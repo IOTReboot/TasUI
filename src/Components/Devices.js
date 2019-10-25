@@ -9,6 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
+import TasmotaDevice from '../DeviceTypes/TasmotaDevice';
+
 
 class Devices extends React.Component {
     constructor(props) {
@@ -48,8 +50,8 @@ class Devices extends React.Component {
     }
 
     handleIpAddressClicked = ipAddress => {
-        sessionStorage.setItem('ipAddress', ipAddress);
-        this.props.history.push('/info');
+        // sessionStorage.setItem('ipAddress', ipAddress);
+        // this.props.history.push('/info');
     }
 
     handleIpAddressDelete = ipAddress => {
@@ -86,7 +88,9 @@ class Devices extends React.Component {
             {this.state.devices.map((item, index) => (
                 <ListItem button key={item}>
                     <ListItemIcon onClick={() => this.handleIpAddressClicked(item)}><DeveloperBoardIcon/></ListItemIcon>
-                    <ListItemText primary={item} onClick={() => this.handleIpAddressClicked(item)}/>
+                    <TasmotaDevice ipAddress={item} deviceManager={this.props.deviceManager} />
+
+                    {/* <ListItemText primary={item} onClick={() => this.handleIpAddressClicked(item)}/> */}
                     <ListItemIcon onClick={() => this.handleIpAddressDelete(item)}><HighlightOffIcon/></ListItemIcon>
                 </ListItem>
             ))}

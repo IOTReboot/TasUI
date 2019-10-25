@@ -13,15 +13,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import InfoIcon from '@material-ui/icons/Info';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import BorderAllIcon from '@material-ui/icons/BorderAll';
 
 import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 
 import Devices from './Components/Devices';
 import DeviceManager from './DeviceManagement/DeviceManager';
 import Info from './Components/Info';
-import { cpus } from 'os';
-import { Collapse } from '@material-ui/core';
 
 const drawerWidth = 240;
 

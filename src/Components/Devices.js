@@ -13,9 +13,9 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 class Devices extends React.Component {
     constructor(props) {
         super(props);
-        let savedDevices = "devices" in localStorage ? JSON.parse(localStorage.getItem('devices')) : [];
+        console.log(this.props);
         this.state = {
-            devices: savedDevices,
+            devices: this.props.deviceManager.getDevices(),
             ipAddress: "",
         }
     }
@@ -35,13 +35,11 @@ class Devices extends React.Component {
     }
 
     addIPAddressIfNeeded = ipAddress => {
-        if (!this.state.devices.find(item => item === ipAddress) && ipAddress.length > 0) {
-            const newDevices = this.state.devices.concat(ipAddress);
-            this.setState({
-                devices: newDevices,
-            });
-            localStorage.setItem('devices', JSON.stringify(newDevices));
-        }
+        this.props.deviceManager.addDevice(ipAddress);
+        const newDevices = this.props.deviceManager.getDevices();
+        this.setState({
+            devices: newDevices
+        });
     }
 
     handleConnectClick() {
@@ -55,15 +53,11 @@ class Devices extends React.Component {
     }
 
     handleIpAddressDelete = ipAddress => {
-        console.log('Delete ' + ipAddress);
-        if (this.state.devices.find(item => item === ipAddress)) {
-            const newDevices = this.state.devices.filter(item => item != ipAddress);
-            console.log('NewDevices ' + newDevices);
-            this.setState({
-                devices: newDevices,
-            });
-            localStorage.setItem('devices', JSON.stringify(newDevices));
-        }
+        this.props.deviceManager.removeDevice(ipAddress);
+        const newDevices = this.props.deviceManager.getDevices();
+        this.setState({
+            devices: newDevices
+        });
     }
 
     render() {

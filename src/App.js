@@ -18,6 +18,7 @@ import BorderAllIcon from '@material-ui/icons/BorderAll';
 import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 
 import Devices from './Components/Devices';
+import DeviceManager from './DeviceManagement/DeviceManager';
 import Info from './Components/Info';
 import { cpus } from 'os';
 import { Collapse } from '@material-ui/core';
@@ -67,10 +68,10 @@ const styles = theme => ({
 
 const deviceGroups = [
   {
-    name: 'All',
-    link: '/devices/all',
-    icon: <BorderAllIcon/>,
-  }, {
+  //   name: 'All',
+  //   link: '/devices/all',
+  //   icon: <BorderAllIcon/>,
+  // }, {
     name: 'Favourites',
     link: '/devices/favs',
     icon: <FavoriteIcon/>,
@@ -90,9 +91,9 @@ const mainMenuItems = [
   }
 ]
 
+const deviceManager = new DeviceManager();
 
 class App extends Component {
-
 
   renderChildItems(item) {
     const { classes } = this.props;
@@ -100,10 +101,12 @@ class App extends Component {
     if (item.children && item.children.length > 0) {
       return item.children.map((child, index) => {
         return(
-          <ListItem button key={child.name} className={classes.nested}>
-            <ListItemIcon>{child.icon}</ListItemIcon>
-            <ListItemText primary={child.name} />
-          </ListItem>  
+          <Link to={child.link}>
+            <ListItem button key={child.name} className={classes.nested}>
+              <ListItemIcon>{child.icon}</ListItemIcon>
+              <ListItemText primary={child.name} />
+            </ListItem>  
+          </Link>
         )
       })
     } 
@@ -116,12 +119,12 @@ class App extends Component {
     const listItems = mainMenuItems.map((item, index) => {
       return (
         <div>
-        {/* <Link to={item.link}> */}
+        <Link to={item.link}>
           <ListItem button key={item.name}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.name} />
           </ListItem>
-        {/* </Link> */}
+        </Link>
 
         {this.renderChildItems(item)}
         <Divider />
@@ -166,11 +169,11 @@ class App extends Component {
             <div className={classes.toolbar} />
               <div>
             <Switch>
-              <Route exact path="/devices" component={Devices} />
-              <Route path="/devices/:ip" component={Devices} />
+              <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
+              <Route path="/devices/:ip" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
               <Route path="/info" component={Info} />
               <Redirect exact from="/" to="/devices" />
-              <Route component={Devices} />
+              <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
             </Switch>
             </div>
           </main>

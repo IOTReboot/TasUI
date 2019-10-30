@@ -1,9 +1,14 @@
 import axios from '../Utils/AxiosClient';
 
+const commands = {
+    Status0 : 'Status 0'
+}
+
 class TasmotaDeviceConnector {
 
     deviceIPAddress = "";
     deviceListener = "";
+    // responseMap = [{}];
 
     constructor(ipAddress) {
         this.deviceIPAddress = ipAddress;
@@ -15,17 +20,30 @@ class TasmotaDeviceConnector {
     }
 
     disconnect() {
+        this.deviceListener = null;
+    }
+
+    getStatus0() {
+        this.performCommandOnDevice(commands.Status0);
+    }
+
+    onCommandResponse(cmnd, response) {
+        switch(cmnd) {
+            case commands.Status0:
+                this.deviceListener.onStatus0(response);
+                break
+        }
 
     }
 
-    async getStatus0() {
+    async performCommandOnDevice(cmnd) {
         try {
             // Load async data from an inexistent endpoint.
-            let response = await axios.get('http://' +  this.deviceIPAddress  + '/cm?cmnd=Status0');
-            this.deviceListener.onStatus0(response);
-            } catch (e) {
-                console.log(`😱 Axios request failed: ${e}`);
-            }
+            let response = await axios.get('http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd));
+            this.onCommandResponse(cmnd, response)
+        } catch (e) {
+            console.log(`Cmnd : ${cmnd} request failed: ${e}`);
+        }
 
     }
 }

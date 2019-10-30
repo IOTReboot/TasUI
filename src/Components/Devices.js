@@ -1,4 +1,5 @@
 import React from 'react'
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
@@ -8,8 +9,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import TasmotaDevice from '../DeviceTypes/TasmotaDevice';
+import findLocalIp from '../Utils/IPFinder';
 
 
 class Devices extends React.Component {
@@ -51,7 +54,7 @@ class Devices extends React.Component {
 
     handleIpAddressClicked = ipAddress => {
         // sessionStorage.setItem('ipAddress', ipAddress);
-        // this.props.history.push('/info');
+        this.props.history.push('/devices/' + ipAddress);
     }
 
     handleIpAddressDelete = ipAddress => {
@@ -66,7 +69,7 @@ class Devices extends React.Component {
     return (
         <Container maxWidth="sm">
             <h1>Devices</h1>
-
+            <Box>
             <TextField
                 id="outlined-name"
                 label="Tasmota IP Address"
@@ -83,15 +86,11 @@ class Devices extends React.Component {
             >
                 Connect
             </Button>
-
+            </Box>
             <List>
             {this.state.devices.map((item, index) => (
                 <ListItem button key={item}>
-                    <ListItemIcon onClick={() => this.handleIpAddressClicked(item)}><DeveloperBoardIcon/></ListItemIcon>
-                    <TasmotaDevice ipAddress={item} deviceManager={this.props.deviceManager} />
-
-                    {/* <ListItemText primary={item} onClick={() => this.handleIpAddressClicked(item)}/> */}
-                    <ListItemIcon onClick={() => this.handleIpAddressDelete(item)}><HighlightOffIcon/></ListItemIcon>
+                    <TasmotaDevice ipAddress={item} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked}/>
                 </ListItem>
             ))}
             </List>

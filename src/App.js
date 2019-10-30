@@ -18,7 +18,7 @@ import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-route
 
 import Devices from './Components/Devices';
 import DeviceManager from './DeviceManagement/DeviceManager';
-import Info from './Components/Info';
+import DeviceDetails from './Components/DeviceDetails';
 
 const drawerWidth = 240;
 
@@ -167,8 +167,7 @@ class App extends Component {
               <div>
             <Switch>
               <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
-              <Route path="/devices/:ip" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
-              <Route path="/info" component={Info} />
+              <Route path="/devices/:ip" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
               <Redirect exact from="/" to="/devices" />
               <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
             </Switch>

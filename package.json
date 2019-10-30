@@ -1,5 +1,5 @@
 {
-  "name": "tasmota-ui",
+  "name": "iotreboot-ui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

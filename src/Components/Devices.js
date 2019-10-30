@@ -72,7 +72,7 @@ class Devices extends React.Component {
             <Box>
             <TextField
                 id="outlined-name"
-                label="Tasmota IP Address"
+                label="Device IP Address"
                 placeholder="IP"
                 margin="normal"
                 variant="outlined"

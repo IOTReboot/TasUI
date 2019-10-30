@@ -112,8 +112,8 @@ class TasmotaDevice extends Component {
 
     renderTypeDetails() {
         return(
-            <Paper>
-            <Grid container justify="center" alignItems="center" direction="column" flexGrow={0} xs={12}>
+            <Paper width="sm">
+            <Grid container justify="center" alignItems="center" direction="column" width="sm" xs={16}>
                 {/* <Box display="flex"> */}
                 <Grid margin={20} xs={4}>
                     <Paper width="200" height="200" align="center" padding="20" elevation={3}>

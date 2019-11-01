@@ -3,10 +3,10 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -67,7 +67,7 @@ class Devices extends React.Component {
 
     render() {
     return (
-        <Container maxWidth="sm">
+        <Container flexGrow={1}>
             <h1>Devices</h1>
             <Box>
             <TextField
@@ -87,13 +87,18 @@ class Devices extends React.Component {
                 Connect
             </Button>
             </Box>
-            <List>
             {this.state.devices.map((item, index) => (
-                <ListItem button key={item}>
+                <ExpansionPanel>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1c-content"
+                    id="panel1c-header"
+                    key={item}
+                    >
                     <TasmotaDevice ipAddress={item} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked}/>
-                </ListItem>
+                </ExpansionPanelSummary>
+                </ExpansionPanel>
             ))}
-            </List>
         </Container>
     );
   }

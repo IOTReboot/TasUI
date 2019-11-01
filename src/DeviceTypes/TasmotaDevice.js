@@ -15,6 +15,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import VisibilityListener from '../Utils/VisibilityListener';
 
 const styles = theme => ({
     imageContainer: {
@@ -80,7 +81,6 @@ class TasmotaDevice extends Component {
 
     constructor(props) {
         super(props);
-        console.log('TasmotaDevice constructor %O', this.props)
         this.ipAddress = this.props.ipAddress;
         this.deviceConnector = this.props.deviceManager.getDeviceConnector(this.ipAddress);
         this.state = {
@@ -89,11 +89,21 @@ class TasmotaDevice extends Component {
         }
     }
 
+    onWindowVisibilityChanged(visible) {
+        if (visible) {
+            this.deviceConnector.resume();
+        } else {
+            this.deviceConnector.pause();
+        }
+    }
+
     componentDidMount() {
+        VisibilityListener.addVisibilityChangeCallback(this.onWindowVisibilityChanged.bind(this));
         this.deviceConnector.connect(this);
     }
 
     componentWillUnmount() {
+        VisibilityListener.removeVisibilityChangeCallback(this.onWindowVisibilityChanged.bind(this));
         this.deviceConnector.disconnect();
     }
 
@@ -124,10 +134,12 @@ class TasmotaDevice extends Component {
             <div style={{ width: '100%' }}>
                 <Box display="flex">
                     <DeveloperBoardIcon/>
-                    <Box flexGrow={1} marginLeft={2} onClick={() => this.props.openDeviceDetails(this.ipAddress)}>
+                    <Box display="flex" flexGrow={1} marginLeft={2} onClick={() => this.props.openDeviceDetails(this.ipAddress)}>
                         <Typography>
                         {this.state.displayName}
                         </Typography>
+                        {this.renderDetailsControlsDimmers()}
+                        {this.renderDetailsControlsButtons()}
                     </Box>
 
                     <DeleteIcon/>
@@ -143,97 +155,107 @@ class TasmotaDevice extends Component {
     }
 
     renderDetailsControlsButtons() {
-        let buttons =  Object.entries(this.state.status0['StatusSTS']).filter(([key, value]) => {
-            if (powerRegex.test(key)) {
-                return [key, value];
-            }
-        })
+        if (this.state.status0) {
+            let buttons =  Object.entries(this.state.status0['StatusSTS']).filter(([key, value]) => {
+                if (powerRegex.test(key)) {
+                    return [key, value];
+                }
+            })
 
-        console.log('DetailsControls buttons : %O', buttons)
+            console.log('DetailsControls buttons : %O', buttons)
 
-        return buttons.map(([key, value]) => {
-            if (value === 'ON') {
-                return (
-                    <ThemeProvider theme={onButtonTheme}>
-                        <Button variant="contained" color="primary" onClick={() => this.powerToggle(key)}>{key} {value}</Button>
-                    </ThemeProvider>
-                )
-            } else {
-                return (
-                    <Button variant="contained" onClick={() => this.powerToggle(key)}>{key} {value}</Button>
-                )
-            }
-        })
+            return buttons.map(([key, value]) => {
+                if (value === 'ON') {
+                    return (
+                        <ThemeProvider theme={onButtonTheme}>
+                            <Button variant="contained" color="primary" onClick={() => this.powerToggle(key)}>{key} {value}</Button>
+                        </ThemeProvider>
+                    )
+                } else {
+                    return (
+                        <Button variant="contained" onClick={() => this.powerToggle(key)}>{key} {value}</Button>
+                    )
+                }
+            })
+        }
     }
 
     renderDetailsControlsDimmers() {
-        let dimmers =  Object.entries(this.state.status0['StatusSTS']).filter(([key, value]) => {
-            if (dimmerRegex.test(key)) {
-                return [key, value];
-            }
-        })
+        if (this.state.status0) {
+            let dimmers =  Object.entries(this.state.status0['StatusSTS']).filter(([key, value]) => {
+                if (dimmerRegex.test(key)) {
+                    return [key, value];
+                }
+            })
 
-        console.log('DetailsControls dimmers : %O', dimmers)
+            console.log('DetailsControls dimmers : %O', dimmers)
 
-        return dimmers.map(([key, value]) => {
-            return (
-                <div className={styles.imageContainer}>
-                    <DimmerSlider
-                        defaultValue={value}
-                        id={key}
-                        aria-labelledby={key + 'slider'}
-                        valueLabelDisplay="auto"
-                        step={1}
-                        min={1}
-                        max={100}
-                        onChangeCommitted={this.dimmerUpdate(key)}
-                    />
-                    <Typography id={key + 'slider'} gutterBottom variant="h5" justify="center">
-                        {key} : {value}
-                    </Typography>
+            return dimmers.map(([key, value]) => {
+                return (
+                    <div className={styles.imageContainer}>
+                        <DimmerSlider
+                            defaultValue={value}
+                            id={key}
+                            aria-labelledby={key + 'slider'}
+                            valueLabelDisplay="auto"
+                            step={1}
+                            min={1}
+                            max={100}
+                            onChangeCommitted={this.dimmerUpdate(key)}
+                        />
+                        <Typography id={key + 'slider'} gutterBottom variant="h5" justify="center">
+                            {key} : {value}
+                        </Typography>
 
-                </div>
-            )
-        })
+                    </div>
+                )
+            })
+        }
     }
 
     renderDetailsStatuses() {
-        return Object.entries(this.state.status0).map(([cmnd, cmndData]) => {
-            
-            return (
-                <ExpansionPanel key={cmnd}>
-                    <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    >
-                    <Typography>{cmnd}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                    <Table aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                            <TableCell>Key</TableCell>
-                            <TableCell>Value</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {Object.entries(cmndData).map(([key, value]) => {
-                            return (
-                                <TableRow key={key}>
-                                    <TableCell align="left">{key}</TableCell>
-                                    <TableCell align="left">{JSON.stringify(value)}</TableCell>
+        if (this.state.status0) {
+            return Object.entries(this.state.status0).map(([cmnd, cmndData]) => {
+                
+                return (
+                    <ExpansionPanel key={cmnd}>
+                        <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography>{cmnd}</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                        <Table aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                <TableCell>Key</TableCell>
+                                <TableCell>Value</TableCell>
                                 </TableRow>
-                            )
-                        })}
-                        </TableBody>
-                    </Table>
-                    </ExpansionPanelDetails>
-                </ExpansionPanel>
-            )
-            
+                            </TableHead>
+                            <TableBody>
+                            {Object.entries(cmndData).map(([key, value]) => {
+                                return (
+                                    <TableRow key={key}>
+                                        <TableCell align="left">{key}</TableCell>
+                                        <TableCell align="left">
+                                            <Typography display="inline">
+                                                {JSON.stringify(value, null, 2)}
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                            </TableBody>
+                        </Table>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                )
+                
 
-        })
+            })
+        }
     }  
 
     renderTypeDetails() {
@@ -256,7 +278,7 @@ class TasmotaDevice extends Component {
                     {this.renderDetailsControlsButtons()}
                 </Grid>
 
-                <Grid xs={6}>
+                <Grid xs={10}>
                     {this.renderDetailsStatuses()}
                 </Grid>
                     <DeleteIcon/>
@@ -265,9 +287,6 @@ class TasmotaDevice extends Component {
     }
 
     render() {
-        if (!this.state.status0) {
-            return null
-        }
         console.log('TasmotaDevice ' + this.props['renderType'])
         switch(this.props['renderType']) {
             case 'List':

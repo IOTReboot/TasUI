@@ -8,6 +8,7 @@ class TasmotaDeviceConnector {
 
     deviceIPAddress = "";
     deviceListener = "";
+    timer = null;
     // responseMap = [{}];
 
     constructor(ipAddress) {
@@ -16,15 +17,29 @@ class TasmotaDeviceConnector {
 
     connect(listener) {
         this.deviceListener = listener;
-        this.getStatus0();
+        this.resume();
     }
 
     disconnect() {
+        this.pause();
         this.deviceListener = null;
     }
 
+    pause() {
+        if(this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+    }
+
+    resume() {
+        this.pause(); // Clear previous Timer
+        this.timer = setInterval(this.getStatus0.bind(this), 10000);
+        this.getStatus0();
+    }
+
     getStatus0() {
-        this.performCommandOnDevice(commands.Status0);
+        this.performCommandOnDeviceDirect(commands.Status0);
     }
 
     onCommandResponse(cmnd, response) {
@@ -36,7 +51,12 @@ class TasmotaDeviceConnector {
 
     }
 
-    async performCommandOnDevice(cmnd) {
+    performCommandOnDevice(cmnd) {
+        this.performCommandOnDeviceDirect(cmnd);
+        this.getStatus0();
+    }
+
+    async performCommandOnDeviceDirect(cmnd) {
         try {
             // Load async data from an inexistent endpoint.
             let response = await axios.get('http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd));

@@ -88,12 +88,11 @@ class Devices extends React.Component {
             </Button>
             </Box>
             {this.state.devices.map((item, index) => (
-                <ExpansionPanel>
+                <ExpansionPanel key={item}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1c-content"
                     id="panel1c-header"
-                    key={item}
                     >
                     <TasmotaDevice ipAddress={item} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked}/>
                 </ExpansionPanelSummary>

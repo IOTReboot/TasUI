@@ -42,11 +42,15 @@ class TasmotaDeviceConnector {
         this.performCommandOnDeviceDirect(commands.Status0);
     }
 
-    onCommandResponse(cmnd, response) {
-        switch(cmnd) {
-            case commands.Status0:
-                this.deviceListener.onStatus0(response);
-                break
+    onCommandResponse(args) {
+        if (args.success) {
+            switch(args.key) {
+                case commands.Status0:
+                    this.deviceListener.onStatus0(args.response);
+                    break
+            }
+        } else {
+            console.log(`Command ${args.key} failed. Url : ${args.url} Response: ${args.response}`)
         }
 
     }
@@ -56,14 +60,14 @@ class TasmotaDeviceConnector {
         this.getStatus0();
     }
 
-    async performCommandOnDeviceDirect(cmnd) {
-        try {
-            // Load async data from an inexistent endpoint.
-            let response = await axios.get('http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd));
-            this.onCommandResponse(cmnd, response)
-        } catch (e) {
-            console.log(`Cmnd : ${cmnd} request failed: ${e}`);
+    performCommandOnDeviceDirect(cmnd) {
+        var callback = function(response) {
+            this.onCommandResponse({key: this.cmnd, response: response, success: this.success});
         }
+
+        axios.get('http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd))
+        .then(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), cmnd: cmnd, success: true}))
+        .catch(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), cmnd: cmnd, success: false}));
 
     }
 }

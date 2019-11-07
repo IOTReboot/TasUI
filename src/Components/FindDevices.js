@@ -31,33 +31,35 @@ class FindDevices extends React.Component {
             numIpsRequested: 0,
             numIpsCompleted: 0,
             devices: [],
-            
+            searching: false,
         }
         
     }
 
     componentDidMount() {
-        this.calculateTotalIPs();
+        this.calculateTotalIPs(this.state.ipFrom, this.state.ipTo);
     }
 
     handleIPFromChange = event => {
         this.setState({
             ipFrom: event.target.value,
         });
-        this.calculateTotalIPs();
+        this.calculateTotalIPs(event.target.value, this.state.ipTo);
     }
 
     handleIPToChange = event => {
         this.setState({
             ipTo: event.target.value,
         });
-        this.calculateTotalIPs();
+        this.calculateTotalIPs(this.state.ipFrom, event.target.value);
     }
 
-    calculateTotalIPs() {
+    calculateTotalIPs(ipFrom, ipTo) {
 
-        let from = new IPAddress.Address4(this.state.ipFrom);
-        let to = new IPAddress.Address4(this.state.ipTo);
+        console.log('Calculate IPs From %s : To %s ', ipFrom , ipTo);
+
+        let from = new IPAddress.Address4(ipFrom);
+        let to = new IPAddress.Address4(ipTo);
 
         console.log('From %O : To %O ', from.bigInteger().toString() , to.bigInteger().toString());
 
@@ -96,6 +98,12 @@ class FindDevices extends React.Component {
                 numIpsCompleted: (this.state.totalAddresses - this.ipsToScan.length) * 100 / this.state.totalAddresses,
                 numIpsRequested: (this.state.totalAddresses - this.ipsToScan.length + this.ipsRequested.length) * 100 / this.state.totalAddresses
             })
+        } else {
+            if (this.ipsRequested.length == 0) {
+                this.setState({
+                    searching: false,
+                })
+            }
         }
     }
 
@@ -126,7 +134,14 @@ class FindDevices extends React.Component {
         for(let ipNum = from; ipNum <= to; ipNum++) {
             this.ipsToScan.push(IPAddress.Address4.fromBigInteger(ipNum).correctForm());
         }
+        this.setState({
+            searching: true,
+        })
+        this.scanIps();
+    }
 
+    handleStopClicked() {
+        this.ipsToScan = [];
         this.scanIps();
     }
 
@@ -139,18 +154,14 @@ class FindDevices extends React.Component {
         console.log('Add Device ' + ipAddress)
         event.stopPropagation();
         this.props.deviceManager.addDevice(ipAddress);
-        this.setState({
-
-        })
+        this.setState({})
     }
 
     deleteDevice = (ipAddress, event) => {
         console.log('Delete Device ' + ipAddress)
         event.stopPropagation();
         this.props.deviceManager.removeDevice(ipAddress);
-        this.setState({
-            
-        })
+        this.setState({})
     }
 
     render() {
@@ -177,18 +188,17 @@ class FindDevices extends React.Component {
                     value={this.state.ipTo}
                     onChange={this.handleIPToChange}
                 />
-                <Button 
-                    variant="contained"
-                    margin="normal"
-                    onClick={() => this.handleFindClicked()}
-                >
-                    Find
-                </Button>
+                {!this.state.searching ? 
+                    <Button variant="contained" margin="normal" onClick={() => this.handleFindClicked()}>Find</Button>
+                    : <Button variant="contained" margin="normal" onClick={() => this.handleStopClicked()} >Stop</Button>
+                }
                 </Box>
                 <Typography>
                     IPs to scan : {this.state.totalAddresses}
                 </Typography>
-                <LinearProgress variant="buffer" value={this.state.numIpsCompleted} valueBuffer={this.state.numIpsRequested} />
+                {this.state.searching ? 
+                    <LinearProgress variant="buffer" value={this.state.numIpsCompleted} valueBuffer={this.state.numIpsRequested} />
+                    : null }
                 {this.state.devices.map((ip, index) => {
 
                     let buttons = (

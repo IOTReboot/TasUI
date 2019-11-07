@@ -16,6 +16,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityListener from '../Utils/VisibilityListener';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 
 const styles = theme => ({
     imageContainer: {
@@ -117,7 +118,8 @@ class TasmotaDevice extends Component {
         })
     }
 
-    powerToggle(button) {
+    powerToggle(button, event) {
+        event.stopPropagation();
         console.log('Toggle power ' + button)
         this.deviceConnector.performCommandOnDevice(button + ' TOGGLE');
         this.deviceConnector.getStatus0();
@@ -134,14 +136,14 @@ class TasmotaDevice extends Component {
             <div style={{ width: '100%' }}>
                 <Box display="flex">
                     <DeveloperBoardIcon/>
-                    <Box display="flex" flexGrow={1} marginLeft={2} onClick={() => this.props.openDeviceDetails(this.ipAddress)}>
+                    <Box display="flex" flexGrow={1} marginLeft={2}>
                         <Typography>
                         {this.state.displayName}
                         </Typography>
                         {this.renderDetailsControlsDimmers()}
                         {this.renderDetailsControlsButtons()}
                     </Box>
-
+                    <SettingsApplicationsIcon onClick={() => this.props.openDeviceDetails(this.ipAddress)}/>
                     <DeleteIcon/>
                 </Box>
             </div>
@@ -168,12 +170,12 @@ class TasmotaDevice extends Component {
                 if (value === 'ON') {
                     return (
                         <ThemeProvider theme={onButtonTheme}>
-                            <Button variant="contained" color="primary" onClick={() => this.powerToggle(key)}>{key} {value}</Button>
+                            <Button variant="contained" color="primary" onClick={(event) => this.powerToggle(key, event)}>{key} {value}</Button>
                         </ThemeProvider>
                     )
                 } else {
                     return (
-                        <Button variant="contained" onClick={() => this.powerToggle(key)}>{key} {value}</Button>
+                        <Button variant="contained" onClick={(event) => this.powerToggle(key, event)}>{key} {value}</Button>
                     )
                 }
             })

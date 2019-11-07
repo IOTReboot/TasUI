@@ -13,12 +13,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import InfoIcon from '@material-ui/icons/Info';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 
 import Devices from './Components/Devices';
 import DeviceManager from './DeviceManagement/DeviceManager';
 import DeviceDetails from './Components/DeviceDetails';
+import FindDevices from './Components/FindDevices';
 
 const drawerWidth = 240;
 
@@ -69,9 +71,9 @@ const deviceGroups = [
   //   link: '/devices/all',
   //   icon: <BorderAllIcon/>,
   // }, {
-    name: 'Favourites',
-    link: '/devices/favs',
-    icon: <FavoriteIcon/>,
+  //   name: 'Favourites',
+  //   link: '/devices/favs',
+  //   icon: <FavoriteIcon/>,
   }  
 ]
 
@@ -80,7 +82,11 @@ const mainMenuItems = [
     name: 'Devices',
     link: '/devices',
     icon: <DeveloperBoardIcon/>,
-    children: deviceGroups,
+    // children: deviceGroups,
+  }, {
+    name: 'Find Devices',
+    link: '/findDevices',
+    icon: <SearchIcon/>,
   }, {
     name: 'About',
     link: '/about',
@@ -166,10 +172,11 @@ class App extends Component {
             <div className={classes.toolbar} />
               <div>
             <Switch>
+              <Route exact path="/findDevices" render={(props) => <FindDevices {...props} deviceManager={deviceManager} />} />
               <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
               <Route path="/devices/:ip" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
+              {/* <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} /> */}
               <Redirect exact from="/" to="/devices" />
-              <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
             </Switch>
             </div>
           </main>

@@ -1,4 +1,5 @@
 import axios from '../Utils/AxiosClient';
+import superagent from 'superagent';
 
 const commands = {
     Status0 : 'Status 0'
@@ -50,7 +51,7 @@ class TasmotaDeviceConnector {
                     break
             }
         } else {
-            console.log(`Command ${args.key} failed. Url : ${args.url} Response: ${args.response}`)
+            console.log(`Command ${args.key} failed. Url : ${args.url} Response: %O`, args.response)
         }
 
     }
@@ -62,12 +63,12 @@ class TasmotaDeviceConnector {
 
     performCommandOnDeviceDirect(cmnd) {
         var callback = function(response) {
-            this.onCommandResponse({key: this.cmnd, response: response, success: this.success});
+            this.onCommandResponse({key: this.cmnd, response: response, url: this.url, success: this.success});
         }
-
-        axios.get('http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd))
-        .then(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), cmnd: cmnd, success: true}))
-        .catch(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), cmnd: cmnd, success: false}));
+        let url = 'http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd);
+        axios.get(url)
+        .then(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), url: url, cmnd: cmnd, success: true}))
+        .catch(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), url: url, cmnd: cmnd, success: false}));
 
     }
 }

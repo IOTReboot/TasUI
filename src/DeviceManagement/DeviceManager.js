@@ -30,6 +30,10 @@ class DeviceManager {
         return this.devices;
     }
 
+    isDeviceKnown(ipAddress) {
+        return this.devices.indexOf(ipAddress) >= 0;
+    }
+
     getDeviceConnector(ipAddress) {
         if (this.deviceConnectors[ipAddress]) {
             return this.deviceConnectors[ipAddress];

@@ -47,7 +47,7 @@ class TasmotaDeviceConnector {
         if (args.success) {
             switch(args.key) {
                 case commands.Status0:
-                    this.deviceListener.onStatus0(args.response);
+                    this.deviceListener.onStatus0(args.response.body);
                     break
             }
         } else {
@@ -62,14 +62,17 @@ class TasmotaDeviceConnector {
     }
 
     performCommandOnDeviceDirect(cmnd) {
-        var callback = function(response) {
-            this.onCommandResponse({key: this.cmnd, response: response, url: this.url, success: this.success});
+        var callback = function(err, response) {
+            // console.log ("Error : %O Response : %O", err, response);
+            this.onCommandResponse({key: this.cmnd, response: response, error: err, url: this.url, ip: this.ip, success: err ? false : true});
         }
         let url = 'http://' +  this.deviceIPAddress  + '/cm?cmnd=' + encodeURI(cmnd);
-        axios.get(url)
-        .then(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), url: url, cmnd: cmnd, success: true}))
-        .catch(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), url: url, cmnd: cmnd, success: false}));
-
+        superagent.get(url)
+        .timeout({
+            response: 5000,  // Wait 5 seconds for the server to start sending,
+            deadline: 60000, // but allow 1 minute for the file to finish loading.
+          })
+          .end(callback.bind({onCommandResponse: this.onCommandResponse.bind(this), ip: this.deviceIPAddress, url: url, cmnd: cmnd}))
     }
 }
 

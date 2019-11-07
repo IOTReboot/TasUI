@@ -7,6 +7,8 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import TasmotaDevice from '../DeviceTypes/TasmotaDevice';
 
@@ -44,14 +46,16 @@ class Devices extends React.Component {
 
     handleConnectClick() {
         this.addIPAddressIfNeeded(this.state.ipAddress)
-        this.handleIpAddressClicked(this.state.ipAddress)
+        this.openDeviceDetails(this.state.ipAddress)
     }
 
-    handleIpAddressClicked = ipAddress => {
+    openDeviceDetails = (ipAddress, event) => {
+        event.stopPropagation();
         this.props.history.push('/devices/' + ipAddress);
     }
 
-    handleIpAddressDelete = ipAddress => {
+    deleteDevice = (ipAddress, event) => {
+        event.stopPropagation();
         this.props.deviceManager.removeDevice(ipAddress);
         const newDevices = this.props.deviceManager.getDevices();
         this.setState({
@@ -81,17 +85,28 @@ class Devices extends React.Component {
                 Connect
             </Button>
             </Box>
-            {this.state.devices.map((item, index) => (
-                <ExpansionPanel key={item}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1c-content"
-                    id="panel1c-header"
-                    >
-                    <TasmotaDevice ipAddress={item} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked}/>
-                </ExpansionPanelSummary>
-                </ExpansionPanel>
-            ))}
+            {this.state.devices.map((ip, index) => {
+
+                let buttons = (
+                    <div>
+                        <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(ip, event)}/>
+                        <DeleteIcon onClick={(event) => this.deleteDevice(ip, event)}/>
+                    </div>
+                )
+                
+                return (
+                    <ExpansionPanel key={ip}>
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1c-content"
+                        id="panel1c-header"
+                        >
+                        <TasmotaDevice ipAddress={ip} renderType="List" deviceManager={this.props.deviceManager} actionButtons={buttons}/>
+                    </ExpansionPanelSummary>
+                    </ExpansionPanel>
+                    )
+                }
+            )}
         </Container>
     );
   }

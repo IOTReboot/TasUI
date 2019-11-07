@@ -21,6 +21,12 @@ class DeviceManager {
         return false;
     }
 
+    updateDevice(macAddress, deviceInfo) {
+        if (this.devices[macAddress]) {
+            return this.addDevice(macAddress, deviceInfo)
+        }
+    }
+
     removeDevice(macAddress) {
         if (this.devices[macAddress]) {
             delete this.devices[macAddress]

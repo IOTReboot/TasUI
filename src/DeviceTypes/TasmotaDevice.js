@@ -114,7 +114,7 @@ class TasmotaDevice extends Component {
             displayName: newDisplayName,
             status0: response,
         })
-        this.props.deviceManager.addDevice(this.macAddress, response);
+        this.props.deviceManager.updateDevice(this.macAddress, response);
     }
 
     powerToggle(button, event) {

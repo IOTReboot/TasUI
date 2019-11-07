@@ -84,7 +84,7 @@ const mainMenuItems = [
     icon: <DeveloperBoardIcon/>,
     // children: deviceGroups,
   }, {
-    name: 'Find New Devices',
+    name: 'Discover Devices',
     link: '/findDevices',
     icon: <SearchIcon/>,
   }, {
@@ -174,7 +174,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/findDevices" render={(props) => <FindDevices {...props} deviceManager={deviceManager} />} />
               <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
-              <Route path="/devices/:ip" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
+              <Route path="/devices/:mac" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
               {/* <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} /> */}
               <Redirect exact from="/" to="/devices" />
             </Switch>

@@ -30,14 +30,17 @@ class FindDevices extends React.Component {
             totalAddresses: "",
             numIpsRequested: 0,
             numIpsCompleted: 0,
-            devices: [],
             searching: false,
         }
         
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.calculateTotalIPs(this.state.ipFrom, this.state.ipTo);
+    }
+
+    componentWillUnmount() {
+        // this.props.deviceManager.clearDiscoveredDevices();
     }
 
     handleIPFromChange = event => {
@@ -73,12 +76,10 @@ class FindDevices extends React.Component {
     onCommandResponse(args) {
         console.log(`${args.ip} : Present : ${args.success} Response : %O`, args.response);
         if (args.success) {
-            if (!this.props.deviceManager.isDeviceKnown(args.response.body.StatusNET.Mac)) {
-                let newDevices = this.state.devices.concat(args.response.body);
-                this.setState({
-                    devices: newDevices,
-                })
-            }
+            // if (!this.props.deviceManager.isDeviceKnown(args.response.body.StatusNET.Mac)) {
+                this.props.deviceManager.addDiscoveredDevice(args.response.body.StatusNET.Mac, args.response.body);
+                this.setState({})
+            // }
         } else {
             
         }
@@ -151,10 +152,10 @@ class FindDevices extends React.Component {
         this.props.history.push('/devices/' + macAddress);
     }
 
-    addDevice = (deviceStatus, event) => {
-        console.log('Add Device ' + deviceStatus.StatusNET.Mac)
+    addDevice = (macAddress, event) => {
+        console.log('Add Device ' + macAddress)
         event.stopPropagation();
-        this.props.deviceManager.addDevice(deviceStatus.StatusNET.Mac, deviceStatus);
+        this.props.deviceManager.addDevice(macAddress, this.props.deviceManager.getDiscoveredDevices()[macAddress]);
         this.setState({})
     }
 
@@ -165,11 +166,35 @@ class FindDevices extends React.Component {
         this.setState({})
     }
 
+    renderDevice(mac) {
+        let buttons = (
+            <div>
+                <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(mac, event)}/>
+                {!this.props.deviceManager.isDeviceKnown(mac) ?
+                    <AddIcon onClick={(event) => this.addDevice(mac, event)}/>
+                    : <DeleteIcon onClick={(event) => this.deleteDevice(mac, event)}/>
+                }
+            </div>
+        )
+
+        return (
+            <ExpansionPanel key={mac}>
+            <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1c-content"
+                id="panel1c-header"
+                >
+                <TasmotaDevice macAddress={mac} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked} actionButtons={buttons}/>
+            </ExpansionPanelSummary>
+            </ExpansionPanel>
+        )
+    }
+
     render() {
 
         return (
             <Container>
-                <h1>Find New Devices</h1>
+                <h1>Discover Active Devices</h1>
                 <Box>
                 <TextField
                     id="outlined-name"
@@ -200,37 +225,32 @@ class FindDevices extends React.Component {
                 {this.state.searching ? 
                     <LinearProgress variant="buffer" value={this.state.numIpsCompleted} valueBuffer={this.state.numIpsRequested} />
                     : null }
-                {this.state.devices.map((status, index) => {
+                    
+                <Typography visibility={Object.keys(this.props.deviceManager.getDiscoveredDevices()).length !== 0 ? "visible" : "hidden"} >
+                    New Devices
+                </Typography>
 
-                    let ip = status.StatusNET.IPAddress;
-                    let mac = status.StatusNET.Mac;
-                    let buttons = (
-                        <div>
-                            <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(mac, event)}/>
-                            {!this.props.deviceManager.isDeviceKnown(mac) ?
-                                <AddIcon onClick={(event) => this.addDevice(status, event)}/>
-                                : <DeleteIcon onClick={(event) => this.deleteDevice(mac, event)}/>
-                            }
-                        </div>
-                    )
+                {Object.keys(this.props.deviceManager.getDiscoveredDevices()).map((mac, index) => {
+                    if (!this.props.deviceManager.isDeviceKnown(mac)) {
+                       return this.renderDevice(mac)
+                    }
+                })}
 
-                    return (
-                        <ExpansionPanel key={ip}>
-                        <ExpansionPanelSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1c-content"
-                            id="panel1c-header"
-                            >
-                            <TasmotaDevice macAddress={mac} renderType="List" deviceInfo={status} deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked} actionButtons={buttons}/>
-                        </ExpansionPanelSummary>
-                        </ExpansionPanel>
-                    )}
-                )}
+                <Typography visibility={Object.keys(this.props.deviceManager.getDiscoveredDevices()).length !== 0 ? "visible" : "hidden"} >
+                    Saved Devices
+                </Typography>
+                {Object.keys(this.props.deviceManager.getDiscoveredDevices()).map((mac, index) => {
+                    if (this.props.deviceManager.isDeviceKnown(mac)) {
+                       return this.renderDevice(mac)
+                    }
+                })}
             </Container>
         )
 
     }
 
 }
+
+
 
 export default FindDevices;

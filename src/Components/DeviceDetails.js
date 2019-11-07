@@ -8,20 +8,21 @@ class DeviceDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ipAddress: "",
+            macAddress: "",
         }
     }
 
     componentDidMount() {
         this.setState({
-            ipAddress: this.props.match.params.ip
+            macAddress: this.props.match.params.mac
         })
+
     }
 
     render() {
-        if (this.state.ipAddress !== "") {
+        if (this.state.macAddress !== "") {
             return (
-                <TasmotaDevice ipAddress={this.state.ipAddress} renderType="Details" deviceManager={this.props.deviceManager} />
+                <TasmotaDevice macAddress={this.state.macAddress} renderType="Details" deviceManager={this.props.deviceManager} />
             );
         } else {
             return null;

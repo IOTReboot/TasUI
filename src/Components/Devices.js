@@ -18,17 +18,17 @@ class Devices extends React.Component {
         console.log(this.props);
         this.state = {
             devices: this.props.deviceManager.getDevices(),
-            ipAddress: "",
+            // ipAddress: "",
         }
     }
 
-    componentDidMount() {
-        console.log(this.props);
-        if ("ip" in this.props.match.params) {
-            this.addIPAddressIfNeeded(this.props.match.params.ip);
-        }
+    // componentDidMount() {
+    //     console.log(this.props);
+    //     if ("ip" in this.props.match.params) {
+    //         this.addIPAddressIfNeeded(this.props.match.params.ip);
+    //     }
 
-    }
+    // }
 
     handleIPChange = event => {
         this.setState({
@@ -36,27 +36,27 @@ class Devices extends React.Component {
         });
     }
 
-    addIPAddressIfNeeded = ipAddress => {
-        this.props.deviceManager.addDevice(ipAddress);
-        const newDevices = this.props.deviceManager.getDevices();
-        this.setState({
-            devices: newDevices
-        });
-    }
+    // addIPAddressIfNeeded = ipAddress => {
+    //     this.props.deviceManager.addDevice(ipAddress);
+    //     const newDevices = this.props.deviceManager.getDevices();
+    //     this.setState({
+    //         devices: newDevices
+    //     });
+    // }
 
     handleConnectClick() {
         this.addIPAddressIfNeeded(this.state.ipAddress)
         this.openDeviceDetails(this.state.ipAddress)
     }
 
-    openDeviceDetails = (ipAddress, event) => {
+    openDeviceDetails = (macAddress, event) => {
         event.stopPropagation();
-        this.props.history.push('/devices/' + ipAddress);
+        this.props.history.push('/devices/' + macAddress);
     }
 
-    deleteDevice = (ipAddress, event) => {
+    deleteDevice = (macAddress, event) => {
         event.stopPropagation();
-        this.props.deviceManager.removeDevice(ipAddress);
+        this.props.deviceManager.removeDevice(macAddress);
         const newDevices = this.props.deviceManager.getDevices();
         this.setState({
             devices: newDevices
@@ -101,7 +101,7 @@ class Devices extends React.Component {
                         aria-controls="panel1c-content"
                         id="panel1c-header"
                         >
-                        <TasmotaDevice macAddress={mac} deviceInfo={this.state.devices[mac]} renderType="List" deviceManager={this.props.deviceManager} actionButtons={buttons}/>
+                        <TasmotaDevice macAddress={mac} renderType="List" deviceManager={this.props.deviceManager} actionButtons={buttons}/>
                     </ExpansionPanelSummary>
                     </ExpansionPanel>
                     )

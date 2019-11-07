@@ -15,38 +15,9 @@ import TasmotaDevice from '../DeviceTypes/TasmotaDevice';
 class Devices extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
         this.state = {
             devices: this.props.deviceManager.getDevices(),
-            // ipAddress: "",
         }
-    }
-
-    // componentDidMount() {
-    //     console.log(this.props);
-    //     if ("ip" in this.props.match.params) {
-    //         this.addIPAddressIfNeeded(this.props.match.params.ip);
-    //     }
-
-    // }
-
-    handleIPChange = event => {
-        this.setState({
-            ipAddress: event.target.value,
-        });
-    }
-
-    // addIPAddressIfNeeded = ipAddress => {
-    //     this.props.deviceManager.addDevice(ipAddress);
-    //     const newDevices = this.props.deviceManager.getDevices();
-    //     this.setState({
-    //         devices: newDevices
-    //     });
-    // }
-
-    handleConnectClick() {
-        this.addIPAddressIfNeeded(this.state.ipAddress)
-        this.openDeviceDetails(this.state.ipAddress)
     }
 
     openDeviceDetails = (macAddress, event) => {
@@ -67,24 +38,6 @@ class Devices extends React.Component {
     return (
         <Container flexGrow={1}>
             <h1>Devices</h1>
-            <Box>
-            <TextField
-                id="outlined-name"
-                label="Device IP Address"
-                placeholder="IP"
-                margin="normal"
-                variant="outlined"
-                value={this.state.ipAddress}
-                onChange={this.handleIPChange}
-            />
-            <Button 
-                variant="contained"
-                margin="normal"
-                onClick={() => this.handleConnectClick()}
-            >
-                Connect
-            </Button>
-            </Box>
             {Object.keys(this.state.devices).map((mac, index) => {
 
                 let buttons = (

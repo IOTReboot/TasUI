@@ -5,41 +5,47 @@ class DeviceManager {
     deviceConnectors = {};
 
     constructor() {
-        this.devices = "devices" in localStorage ? JSON.parse(localStorage.getItem('devices')) : [];
+        this.devices = "devices" in localStorage ? JSON.parse(localStorage.getItem('devices')) : {};
+        if (Array.isArray(this.devices)) {
+            this.devices = {}
+            localStorage.setItem('devices', JSON.stringify(this.devices));
+        }
     }
 
-    addDevice(ipAddress) {
-        if (!this.devices.find(item => item === ipAddress) && ipAddress.length > 0) {
-            const newDevices = this.devices.concat(ipAddress);
-            this.devices = newDevices;
-            localStorage.setItem('devices', JSON.stringify(newDevices));
+    addDevice(macAddress, deviceInfo) {
+        if (macAddress.length > 0) {
+            this.devices[macAddress] = deviceInfo;
+            localStorage.setItem('devices', JSON.stringify(this.devices));
             return true;
-        }
+        } 
         return false;
     }
 
-    removeDevice(ipAddress) {
-        if (this.devices.find(item => item === ipAddress)) {
-            const newDevices = this.devices.filter(item => item !== ipAddress);
-            this.devices = newDevices
-            localStorage.setItem('devices', JSON.stringify(newDevices));
+    removeDevice(macAddress) {
+        if (this.devices[macAddress]) {
+            delete this.devices[macAddress]
+            localStorage.setItem('devices', JSON.stringify(this.devices));
         }
+    }
+
+    getDevice(macAddress) {
+        return this.devices[macAddress];
     }
 
     getDevices() {
         return this.devices;
     }
 
-    isDeviceKnown(ipAddress) {
-        return this.devices.indexOf(ipAddress) >= 0;
+    isDeviceKnown(macAddress) {
+        return this.devices[macAddress] != null;
     }
 
-    getDeviceConnector(ipAddress) {
-        if (this.deviceConnectors[ipAddress]) {
-            return this.deviceConnectors[ipAddress];
+    getDeviceConnector(macAddress, ipAddress) {
+        if (this.deviceConnectors[macAddress]) {
+            return this.deviceConnectors[macAddress];
         } else {
             let deviceConnector = new TasmotaDeviceConnector(ipAddress);
-            this.deviceConnectors[ipAddress] = deviceConnector;
+            this.deviceConnectors[macAddress] = deviceConnector;
             return deviceConnector;
         }
     }

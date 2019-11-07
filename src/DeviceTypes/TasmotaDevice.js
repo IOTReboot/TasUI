@@ -77,16 +77,15 @@ const DimmerSlider = withStyles({
 class TasmotaDevice extends Component {
 
     deviceConnector = {};
-    ipAddress = "";
 
     constructor(props) {
         super(props);
-        this.ipAddress = this.props.ipAddress;
-        this.deviceConnector = this.props.deviceManager.getDeviceConnector(this.ipAddress);
+        this.macAddress = this.props.macAddress;
         this.state = {
-            displayName: this.ipAddress,
-            status0: '',
+            displayName: this.props.deviceInfo.Status.FriendlyName[0] + ' (' + this.macAddress + ')',
+            status0: this.props.deviceInfo,
         }
+        this.deviceConnector = this.props.deviceManager.getDeviceConnector(this.macAddress, this.props.deviceInfo.StatusNET.IPAddress);
     }
 
     onWindowVisibilityChanged(visible) {
@@ -108,13 +107,14 @@ class TasmotaDevice extends Component {
     }
 
     onStatus0(response) {
-        console.log('Status0 %s :  %O', this.ipAddress, response);
-        let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.ipAddress + ')';
+        console.log('Status0 %s :  %O', this.macAddress, response);
+        let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
         console.log(newDisplayName);
         this.setState({
             displayName: newDisplayName,
             status0: response,
         })
+        this.props.deviceManager.addDevice(this.macAddress, response);
     }
 
     powerToggle(button, event) {

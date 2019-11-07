@@ -73,11 +73,12 @@ class FindDevices extends React.Component {
     onCommandResponse(args) {
         console.log(`${args.ip} : Present : ${args.success} Response : %O`, args.response);
         if (args.success) {
-            let newDevices = this.state.devices.concat(args.ip);
-            console.log('NewDevices %O', newDevices);
-            this.setState({
-                devices: newDevices,
-            })
+            if (!this.props.deviceManager.isDeviceKnown(args.response.body.StatusNET.Mac)) {
+                let newDevices = this.state.devices.concat(args.response.body);
+                this.setState({
+                    devices: newDevices,
+                })
+            }
         } else {
             
         }
@@ -109,7 +110,7 @@ class FindDevices extends React.Component {
 
     sendRequest(ip) {
         var callback = function(err, response) {
-            this.onCommandResponse({key: this.cmnd, response: err ? err : response, ip: this.ip, url: this.url, success: err ? false : true});
+            this.onCommandResponse({key: this.cmnd, response: response, error: err, ip: this.ip, url: this.url, success: err ? false : true});
         }
 
         let cmnd = "Status 0"
@@ -145,22 +146,22 @@ class FindDevices extends React.Component {
         this.scanIps();
     }
 
-    openDeviceDetails = (ipAddress, event) => {
+    openDeviceDetails = (macAddress, event) => {
         event.stopPropagation();
-        this.props.history.push('/devices/' + ipAddress);
+        this.props.history.push('/devices/' + macAddress);
     }
 
-    addDevice = (ipAddress, event) => {
-        console.log('Add Device ' + ipAddress)
+    addDevice = (deviceStatus, event) => {
+        console.log('Add Device ' + deviceStatus.StatusNET.Mac)
         event.stopPropagation();
-        this.props.deviceManager.addDevice(ipAddress);
+        this.props.deviceManager.addDevice(deviceStatus.StatusNET.Mac, deviceStatus);
         this.setState({})
     }
 
-    deleteDevice = (ipAddress, event) => {
-        console.log('Delete Device ' + ipAddress)
+    deleteDevice = (macAddress, event) => {
+        console.log('Delete Device ' + macAddress)
         event.stopPropagation();
-        this.props.deviceManager.removeDevice(ipAddress);
+        this.props.deviceManager.removeDevice(macAddress);
         this.setState({})
     }
 
@@ -168,7 +169,7 @@ class FindDevices extends React.Component {
 
         return (
             <Container>
-                <h1>Find Devices</h1>
+                <h1>Find New Devices</h1>
                 <Box>
                 <TextField
                     id="outlined-name"
@@ -199,14 +200,16 @@ class FindDevices extends React.Component {
                 {this.state.searching ? 
                     <LinearProgress variant="buffer" value={this.state.numIpsCompleted} valueBuffer={this.state.numIpsRequested} />
                     : null }
-                {this.state.devices.map((ip, index) => {
+                {this.state.devices.map((status, index) => {
 
+                    let ip = status.StatusNET.IPAddress;
+                    let mac = status.StatusNET.Mac;
                     let buttons = (
                         <div>
-                            <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(ip, event)}/>
-                            {!this.props.deviceManager.isDeviceKnown(ip) ?
-                                <AddIcon onClick={(event) => this.addDevice(ip, event)}/>
-                                : <DeleteIcon onClick={(event) => this.deleteDevice(ip, event)}/>
+                            <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(mac, event)}/>
+                            {!this.props.deviceManager.isDeviceKnown(mac) ?
+                                <AddIcon onClick={(event) => this.addDevice(status, event)}/>
+                                : <DeleteIcon onClick={(event) => this.deleteDevice(mac, event)}/>
                             }
                         </div>
                     )
@@ -218,7 +221,7 @@ class FindDevices extends React.Component {
                             aria-controls="panel1c-content"
                             id="panel1c-header"
                             >
-                            <TasmotaDevice ipAddress={ip} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked} actionButtons={buttons}/>
+                            <TasmotaDevice macAddress={mac} renderType="List" deviceInfo={status} deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked} actionButtons={buttons}/>
                         </ExpansionPanelSummary>
                         </ExpansionPanel>
                     )}

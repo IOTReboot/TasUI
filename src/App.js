@@ -84,7 +84,7 @@ const mainMenuItems = [
     icon: <DeveloperBoardIcon/>,
     // children: deviceGroups,
   }, {
-    name: 'Find Devices',
+    name: 'Find New Devices',
     link: '/findDevices',
     icon: <SearchIcon/>,
   }, {

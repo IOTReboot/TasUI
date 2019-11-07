@@ -85,23 +85,23 @@ class Devices extends React.Component {
                 Connect
             </Button>
             </Box>
-            {this.state.devices.map((ip, index) => {
+            {Object.keys(this.state.devices).map((mac, index) => {
 
                 let buttons = (
                     <div>
-                        <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(ip, event)}/>
-                        <DeleteIcon onClick={(event) => this.deleteDevice(ip, event)}/>
+                        <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(mac, event)}/>
+                        <DeleteIcon onClick={(event) => this.deleteDevice(mac, event)}/>
                     </div>
                 )
                 
                 return (
-                    <ExpansionPanel key={ip}>
+                    <ExpansionPanel key={mac}>
                     <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1c-content"
                         id="panel1c-header"
                         >
-                        <TasmotaDevice ipAddress={ip} renderType="List" deviceManager={this.props.deviceManager} actionButtons={buttons}/>
+                        <TasmotaDevice macAddress={mac} deviceInfo={this.state.devices[mac]} renderType="List" deviceManager={this.props.deviceManager} actionButtons={buttons}/>
                     </ExpansionPanelSummary>
                     </ExpansionPanel>
                     )

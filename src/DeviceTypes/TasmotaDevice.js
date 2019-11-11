@@ -143,18 +143,92 @@ class TasmotaDevice extends Component {
         this.deviceConnector.getStatus0();
     }
 
-    renderTypeTableRow() {
+    renderTypeTableStatusRow() {
         return(
             <TableRow key={this.state.status0}>
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
-              <TableCell align="right">{this.props.actionButtons}</TableCell>
-              <TableCell align="right">{this.state.status0.Status.Module}</TableCell>
-              <TableCell align="right"><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
-              <TableCell align="right">{this.renderDetailsControlsDimmers('Table')}</TableCell>
-              <TableCell align="right">{this.state.status0.StatusSTS.LoadAvg}</TableCell>
-              <TableCell align="right">{this.state.status0.StatusSTS.Uptime}</TableCell>
+              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.Status.Module}</TableCell>
+              <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
+              <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.LoadAvg}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Uptime}</TableCell>
+            </TableRow>
+        )
+    }
+
+    renderTypeTableHealthRow() {
+        return(
+            <TableRow key={this.state.status0}>
+              <TableCell component="th" scope="row">
+                {this.state.status0.Status.FriendlyName[0]}
+              </TableCell>
+              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Uptime}</TableCell>
+              <TableCell>{this.state.status0.StatusPRM.BootCount}</TableCell>
+              <TableCell>{this.state.status0.StatusPRM.RestartReason}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.LoadAvg}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Sleep}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.MqttCount}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.Downtime}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
+            </TableRow>
+        )
+    }
+
+    renderTypeTableWifiRow() {
+        return(
+            <TableRow key={this.state.status0}>
+              <TableCell component="th" scope="row">
+                {this.state.status0.Status.FriendlyName[0]}
+              </TableCell>
+              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusNET.Hostname}</TableCell>
+              <TableCell>{this.state.status0.StatusNET.Mac}</TableCell>
+              <TableCell>{this.state.status0.StatusNET.IPAddress}</TableCell>
+              <TableCell>{this.state.status0.StatusNET.Gateway}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.SSId}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.Channel}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.Downtime}</TableCell>
+            </TableRow>
+        )
+    }
+
+    renderTypeTableMqttRow() {
+        return(
+            <TableRow key={this.state.status0}>
+              <TableCell component="th" scope="row">
+                {this.state.status0.Status.FriendlyName[0]}
+              </TableCell>
+              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusMQT.MqttHost}</TableCell>
+              <TableCell>{this.state.status0.StatusMQT.MqttPort}</TableCell>
+              <TableCell>{this.state.status0.StatusMQT.MqttClient}</TableCell>
+              <TableCell>{this.state.status0.Status.Topic}</TableCell>
+              <TableCell>{this.state.status0.StatusPRM.GroupTopic}</TableCell>
+            </TableRow>
+        )
+    }
+
+    renderTypeTableFirmwareRow() {
+        return(
+            <TableRow key={this.state.status0}>
+              <TableCell component="th" scope="row">
+                {this.state.status0.Status.FriendlyName[0]}
+              </TableCell>
+              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusFWR.Version}</TableCell>
+              <TableCell>{this.state.status0.StatusFWR.Core}</TableCell>
+              <TableCell>{this.state.status0.StatusFWR.SDK}</TableCell>
+              <TableCell>{this.state.status0.StatusMEM.ProgramSize}</TableCell>
+              <TableCell>{this.state.status0.StatusMEM.Free}</TableCell>
+              <TableCell>{this.state.status0.StatusPRM.OtaUrl}</TableCell>
             </TableRow>
         )
     }
@@ -195,7 +269,7 @@ class TasmotaDevice extends Component {
 
             return buttons.map(([key, value]) => {
                 
-                let display = key + ' ' + value;
+                let display = key;
                 if (type === 'Table') {
                     display = key.replace('POWER', '');
 
@@ -287,23 +361,6 @@ class TasmotaDevice extends Component {
                             />
                         </Popover>
                     </div>
-
-                    // <div className={styles.imageContainer}>
-                    //     <DimmerSlider
-                    //         defaultValue={value}
-                    //         id={key}
-                    //         aria-labelledby={key + 'slider'}
-                    //         valueLabelDisplay="auto"
-                    //         step={1}
-                    //         min={1}
-                    //         max={100}
-                    //         onChangeCommitted={this.dimmerUpdate(key)}
-                    //     />
-                    //     <Typography id={key + 'slider'} gutterBottom variant="h5" justify="center">
-                    //         {key} : {value}
-                    //     </Typography>
-
-                    // </div>
                 )
             })
         }
@@ -383,6 +440,7 @@ class TasmotaDevice extends Component {
     }
 
     render() {
+        console.log('Tasmota Device renderType : %s', this.props.renderType)
         switch(this.props['renderType']) {
             case 'List':
                 return this.renderTypeList();
@@ -390,8 +448,21 @@ class TasmotaDevice extends Component {
             case 'Details':
                 return this.renderTypeDetails();
 
-            case 'Table':
-                return this.renderTypeTableRow();
+            case 'Table_Status':
+                return this.renderTypeTableStatusRow();
+
+            case 'Table_Health':
+                return this.renderTypeTableHealthRow();
+
+            case 'Table_WIFI':
+                return this.renderTypeTableWifiRow()
+    
+            case 'Table_Mqtt':
+                return this.renderTypeTableMqttRow()
+    
+            case 'Table_Firmware':
+                return this.renderTypeTableFirmwareRow()
+        
 
             default:
                 return (

@@ -16,6 +16,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityListener from '../Utils/VisibilityListener';
+import Popover from '@material-ui/core/Popover';
 
 const styles = theme => ({
     imageContainer: {
@@ -47,7 +48,11 @@ const DimmerSlider = withStyles({
     root: {
       color: '#52af77',
       height: 8,
-      width: 300
+      width: 300,
+      paddingTop: 70,
+      paddingBottom: 10,
+      paddingLeft: 10,
+      paddingRight: 10,
     },
     thumb: {
       height: 24,
@@ -84,6 +89,7 @@ class TasmotaDevice extends Component {
         this.state = {
             displayName: "",
             status0: null,
+            dimmerAnchors: {},
         }
     }
 
@@ -95,7 +101,7 @@ class TasmotaDevice extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.setState({
             displayName: this.props.deviceManager.getDevice(this.macAddress).Status.FriendlyName[0] + ' (' + this.macAddress + ')',
             status0: this.props.deviceManager.getDevice(this.macAddress)
@@ -113,9 +119,9 @@ class TasmotaDevice extends Component {
     }
 
     onStatus0(response) {
-        console.log('Status0 %s :  %O', this.macAddress, response);
+        // console.log('Status0 %s :  %O', this.macAddress, response);
         let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
-        console.log(newDisplayName);
+        // console.log(newDisplayName);
         this.setState({
             displayName: newDisplayName,
             status0: response,
@@ -130,10 +136,27 @@ class TasmotaDevice extends Component {
         this.deviceConnector.getStatus0();
     }
 
-    dimmerUpdate = (input) => (event, newValue) => {
-        console.log('Dimmer id : %O, value %O newValue %O', input, event, newValue);
-        this.deviceConnector.performCommandOnDevice(input + ' ' + newValue);
+    dimmerUpdate(dimmer, event, newValue) {
+        console.log('Dimmer id : %O, value %O newValue %O', dimmer, event, newValue);
+        event.stopPropagation()
+        this.deviceConnector.performCommandOnDevice(dimmer + ' ' + newValue);
         this.deviceConnector.getStatus0();
+    }
+
+    renderTypeTableRow() {
+        return(
+            <TableRow key={this.state.status0}>
+              <TableCell component="th" scope="row">
+                {this.state.status0.Status.FriendlyName[0]}
+              </TableCell>
+              <TableCell align="right">{this.props.actionButtons}</TableCell>
+              <TableCell align="right">{this.state.status0.Status.Module}</TableCell>
+              <TableCell align="right"><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
+              <TableCell align="right">{this.renderDetailsControlsDimmers('Table')}</TableCell>
+              <TableCell align="right">{this.state.status0.StatusSTS.LoadAvg}</TableCell>
+              <TableCell align="right">{this.state.status0.StatusSTS.Uptime}</TableCell>
+            </TableRow>
+        )
     }
 
     renderTypeList() {
@@ -160,7 +183,7 @@ class TasmotaDevice extends Component {
         )
     }
 
-    renderDetailsControlsButtons() {
+    renderDetailsControlsButtons(type = 'Details') {
         if (this.state.status0) {
             let buttons =  Object.entries(this.state.status0['StatusSTS']).filter(([key, value]) => {
                 if (powerRegex.test(key)) {
@@ -171,22 +194,51 @@ class TasmotaDevice extends Component {
             console.log('DetailsControls buttons : %O', buttons)
 
             return buttons.map(([key, value]) => {
+                
+                let display = key + ' ' + value;
+                if (type === 'Table') {
+                    display = key.replace('POWER', '');
+
+                    if (display === '') {
+                        display = '1'
+                    }
+                }
+
                 if (value === 'ON') {
                     return (
                         <ThemeProvider theme={onButtonTheme} key={key}>
-                            <Button variant="contained" key={key} color="primary" onClick={(event) => this.powerToggle(key, event)}>{key} {value}</Button>
+                            <Button variant="contained" key={key} color="primary" onClick={(event) => this.powerToggle(key, event)}>{display}</Button>
                         </ThemeProvider>
                     )
                 } else {
                     return (
-                        <Button variant="contained" key={key} onClick={(event) => this.powerToggle(key, event)}>{key} {value}</Button>
+                        <Button variant="contained" key={key} onClick={(event) => this.powerToggle(key, event)}>{display}</Button>
                     )
                 }
             })
         }
     }
 
-    renderDetailsControlsDimmers() {
+    openDimmerPopover(dimmer, event) {
+        event.stopPropagation()
+        let newAnchors = Object.assign({}, this.state.dimmerAnchors);
+        newAnchors[dimmer] = event.target
+        this.setState({
+            dimmerAnchors: newAnchors,
+        })
+    }
+
+    dimmerPopoverClosed(dimmer, event) {
+        event.stopPropagation()
+        let newAnchors = Object.assign({}, this.state.dimmerAnchors);
+        delete newAnchors[dimmer]
+        this.setState({
+            dimmerAnchors: newAnchors,
+        })
+    }
+
+
+    renderDetailsControlsDimmers(type = 'Details') {
         if (this.state.status0) {
             let dimmers =  Object.entries(this.state.status0['StatusSTS']).filter(([key, value]) => {
                 if (dimmerRegex.test(key)) {
@@ -197,23 +249,61 @@ class TasmotaDevice extends Component {
             console.log('DetailsControls dimmers : %O', dimmers)
 
             return dimmers.map(([key, value]) => {
-                return (
-                    <div className={styles.imageContainer}>
-                        <DimmerSlider
-                            defaultValue={value}
-                            id={key}
-                            aria-labelledby={key + 'slider'}
-                            valueLabelDisplay="auto"
-                            step={1}
-                            min={1}
-                            max={100}
-                            onChangeCommitted={this.dimmerUpdate(key)}
-                        />
-                        <Typography id={key + 'slider'} gutterBottom variant="h5" justify="center">
-                            {key} : {value}
-                        </Typography>
 
+                let display = key + ' ' + value;
+                if (type === 'Table') {
+                    display = key.replace('Dimmer', 'Dim');
+                    display += ':'+value
+                }
+
+                return (
+                    <div>
+                        <Button variant="contained" key={key} onClick={(event) => this.openDimmerPopover(key, event)}>{display}</Button>
+
+                        <Popover
+                            id={'dimmerPop' + key}
+                            open={Boolean(this.state.dimmerAnchors[key])}
+                            anchorEl={this.state.dimmerAnchors[key]}
+                            onClose={(event) => this.dimmerPopoverClosed(key, event)}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                        >
+                            <DimmerSlider
+                                defaultValue={value}
+                                id={key}
+                                aria-labelledby={key + 'slider'}
+                                valueLabelDisplay="on"
+                                step={1}
+                                min={1}
+                                max={100}
+                                onChange={(event, value) => event.stopPropagation()}
+                                onChangeCommitted={(event, value) => this.dimmerUpdate(key, event, value)}
+                            />
+                        </Popover>
                     </div>
+
+                    // <div className={styles.imageContainer}>
+                    //     <DimmerSlider
+                    //         defaultValue={value}
+                    //         id={key}
+                    //         aria-labelledby={key + 'slider'}
+                    //         valueLabelDisplay="auto"
+                    //         step={1}
+                    //         min={1}
+                    //         max={100}
+                    //         onChangeCommitted={this.dimmerUpdate(key)}
+                    //     />
+                    //     <Typography id={key + 'slider'} gutterBottom variant="h5" justify="center">
+                    //         {key} : {value}
+                    //     </Typography>
+
+                    // </div>
                 )
             })
         }
@@ -293,20 +383,20 @@ class TasmotaDevice extends Component {
     }
 
     render() {
-        console.log('TasmotaDevice ' + this.props['renderType'])
         switch(this.props['renderType']) {
             case 'List':
                 return this.renderTypeList();
-                break
 
             case 'Details':
                 return this.renderTypeDetails();
-                break
+
+            case 'Table':
+                return this.renderTypeTableRow();
 
             default:
                 return (
                     <Typography>
-                        Default RenderType : {this.state.displayName}
+                         {this.state.displayName} RenderType : {this.props.renderType}
                     </Typography>
                 )
                 break

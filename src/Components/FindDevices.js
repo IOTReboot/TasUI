@@ -101,7 +101,7 @@ class FindDevices extends React.Component {
                 numIpsRequested: (this.state.totalAddresses - this.ipsToScan.length + this.ipsRequested.length) * 100 / this.state.totalAddresses
             })
         } else {
-            if (this.ipsRequested.length == 0) {
+            if (this.ipsRequested.length === 0) {
                 this.setState({
                     searching: false,
                 })

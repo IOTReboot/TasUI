@@ -8,7 +8,7 @@ const commands = {
 class TasmotaDeviceConnector {
 
     deviceIPAddress = "";
-    deviceListener = "";
+    deviceListeners = [];
     timer = null;
     // responseMap = [{}];
 
@@ -17,13 +17,25 @@ class TasmotaDeviceConnector {
     }
 
     connect(listener) {
-        this.deviceListener = listener;
-        this.resume();
+        let index = this.deviceListeners.indexOf(listener)
+        if (index === -1) {
+            this.deviceListeners.push(listener);            
+        }
+
+        if (this.deviceListeners.length === 1) {
+            this.resume();
+        }
     }
 
-    disconnect() {
-        this.pause();
-        this.deviceListener = null;
+    disconnect(listener) {
+        let index = this.deviceListeners.indexOf(listener)
+        if (index !== -1) {
+            this.deviceListeners.splice(index, 1)
+        }
+
+        if (this.deviceListeners.length === 0) {
+            this.pause();
+        }
     }
 
     pause() {
@@ -44,16 +56,19 @@ class TasmotaDeviceConnector {
     }
 
     onCommandResponse(args) {
-        if (args.success) {
-            switch(args.key) {
-                case commands.Status0:
-                    this.deviceListener.onStatus0(args.response.body);
-                    break
+        // console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response)
+        this.deviceListeners.forEach(function (deviceListener, index) {
+            if (args.success) {
+                switch(args.key) {
+                    case commands.Status0:
+                        deviceListener.onStatus0(args.response.body);
+                        break
+                }
+            } else {
+                console.log(`Command ${args.key} failed. Url : ${args.url} Response: %O`, args.response)
             }
-        } else {
-            console.log(`Command ${args.key} failed. Url : ${args.url} Response: %O`, args.response)
-        }
-
+    
+        });
     }
 
     performCommandOnDevice(cmnd) {

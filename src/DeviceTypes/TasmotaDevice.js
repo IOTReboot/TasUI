@@ -17,6 +17,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import VisibilityListener from '../Utils/VisibilityListener';
 import Popover from '@material-ui/core/Popover';
+import SettingsGroup from '../Components/SettingsGroup'
 
 const styles = theme => ({
     imageContainer: {
@@ -126,15 +127,17 @@ class TasmotaDevice extends Component {
         this.deviceConnector.disconnect();
     }
 
-    onStatus0(response) {
-        // console.log('Status0 %s :  %O', this.macAddress, response);
-        let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
-        // console.log(newDisplayName);
-        this.setState({
-            displayName: newDisplayName,
-            status0: response,
-        })
-        this.props.deviceManager.updateDevice(this.macAddress, response);
+    onCommandResponse(cmnd, response) {
+        if (cmnd === 'Status 0') {
+            // console.log('Status0 %s :  %O', this.macAddress, response);
+            let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
+            // console.log(newDisplayName);
+            this.setState({
+                displayName: newDisplayName,
+                status0: response,
+            })
+            this.props.deviceManager.updateDevice(this.macAddress, response);
+        }
     }
 
     powerToggle(button, event) {
@@ -420,6 +423,51 @@ class TasmotaDevice extends Component {
     }  
 
     renderTypeDetails() {
+        let mqttSettingsGroup = {
+            groupName: "Mqtt Connection Settings",
+            settings: [{
+                name: 'Mqtt Host',
+                command: 'MqttHost',
+            }, {
+                name: 'Mqtt User',
+                command: 'MqttUser',
+            }, {
+                name: 'Mqtt Password',
+                command: 'MqttPassword',
+            }]
+        }
+
+        let wifiSettingsGroup = {
+            groupName: "Wifi Connection Settings",
+            settings: [{
+                name: 'Ssid 1',
+                command: 'Ssid1',
+            }, {
+                name: 'Password 1',
+                command: 'Password1',
+            }, {
+                name: 'Ssid 2',
+                command: 'Ssid2',
+            }, {
+                name: 'Password 2',
+                command: 'Password2',
+            }]
+        }
+
+        let ruleSettingsGroup = {
+            groupName: 'Rules',
+            settings: [{
+                name: 'Rule 1',
+                command: 'Rule1',
+            },{
+                name: 'Rule 2',
+                command: 'Rule2'
+            },{
+                name: 'Rule 3',
+                command: 'Rule3'
+            }]
+        }
+
         return(
             <Grid container justify="center" alignItems="center" direction="column" width="sm" xs={12}>
                 <Grid margin={20} className={styles.detailsContainer} >
@@ -438,6 +486,18 @@ class TasmotaDevice extends Component {
                 <Grid xs={12}>
                     {this.renderDetailsControlsButtons()}
                 </Grid>
+
+                <Grid xs={12}>
+                    <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={wifiSettingsGroup} />
+                </Grid>
+
+                <Grid xs={12}>
+                    <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={mqttSettingsGroup} />
+                </Grid>
+{/* 
+                <Grid xs={12}>
+                    <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={ruleSettingsGroup} />
+                </Grid> */}
 
                 <Grid xs={10}>
                     {this.renderDetailsStatuses()}

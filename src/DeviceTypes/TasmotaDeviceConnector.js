@@ -59,11 +59,12 @@ class TasmotaDeviceConnector {
         // console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response)
         this.deviceListeners.forEach(function (deviceListener, index) {
             if (args.success) {
-                switch(args.key) {
-                    case commands.Status0:
-                        deviceListener.onStatus0(args.response.body);
-                        break
-                }
+                deviceListener.onCommandResponse(args.key, args.response.body)
+                // switch(args.key) {
+                //     case commands.Status0:
+                //         deviceListener.onStatus0(args.response.body);
+                //         break
+                // }
             } else {
                 console.log(`Command ${args.key} failed. Url : ${args.url} Response: %O`, args.response)
             }

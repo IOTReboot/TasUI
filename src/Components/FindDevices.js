@@ -1,21 +1,18 @@
-import React from 'react'
-import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box"
-import TextField from "@material-ui/core/TextField"
-import Button from "@material-ui/core/Button"
-import LinearProgress from "@material-ui/core/LinearProgress"
-import ExpansionPanel from "@material-ui/core/ExpansionPanel"
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import TasmotaDevice from "../DeviceTypes/TasmotaDevice"
-
-import axios from "axios";
-import superagent from "superagent"
-import IPAddress from 'ip-address';
 import { Typography } from '@material-ui/core';
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import TextField from "@material-ui/core/TextField";
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import IPAddress from 'ip-address';
+import React from 'react';
+import superagent from "superagent";
+import DeviceList from './DeviceList';
+import DisplayTypeButtons from './DisplayTypeButtons';
+
 
 class FindDevices extends React.Component {
 
@@ -31,6 +28,7 @@ class FindDevices extends React.Component {
             numIpsRequested: 0,
             numIpsCompleted: 0,
             searching: false,
+            displayMode: "Table_Status"
         }
         
     }
@@ -166,36 +164,58 @@ class FindDevices extends React.Component {
         this.setState({})
     }
 
-    renderDevice(mac) {
-        let buttons = (
-            <div>
-                <SettingsApplicationsIcon onClick={(event) => this.openDeviceDetails(mac, event)}/>
-                {!this.props.deviceManager.isDeviceKnown(mac) ?
-                    <AddIcon onClick={(event) => this.addDevice(mac, event)}/>
-                    : <DeleteIcon onClick={(event) => this.deleteDevice(mac, event)}/>
-                }
-            </div>
-        )
+    knownDeviceButtons = [{
+        toolTip: "Details",
+        label: "details",
+        icon: <SettingsApplicationsIcon />,
+        onButtonClick: (mac, event) => this.openDeviceDetails(mac, event),
+    },{
+        toolTip: "Delete", 
+        label: "delete", 
+        icon: <DeleteIcon />,
+        onButtonClick: (mac, event) => this.deleteDevice(mac, event),
+    }]
 
-        return (
-            <ExpansionPanel key={mac}>
-            <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1c-content"
-                id="panel1c-header"
-                >
-                <TasmotaDevice macAddress={mac} renderType="List" deviceManager={this.props.deviceManager} openDeviceDetails={this.handleIpAddressClicked} actionButtons={buttons}/>
-            </ExpansionPanelSummary>
-            </ExpansionPanel>
-        )
-    }
+    newDeviceButtons = [{
+        toolTip: "Details",
+        label: "details",
+        icon: <SettingsApplicationsIcon />,
+        onButtonClick: (mac, event) => this.openDeviceDetails(mac, event),
+    },{
+        toolTip: "Add", 
+        label: "add", 
+        icon: <AddIcon />,
+        onButtonClick: (mac, event) => this.addDevice(mac, event),
+    }]
 
     render() {
 
+        let discoveredDevices = this.props.deviceManager.getDiscoveredDevices()
+        let discoveredDevicesMacs = Object.keys(discoveredDevices)
+        
+        let newDevices = discoveredDevicesMacs.filter((mac) => {
+            return !this.props.deviceManager.isDeviceKnown(mac)
+        }).reduce((obj, key) => {
+            obj[key] = discoveredDevices[key];
+            return obj;
+        }, {});
+
+
+        let knownDevices = discoveredDevicesMacs.filter((mac) => {
+            return this.props.deviceManager.isDeviceKnown(mac)
+        }).reduce((obj, key) => {
+            obj[key] = discoveredDevices[key];
+            return obj;
+        }, {});
+
+
         return (
             <Container>
+                <Box display="flex" alignItems="baseline" flexDirection="row">
                 <h1>Discover Active Devices</h1>
-                <Box>
+                <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
+                </Box>
+                <Box display="flex" alignItems="baseline" flexDirection="row">
                 <TextField
                     id="outlined-name"
                     label="Start IP Address"
@@ -226,24 +246,16 @@ class FindDevices extends React.Component {
                     <LinearProgress variant="buffer" value={this.state.numIpsCompleted} valueBuffer={this.state.numIpsRequested} />
                     : null }
                     
-                <Typography visibility={Object.keys(this.props.deviceManager.getDiscoveredDevices()).length !== 0 ? "visible" : "hidden"} >
-                    New Devices
-                </Typography>
 
-                {Object.keys(this.props.deviceManager.getDiscoveredDevices()).map((mac, index) => {
-                    if (!this.props.deviceManager.isDeviceKnown(mac)) {
-                       return this.renderDevice(mac)
-                    }
-                })}
+                {/* <h3>New Devices</h3> */}
+                <DeviceList 
+                    key="newDevices"
+                    displayMode={this.state.displayMode} 
+                    deviceSections={{ "New Devices": { devices: newDevices, itemButtons: this.newDeviceButtons},
+                                     "Saved Devices": { devices: knownDevices, itemButtons: this.knownDeviceButtons}}}
+                    deviceManager={this.props.deviceManager}
+                />
 
-                <Typography visibility={Object.keys(this.props.deviceManager.getDiscoveredDevices()).length !== 0 ? "visible" : "hidden"} >
-                    Saved Devices
-                </Typography>
-                {Object.keys(this.props.deviceManager.getDiscoveredDevices()).map((mac, index) => {
-                    if (this.props.deviceManager.isDeviceKnown(mac)) {
-                       return this.renderDevice(mac)
-                    }
-                })}
             </Container>
         )
 

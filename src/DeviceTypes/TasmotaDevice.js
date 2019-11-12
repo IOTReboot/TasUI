@@ -101,6 +101,14 @@ class TasmotaDevice extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) { 
+        if (nextProps.macAddress !== this.macAddress) {
+            this.deviceConnector.disconnect();
+            this.deviceConnector = this.props.deviceManager.getDeviceConnector(nextProps.macAddress, this.props.deviceManager.getDevice(nextProps.macAddress).StatusNET.IPAddress);
+            this.deviceConnector.connect();
+        }
+    }
+
     componentWillMount() {
         this.setState({
             displayName: this.props.deviceManager.getDevice(this.macAddress).Status.FriendlyName[0] + ' (' + this.macAddress + ')',
@@ -145,7 +153,7 @@ class TasmotaDevice extends Component {
 
     renderTypeTableStatusRow() {
         return(
-            <TableRow key={this.state.status0}>
+            <TableRow key={this.props.macAddress}>
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
@@ -161,7 +169,7 @@ class TasmotaDevice extends Component {
 
     renderTypeTableHealthRow() {
         return(
-            <TableRow key={this.state.status0}>
+            <TableRow key={this.props.macAddress}>
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
@@ -181,7 +189,7 @@ class TasmotaDevice extends Component {
 
     renderTypeTableWifiRow() {
         return(
-            <TableRow key={this.state.status0}>
+            <TableRow key={this.props.macAddress}>
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
@@ -202,7 +210,7 @@ class TasmotaDevice extends Component {
 
     renderTypeTableMqttRow() {
         return(
-            <TableRow key={this.state.status0}>
+            <TableRow key={this.props.macAddress}>
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
@@ -218,7 +226,7 @@ class TasmotaDevice extends Component {
 
     renderTypeTableFirmwareRow() {
         return(
-            <TableRow key={this.state.status0}>
+            <TableRow key={this.props.macAddress}>
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>

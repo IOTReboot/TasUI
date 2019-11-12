@@ -122,7 +122,7 @@ class App extends Component {
     const listItems = mainMenuItems.map((item, index) => {
       return (
         <div>
-        <Link to={item.link}>
+        <Link to={item.link} key={item.link} >
           <ListItem button key={item.name}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.name} />

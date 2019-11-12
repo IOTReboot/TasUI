@@ -235,8 +235,8 @@ class FindDevices extends React.Component {
                     onChange={this.handleIPToChange}
                 />
                 {!this.state.searching ? 
-                    <Button variant="contained" margin="normal" onClick={() => this.handleFindClicked()}>Find</Button>
-                    : <Button variant="contained" margin="normal" onClick={() => this.handleStopClicked()} >Stop</Button>
+                    <Button variant="contained" margin="normal" onClick={() => this.handleFindClicked()}>Start Discovery</Button>
+                    : <Button variant="contained" margin="normal" onClick={() => this.handleStopClicked()} >Stop Discovery</Button>
                 }
                 </Box>
                 <Typography>

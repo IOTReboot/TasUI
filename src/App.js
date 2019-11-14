@@ -20,6 +20,7 @@ import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-route
 import Devices from './Components/Devices';
 import DeviceManager from './DeviceManagement/DeviceManager';
 import DeviceDetails from './Components/DeviceDetails';
+import DeviceSettings from './Components/DeviceSettings';
 import FindDevices from './Components/FindDevices';
 
 const drawerWidth = 240;
@@ -175,6 +176,7 @@ class App extends Component {
               <Route exact path="/findDevices" render={(props) => <FindDevices {...props} deviceManager={deviceManager} />} />
               <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
               <Route path="/devices/:mac" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
+              <Route path="/settings/:mac" render={(props) => <DeviceSettings {...props} deviceManager={deviceManager} />} />
               {/* <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} /> */}
               <Redirect exact from="/" to="/devices" />
             </Switch>

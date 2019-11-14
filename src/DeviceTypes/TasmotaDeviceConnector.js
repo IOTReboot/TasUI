@@ -1,4 +1,3 @@
-import axios from '../Utils/AxiosClient';
 import superagent from 'superagent';
 
 const commands = {

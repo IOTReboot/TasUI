@@ -1,6 +1,6 @@
 import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { green, blue } from '@material-ui/core/colors';
-import { Box, Grid, Paper, Container, Button, Slider } from '@material-ui/core';
+import { Box, Grid, Paper, Container, Button, Slider, Divider } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -11,6 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import React, { Component } from 'react';
 import Svg from 'react-inlinesvg';
 import Table from '@material-ui/core/Table';
+import Link from '@material-ui/core/Link';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -18,6 +19,16 @@ import TableRow from '@material-ui/core/TableRow';
 import VisibilityListener from '../Utils/VisibilityListener';
 import Popover from '@material-ui/core/Popover';
 import SettingsGroup from '../Components/SettingsGroup'
+import TasmotaVersionedConfig from '../Configuration/TasmotaVersionedConfig'
+import TasmotaConfig_06070000 from '../Configuration/TasmotaConfig-6.7.0.0';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Checkbox from '@material-ui/core/Checkbox';
+
 
 const styles = theme => ({
     imageContainer: {
@@ -422,7 +433,7 @@ class TasmotaDevice extends Component {
         }
     }  
 
-    renderTypeDetails() {
+    renderTypeSettings() {
         let mqttSettingsGroup = {
             groupName: "Mqtt Connection Settings",
             settings: [{
@@ -499,11 +510,166 @@ class TasmotaDevice extends Component {
                     <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={ruleSettingsGroup} />
                 </Grid> */}
 
-                <Grid xs={10}>
-                    {this.renderDetailsStatuses()}
-                </Grid>
-                    <DeleteIcon/>
             </Grid>
+        )
+    }
+
+    copyToClipboard() {
+        navigator.clipboard.writeText(JSON.stringify(this.state.status0, null, 2))
+    }
+
+    convertHexStringToBitArray(bytesString) {
+        var bitArray = [];
+        var digitValue = 0;
+        let charArray = bytesString.toLowerCase().split('');
+
+
+        charArray.forEach((char, index) => {
+            digitValue = '0123456789abcdefgh'.indexOf(char);
+            for(let n = 3; n >= 0; n--) {
+                bitArray.push((digitValue >> n) & 1)
+            }
+        })
+
+        // console.log('ByteString: %s to bitArray : %O', bytesString, bitArray.reverse())
+        return bitArray.reverse()
+    }
+
+
+    renderDetailsSetOptions() {
+        return (
+            <ExpansionPanel key="SetOptionFlagExpansionPanel">
+                        <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography>SetOption Flags List</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                        <List dense >
+                            {this.renderDetailsSetOptionsListItems()}
+                        </List>
+            </ExpansionPanelDetails>
+            </ExpansionPanel>
+        )
+    }
+
+    renderDetailsSetOptionsListItems() {
+
+        return this.state.status0.StatusLOG.SetOption.map((setOptionStr,index) => {
+            if (index !== 1) {
+            let valueArray = this.convertHexStringToBitArray(setOptionStr)
+            return TasmotaVersionedConfig.TasmotaConfig_06070000.setOptionsStatusMaps[index].items.map((item, itemIndex) => {
+                if (item.name !== '' && item.description !== '') {
+                    var soValue = itemIndex + TasmotaVersionedConfig.TasmotaConfig_06070000.setOptionsStatusMaps[index].setOptionStart;
+                    console.log('SetOption%d (%s) : %d', soValue, item.name, valueArray[itemIndex])
+                    return (
+                        <ListItem key={'SetOption' + soValue}>
+                            <ListItemText id={'checkbox-lable-SetOption' + soValue} primary={`SetOption${soValue}`} 
+                                secondary={item.description}/>
+                            <ListItemSecondaryAction>
+                            <Checkbox
+                                edge="end"
+                                checked={valueArray[itemIndex] === 1}
+                                disabled
+                            />
+                            </ListItemSecondaryAction>
+                        </ListItem>
+                    )
+                }
+            })
+            }
+        })
+    }
+
+
+    renderDetailsConnectivity() {
+        return (
+        <React.Fragment>
+            <TableRow>
+                <TableCell />
+                <TableCell>Wifi AP</TableCell>
+                <TableCell>{this.state.status0.StatusSTS.Wifi.SSId}</TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell />
+                <TableCell>Wifi Strength</TableCell>
+                <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell />
+                <TableCell>Wifi Channel</TableCell>
+                <TableCell>{this.state.status0.StatusSTS.Wifi.Channel}</TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell />
+                <TableCell>Wifi BSSID</TableCell>
+                <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
+            </TableRow>
+        </React.Fragment>
+        )
+    }
+
+    renderTypeDetails() {
+        return (
+            <React.Fragment>
+            <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center" style={{maxWidth: 900}}>
+            {/* <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center"> */}
+            {/* <Box className={styles.imageContainer} width="200" height="200"> */}
+                    <Paper alignSelf="center" style={{width: 200, height: 200}}>
+                        {this.renderDetailsImage()}
+                    </Paper>
+                {/* </Box> */}
+            {/* </Box> */}
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell colSpan={2}></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                            <TableCell align="left"><Typography>FriendlyName</Typography></TableCell>
+                            <TableCell align="center" colSpan={2}>{this.state.status0.Status.FriendlyName[0]}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                            <TableCell align="left"><Typography>Relays</Typography></TableCell>
+                            <TableCell align="center" colSpan={2}>{this.renderDetailsControlsButtons('Table')}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                            <TableCell align="left"><Typography>Light Controls</Typography></TableCell>
+                            <TableCell align="center" colSpan={2}>{this.renderDetailsControlsDimmers('Table')}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                            <TableCell align="left"><Typography>Connectivity</Typography></TableCell>
+                            <TableCell colSpan={2}/>
+                    </TableRow>
+                    {this.renderDetailsConnectivity()}
+
+
+                    {/* <TableRow>
+                            <TableCell align="left"><Typography>SetOptions Flags List</Typography></TableCell>
+                            <TableCell colSpan={2}/>
+                    </TableRow> */}
+
+                </TableBody>
+            </Table>
+
+            {this.renderDetailsSetOptions()}
+
+            {/* <Box> */}
+            <Box display="flex" flexDirection="row" justifyContent="space-between">
+                <Typography variant="h6">Status Report</Typography>
+                <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
+            </Box>
+
+            {this.renderDetailsStatuses()}
+
+            </Box>
+            {/* </Box> */}
+            </React.Fragment>
         )
     }
 
@@ -512,6 +678,9 @@ class TasmotaDevice extends Component {
         switch(this.props['renderType']) {
             case 'List':
                 return this.renderTypeList();
+
+            case 'Settings':
+                return this.renderTypeSettings();
 
             case 'Details':
                 return this.renderTypeDetails();

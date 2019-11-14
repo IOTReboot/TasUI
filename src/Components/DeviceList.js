@@ -74,10 +74,10 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Module</TableCell>
                 <TableCell>Power</TableCell>
-                <TableCell>Dimmer</TableCell>
+                <TableCell>Light Controls</TableCell>
                 <TableCell>LoadAvg</TableCell>
                 <TableCell>Uptime</TableCell>
           </TableRow>
@@ -89,7 +89,7 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Uptime</TableCell>
                 <TableCell>Boot Count</TableCell>
                 <TableCell>Restart Reason</TableCell>
@@ -108,7 +108,7 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Version</TableCell>
                 <TableCell>Core</TableCell>
                 <TableCell>SDK</TableCell>
@@ -123,7 +123,7 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Hostname</TableCell>
                 <TableCell>Mac Address</TableCell>
                 <TableCell>IP Address</TableCell>
@@ -143,7 +143,7 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Mqtt Host</TableCell>
                 <TableCell>Mqtt Port</TableCell>
                 <TableCell>Mqtt Client</TableCell>

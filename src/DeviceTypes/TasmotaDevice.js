@@ -3,6 +3,7 @@ import { green, blue } from '@material-ui/core/colors';
 import { Box, Grid, Paper, Container, Button, Slider, Divider } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import CircularProgress from '@material-ui/core/CircularProgress'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -102,6 +103,9 @@ class TasmotaDevice extends Component {
             displayName: "",
             status0: null,
             dimmerAnchors: {},
+            template: '',
+            gpios: '',
+            gpio: '',
         }
     }
 
@@ -148,6 +152,21 @@ class TasmotaDevice extends Component {
                 status0: response,
             })
             this.props.deviceManager.updateDevice(this.macAddress, response);
+        } else if (cmnd === 'Template') {
+            this.setState({
+                template: response,
+            })
+            this.deviceConnector.performCommandOnDevice('GPIOs')
+        } else if (cmnd === 'GPIO') {
+            // console.log('GPIO Response : %O', response)
+            this.setState({
+                gpio: response,
+            })
+            this.deviceConnector.performCommandOnDevice('GPIOs')
+        } else if (cmnd === 'GPIOs') {
+            this.setState({
+                gpios: response,
+            })
         }
     }
 
@@ -155,14 +174,12 @@ class TasmotaDevice extends Component {
         event.stopPropagation();
         console.log('Toggle power ' + button)
         this.deviceConnector.performCommandOnDevice(button + ' TOGGLE');
-        this.deviceConnector.getStatus0();
     }
 
     dimmerUpdate(dimmer, event, newValue) {
         console.log('Dimmer id : %O, value %O newValue %O', dimmer, event, newValue);
         event.stopPropagation()
         this.deviceConnector.performCommandOnDevice(dimmer + ' ' + newValue);
-        this.deviceConnector.getStatus0();
     }
 
     renderTypeTableStatusRow() {
@@ -389,7 +406,7 @@ class TasmotaDevice extends Component {
     }
 
     renderDetailsStatuses() {
-        if (this.state.status0) {
+        
             return Object.entries(this.state.status0).map(([cmnd, cmndData]) => {
                 
                 return (
@@ -402,7 +419,7 @@ class TasmotaDevice extends Component {
                         <Typography>{cmnd}</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
-                        <Table aria-label="simple table">
+                        <Table aria-label="simple table" size="small">
                             <TableHead>
                                 <TableRow>
                                 <TableCell>Key</TableCell>
@@ -430,7 +447,7 @@ class TasmotaDevice extends Component {
                 
 
             })
-        }
+        
     }  
 
     renderTypeSettings() {
@@ -515,7 +532,15 @@ class TasmotaDevice extends Component {
     }
 
     copyToClipboard() {
-        navigator.clipboard.writeText(JSON.stringify(this.state.status0, null, 2))
+        const el = document.createElement('textarea');
+        el.value = JSON.stringify(this.state.status0, null, 2)
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
     }
 
     convertHexStringToBitArray(bytesString) {
@@ -563,19 +588,22 @@ class TasmotaDevice extends Component {
             return TasmotaVersionedConfig.TasmotaConfig_06070000.setOptionsStatusMaps[index].items.map((item, itemIndex) => {
                 if (item.name !== '' && item.description !== '') {
                     var soValue = itemIndex + TasmotaVersionedConfig.TasmotaConfig_06070000.setOptionsStatusMaps[index].setOptionStart;
-                    console.log('SetOption%d (%s) : %d', soValue, item.name, valueArray[itemIndex])
+                    // console.log('SetOption%d (%s) : %d', soValue, item.name, valueArray[itemIndex])
                     return (
-                        <ListItem key={'SetOption' + soValue}>
-                            <ListItemText id={'checkbox-lable-SetOption' + soValue} primary={`SetOption${soValue}`} 
-                                secondary={item.description}/>
-                            <ListItemSecondaryAction>
-                            <Checkbox
-                                edge="end"
-                                checked={valueArray[itemIndex] === 1}
-                                disabled
-                            />
-                            </ListItemSecondaryAction>
-                        </ListItem>
+                        <React.Fragment>
+                            <ListItem key={'SetOption' + soValue}>
+                                <ListItemText id={'checkbox-lable-SetOption' + soValue} primary={`SetOption${soValue}`} 
+                                    secondary={item.description}/>
+                                <ListItemSecondaryAction>
+                                <Checkbox
+                                    edge="end"
+                                    checked={valueArray[itemIndex] === 1}
+                                    disabled
+                                />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                            <Divider variant="fullWidth" component="li" />
+                        </React.Fragment>
                     )
                 }
             })
@@ -583,30 +611,178 @@ class TasmotaDevice extends Component {
         })
     }
 
+    getPanelCommandData = command => (event, isExpanded) => {
+        event.stopPropagation()
+        if (isExpanded) {
+            this.deviceConnector.performCommandOnDevice(command);
+        }
+    }
+
+    getGPIOName(gpio) {
+        var keys = Object.keys(this.state.gpios)
+
+        for(let n = 0; n < keys.length; n++) {
+            console.log("Keys %O", this.state.gpios[keys[n]])
+            if (typeof this.state.gpios[keys[n]] === 'object') {
+                if (this.state.gpios[keys[n]][gpio]) {
+                    return this.state.gpios[keys[n]][gpio]
+                } else {
+                    return 'User'
+                }
+            } else {
+                if (this.state.gpios[keys[n]].startsWith(gpio.toString())) {
+                    return this.state.gpios[keys[n]].replace(gpio.toString(), "")
+                }
+            }
+        }
+    }
+
+    renderTemplateResponse() {
+        return (
+            <Table size="small">
+                <TableBody>
+                    <TableRow>
+                        <TableCell>NAME</TableCell>
+                        <TableCell>{this.state.template.NAME}</TableCell>
+                    </TableRow>
+
+                    {
+                        this.state.template.GPIO.map((gpio, index) => {
+                            return (
+                                <TableRow>
+                                    <TableCell>{`GPIO${index}`}</TableCell>
+                                    <TableCell>{`${gpio} ( ${this.getGPIOName(gpio)} )`}</TableCell>
+                                </TableRow>
+                            )
+                        }) 
+                    }
+
+                    <TableRow>
+                        <TableCell>FLAG</TableCell>
+                        <TableCell>{this.state.template.FLAG}</TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell>BASE</TableCell>
+                        <TableCell>{this.state.template.BASE}</TableCell>
+                    </TableRow>
+
+                </TableBody>
+            </Table>
+
+        )
+    }
+
+    renderDetailsTemplate() {
+       return (
+       <ExpansionPanel key="TemplateDetailsExpansionPanel" onChange={this.getPanelCommandData('Template')}>
+            <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+            >
+            <Typography>Template</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+
+            {this.state.template === '' || this.state.gpios === '' ? <CircularProgress /> : 
+                this.renderTemplateResponse()
+            }
+
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
+       )
+    }
+
+    renderGPIOResponse() {
+
+        return (
+            <Table size="small">
+            <TableBody>
+
+            {Object.keys(this.state.gpio).map((gpio, index) => {
+                if (typeof this.state.gpio[gpio] === 'object') {
+                    var key = Object.keys(this.state.gpio[gpio])[0]
+                    return (
+                        <TableRow>
+                            <TableCell>{gpio}</TableCell>
+                            <TableCell>{`${key} ( ${this.state.gpio[gpio][key]} )`}</TableCell>
+                        </TableRow>
+                    )
+                } else {
+                    return (
+                        <TableRow>
+                            <TableCell>{gpio}</TableCell>
+                            <TableCell>{this.state.gpio[gpio]}</TableCell>
+                        </TableRow>
+                    )
+                }
+            })} 
+
+            </TableBody>
+            </Table>
+        )
+    }
+
+    renderDetailsGPIO() {
+        return (
+        <ExpansionPanel key="GPIODetailsExpansionPanel" onChange={this.getPanelCommandData('GPIO')}>
+             <ExpansionPanelSummary
+             expandIcon={<ExpandMoreIcon />}
+             aria-controls="panel1a-content"
+             id="panel1a-header"
+             >
+             <Typography>Module GPIO</Typography>
+             </ExpansionPanelSummary>
+             <ExpansionPanelDetails>
+ 
+             {this.state.gpio === '' || this.state.gpios === '' ? <CircularProgress /> : 
+                 this.renderGPIOResponse()
+             }
+ 
+             </ExpansionPanelDetails>
+         </ExpansionPanel>
+        )
+     }
 
     renderDetailsConnectivity() {
         return (
         <React.Fragment>
-            <TableRow>
-                <TableCell />
-                <TableCell>Wifi AP</TableCell>
-                <TableCell>{this.state.status0.StatusSTS.Wifi.SSId}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell />
-                <TableCell>Wifi Strength</TableCell>
-                <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell />
-                <TableCell>Wifi Channel</TableCell>
-                <TableCell>{this.state.status0.StatusSTS.Wifi.Channel}</TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell />
-                <TableCell>Wifi BSSID</TableCell>
-                <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
-            </TableRow>
+            <ExpansionPanel key="ConnectivityDetailsExpansionPanel">
+                        <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        >
+                        <Typography>Connectivity</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                <Table size="small">
+                <TableBody>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell>Wifi AP</TableCell>
+                        <TableCell>{this.state.status0.StatusSTS.Wifi.SSId}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell>Wifi Strength</TableCell>
+                        <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell>Wifi Channel</TableCell>
+                        <TableCell>{this.state.status0.StatusSTS.Wifi.Channel}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell>Wifi BSSID</TableCell>
+                        <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
+                    </TableRow>
+                </TableBody>
+                </Table>
+            </ExpansionPanelDetails>
+            </ExpansionPanel>
         </React.Fragment>
         )
     }
@@ -615,14 +791,12 @@ class TasmotaDevice extends Component {
         return (
             <React.Fragment>
             <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center" style={{maxWidth: 900}}>
-            {/* <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center"> */}
-            {/* <Box className={styles.imageContainer} width="200" height="200"> */}
-                    <Paper alignSelf="center" style={{width: 200, height: 200}}>
+            <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center">
+                    <Paper align="center" style={{width: 200, height: 200}}>
                         {this.renderDetailsImage()}
                     </Paper>
-                {/* </Box> */}
-            {/* </Box> */}
-            <Table>
+            </Box>
+            <Table size="medium">
                 <TableHead>
                     <TableRow>
                         <TableCell colSpan={2}></TableCell>
@@ -642,33 +816,50 @@ class TasmotaDevice extends Component {
                             <TableCell align="center" colSpan={2}>{this.renderDetailsControlsDimmers('Table')}</TableCell>
                     </TableRow>
 
+
                     <TableRow>
-                            <TableCell align="left"><Typography>Connectivity</Typography></TableCell>
-                            <TableCell colSpan={2}/>
+                        <TableCell colSpan={3}>
+                            {this.renderDetailsConnectivity()}
+                        </TableCell>
                     </TableRow>
-                    {this.renderDetailsConnectivity()}
+
+                    <TableRow>
+                        <TableCell colSpan={3}>
+                            {this.renderDetailsGPIO()}
+                        </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell colSpan={3}>
+                            {this.renderDetailsTemplate()}
+                        </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell colSpan={3}>
+                            {this.renderDetailsSetOptions()}
+                        </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                            <TableCell align="left"><Typography>Status Report</Typography></TableCell>
+                            <TableCell align="center" colSpan={2}>
+                                <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
+                            </TableCell>
+                    </TableRow>
+
+                    <TableRow>
+                        <TableCell colSpan={3}>
+                            {this.renderDetailsStatuses()}
+                        </TableCell>
+                    </TableRow>
 
 
-                    {/* <TableRow>
-                            <TableCell align="left"><Typography>SetOptions Flags List</Typography></TableCell>
-                            <TableCell colSpan={2}/>
-                    </TableRow> */}
 
                 </TableBody>
             </Table>
 
-            {this.renderDetailsSetOptions()}
-
-            {/* <Box> */}
-            <Box display="flex" flexDirection="row" justifyContent="space-between">
-                <Typography variant="h6">Status Report</Typography>
-                <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
             </Box>
-
-            {this.renderDetailsStatuses()}
-
-            </Box>
-            {/* </Box> */}
             </React.Fragment>
         )
     }

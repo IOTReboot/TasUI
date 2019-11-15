@@ -192,8 +192,6 @@ class TasmotaDevice extends Component {
               <TableCell>{this.state.status0.Status.Module}</TableCell>
               <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
               <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.LoadAvg}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Uptime}</TableCell>
             </TableRow>
         )
     }
@@ -205,15 +203,17 @@ class TasmotaDevice extends Component {
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
               <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Uptime}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.MqttCount}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.Downtime}</TableCell>
+              <TableCell>{this.state.status0.StatusFWR.Version}</TableCell>
+              <TableCell>{this.state.status0.StatusFWR.Core}</TableCell>
               <TableCell>{this.state.status0.StatusPRM.BootCount}</TableCell>
               <TableCell>{this.state.status0.StatusPRM.RestartReason}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.LoadAvg}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Sleep}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.MqttCount}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.Downtime}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
             </TableRow>
         )
     }
@@ -225,16 +225,16 @@ class TasmotaDevice extends Component {
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
               <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.Downtime}</TableCell>
               <TableCell>{this.state.status0.StatusNET.Hostname}</TableCell>
               <TableCell>{this.state.status0.StatusNET.Mac}</TableCell>
               <TableCell>{this.state.status0.StatusNET.IPAddress}</TableCell>
               <TableCell>{this.state.status0.StatusNET.Gateway}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.SSId}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.Channel}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
-              <TableCell>{this.state.status0.StatusSTS.Wifi.Downtime}</TableCell>
             </TableRow>
         )
     }
@@ -246,11 +246,18 @@ class TasmotaDevice extends Component {
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
               <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
+              <TableCell>{this.state.status0.StatusSTS.MqttCount}</TableCell>
+              <TableCell>{this.state.status0.Status.Topic}</TableCell>
+              <TableCell>'Full Topic - N/A'</TableCell>
+              <TableCell>'Command Topic - N/A'</TableCell>
+              <TableCell>'Stat Topic - N/A'</TableCell>
+              <TableCell>'Tele Topic - N/A'</TableCell>
+              <TableCell>'Fallback Topic - N/A'</TableCell>
+              <TableCell>{this.state.status0.StatusPRM.GroupTopic}</TableCell>
               <TableCell>{this.state.status0.StatusMQT.MqttHost}</TableCell>
               <TableCell>{this.state.status0.StatusMQT.MqttPort}</TableCell>
               <TableCell>{this.state.status0.StatusMQT.MqttClient}</TableCell>
-              <TableCell>{this.state.status0.Status.Topic}</TableCell>
-              <TableCell>{this.state.status0.StatusPRM.GroupTopic}</TableCell>
             </TableRow>
         )
     }
@@ -621,17 +628,23 @@ class TasmotaDevice extends Component {
     getGPIOName(gpio) {
         var keys = Object.keys(this.state.gpios)
 
+        if (gpio === 255) {
+            return 'User'
+        }
+
         for(let n = 0; n < keys.length; n++) {
-            console.log("Keys %O", this.state.gpios[keys[n]])
-            if (typeof this.state.gpios[keys[n]] === 'object') {
+            console.log("Keys %s", this.state.gpios[keys[n]])
+            if (!Array.isArray(this.state.gpios[keys[n]])) {
                 if (this.state.gpios[keys[n]][gpio]) {
                     return this.state.gpios[keys[n]][gpio]
                 } else {
                     return 'User'
                 }
             } else {
-                if (this.state.gpios[keys[n]].startsWith(gpio.toString())) {
-                    return this.state.gpios[keys[n]].replace(gpio.toString(), "")
+                for (let i = 0; i < this.state.gpios[keys[n]].length; i++) {
+                    if(this.state.gpios[keys[n]][i].startsWith(gpio.toString() + ' ')) {
+                        return this.state.gpios[keys[n]][i].replace(gpio.toString(), "")
+                    }
                 }
             }
         }

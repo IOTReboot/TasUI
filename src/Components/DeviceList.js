@@ -74,12 +74,10 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="left">Actions</TableCell>
                 <TableCell>Module</TableCell>
                 <TableCell>Power</TableCell>
                 <TableCell>Light Controls</TableCell>
-                <TableCell>LoadAvg</TableCell>
-                <TableCell>Uptime</TableCell>
           </TableRow>
         )
     }
@@ -89,16 +87,18 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="left">Actions</TableCell>
+                <TableCell>RSSI</TableCell>
                 <TableCell>Uptime</TableCell>
+                <TableCell>Mqtt Count</TableCell>
+                <TableCell>Link Count</TableCell>
+                <TableCell>Downtime</TableCell>
+                <TableCell>Version</TableCell>
+                <TableCell>Core</TableCell>
                 <TableCell>Boot Count</TableCell>
                 <TableCell>Restart Reason</TableCell>
                 <TableCell>LoadAvg</TableCell>
                 <TableCell>Sleep</TableCell>
-                <TableCell>MqttCount</TableCell>
-                <TableCell>LinkCount</TableCell>
-                <TableCell>Downtime</TableCell>
-                <TableCell>RSSI</TableCell>
           </TableRow>
         )
     }
@@ -108,7 +108,7 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="left">Actions</TableCell>
                 <TableCell>Version</TableCell>
                 <TableCell>Core</TableCell>
                 <TableCell>SDK</TableCell>
@@ -123,17 +123,17 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="left">Actions</TableCell>
+                <TableCell>RSSI</TableCell>
+                <TableCell>BSSID</TableCell>
+                <TableCell>Link Count</TableCell>
+                <TableCell>Downtime</TableCell>
                 <TableCell>Hostname</TableCell>
                 <TableCell>Mac Address</TableCell>
                 <TableCell>IP Address</TableCell>
                 <TableCell>Gateway</TableCell>
                 <TableCell>SSID</TableCell>
-                <TableCell>BSSID</TableCell>
                 <TableCell>Channel</TableCell>
-                <TableCell>RSSI</TableCell>
-                <TableCell>Link Count</TableCell>
-                <TableCell>Downtime</TableCell>
           </TableRow>
         )
     }
@@ -143,12 +143,19 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="left">Actions</TableCell>
+                <TableCell>RSSI</TableCell>
+                <TableCell>Mqtt Count</TableCell>
+                <TableCell>Topic</TableCell>
+                <TableCell>Full Topic</TableCell>
+                <TableCell>Command Topic</TableCell>
+                <TableCell>Stat Topic</TableCell>
+                <TableCell>Tele Topic</TableCell>
+                <TableCell>Fallback Topic</TableCell>
+                <TableCell>Group Topic</TableCell>
                 <TableCell>Mqtt Host</TableCell>
                 <TableCell>Mqtt Port</TableCell>
                 <TableCell>Mqtt Client</TableCell>
-                <TableCell>Topic</TableCell>
-                <TableCell>Group Topic</TableCell>
           </TableRow>
         )
     }

@@ -1,7 +1,9 @@
 import superagent from 'superagent';
 
 const commands = {
-    Status0 : 'Status 0'
+    Status0 : 'Status 0',
+    State: 'State',
+    Status8: 'Status 8',
 }
 
 class TasmotaDeviceConnector {
@@ -46,12 +48,24 @@ class TasmotaDeviceConnector {
 
     resume() {
         this.pause(); // Clear previous Timer
-        this.timer = setInterval(this.getStatus0.bind(this), 10000);
+        this.timer = setInterval(this.requestDeviceStatus.bind(this), 10000);
         this.getStatus0();
+    }
+
+    requestDeviceStatus() {
+        this.getState()
     }
 
     getStatus0() {
         this.performCommandOnDeviceDirect(commands.Status0);
+    }
+
+    getState() {
+        this.performCommandOnDeviceDirect(commands.State);
+    }
+
+    getStatus8() {
+        this.performCommandOnDeviceDirect(commands.Status8);
     }
 
     onCommandResponse(args) {
@@ -69,6 +83,10 @@ class TasmotaDeviceConnector {
             }
     
         });
+
+        if(args.key === commands.State) {
+            this.getStatus8()
+        }
     }
 
     performCommandOnDevice(cmnd) {

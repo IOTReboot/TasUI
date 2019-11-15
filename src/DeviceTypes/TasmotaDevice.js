@@ -143,10 +143,15 @@ class TasmotaDevice extends Component {
     }
 
     onCommandResponse(cmnd, response) {
+        console.log('State %s cmnd: %s response : %O', this.state.displayName, cmnd, response)
+
         if (cmnd === 'Status 0') {
             // console.log('Status0 %s :  %O', this.macAddress, response);
             let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
             // console.log(newDisplayName);
+            if (this.state.status0.Status.ModuleName) {
+                response.Status.ModuleName = this.state.status0.Status.ModuleName + '' 
+            }
             this.setState({
                 displayName: newDisplayName,
                 status0: response,
@@ -167,6 +172,33 @@ class TasmotaDevice extends Component {
             this.setState({
                 gpios: response,
             })
+        } else if (cmnd === 'State') {
+
+            var status0Clone = Object.assign({}, this.state.status0);
+
+            status0Clone.Status.ModuleName = response.Module + '' // Clone
+            delete response.Module
+            
+            var statusNames = Object.keys(status0Clone)
+            
+            statusNames.forEach((status) => {
+                Object.keys(status0Clone[status]).forEach((param) => {
+                    if (response[param]) {
+                        status0Clone[status][param] = response[param]
+                    }
+                })
+            })
+
+            this.setState({ status0: status0Clone})
+            this.props.deviceManager.updateDevice(this.macAddress, status0Clone);
+
+        } else if (cmnd === 'Status 8') {
+
+            var status0Clone = Object.assign({}, this.state.status0);
+            status0Clone.StatusSNS = response.StatusSNS
+
+            this.setState({ status0: status0Clone })
+            this.props.deviceManager.updateDevice(this.macAddress, status0Clone);
         }
     }
 
@@ -189,7 +221,7 @@ class TasmotaDevice extends Component {
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
               <TableCell>{this.props.actionButtons}</TableCell>
-              <TableCell>{this.state.status0.Status.Module}</TableCell>
+              <TableCell>{this.state.status0.Status.ModuleName ? `${this.state.status0.Status.ModuleName} (${this.state.status0.Status.Module})` : this.state.status0.Status.Module}</TableCell>
               <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
               <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
             </TableRow>

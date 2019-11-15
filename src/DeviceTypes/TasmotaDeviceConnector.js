@@ -48,7 +48,7 @@ class TasmotaDeviceConnector {
 
     resume() {
         this.pause(); // Clear previous Timer
-        this.timer = setInterval(this.requestDeviceStatus.bind(this), 10000);
+        this.timer = setInterval(this.requestDeviceStatus.bind(this), 15000);
         this.getStatus0();
     }
 

@@ -176,8 +176,10 @@ class TasmotaDevice extends Component {
 
             var status0Clone = Object.assign({}, this.state.status0);
 
-            status0Clone.Status.ModuleName = response.Module + '' // Clone
-            delete response.Module
+            if (response.Module) {
+                status0Clone.Status.ModuleName = response.Module + '' // Clone
+                delete response.Module
+            }
             
             var statusNames = Object.keys(status0Clone)
             

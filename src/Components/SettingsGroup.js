@@ -16,7 +16,7 @@ class SettingsGroup extends React.Component {
         this.commandResponses = {}
     }
 
-    onCommandResponse(cmnd, response) {
+    onCommandResponse(cmnd, success, response) {
         console.log('Settings cmnd %s response : %O ', cmnd, response )
         let newState = Object.assign({}, this.state.settingsStates)
         Object.keys(response).forEach((key) => {

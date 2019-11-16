@@ -74,7 +74,8 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell />
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Module</TableCell>
                 <TableCell>Power</TableCell>
                 <TableCell>Light Controls</TableCell>
@@ -87,7 +88,8 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell />
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>RSSI</TableCell>
                 <TableCell>Uptime</TableCell>
                 <TableCell>Mqtt Count</TableCell>
@@ -108,7 +110,8 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell />
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>Version</TableCell>
                 <TableCell>Core</TableCell>
                 <TableCell>SDK</TableCell>
@@ -123,7 +126,8 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell />
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>RSSI</TableCell>
                 <TableCell>BSSID</TableCell>
                 <TableCell>Link Count</TableCell>
@@ -143,7 +147,8 @@ class DeviceList extends React.Component {
         return (
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
-                <TableCell align="left">Actions</TableCell>
+                <TableCell />
+                <TableCell align="center">Actions</TableCell>
                 <TableCell>RSSI</TableCell>
                 <TableCell>Mqtt Count</TableCell>
                 <TableCell>Topic</TableCell>

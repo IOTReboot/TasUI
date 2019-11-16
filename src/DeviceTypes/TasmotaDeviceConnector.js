@@ -15,6 +15,7 @@ class TasmotaDeviceConnector {
 
     constructor(ipAddress) {
         this.deviceIPAddress = ipAddress;
+        this.online = false;
     }
 
     updateIpAddress(ipAddress) {
@@ -76,20 +77,17 @@ class TasmotaDeviceConnector {
     }
 
     onCommandResponse(args) {
+        if (args.key === commands.State || args.key == commands.Status0) {
+            this.online = args.success
+        }
         // console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response)
         this.deviceListeners.forEach(function (deviceListener, index) {
-            if (args.success) {
-                deviceListener.onCommandResponse(args.key, args.response.body)
-                // switch(args.key) {
-                //     case commands.Status0:
-                //         deviceListener.onStatus0(args.response.body);
-                //         break
-                // }
-            } else {
-                console.log(`Command ${args.key} failed. Url : ${args.url} Response: %O`, args.response)
-            }
-    
+            deviceListener.onCommandResponse(args.key, args.success, args.success ? args.response.body : null)    
         });
+
+        if (!args.success) {
+            console.log(`Command ${args.key} failed. Url : ${args.url} Response: %O`, args.response)
+        }
 
         if(args.key === commands.State) {
             this.getStatus8()

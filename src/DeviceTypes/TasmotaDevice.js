@@ -1,6 +1,6 @@
 import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { green, blue } from '@material-ui/core/colors';
-import { Box, Grid, Paper, Container, Button, Slider, Divider } from '@material-ui/core';
+import { Box, Grid, Paper, Container, Button, Slider, Divider, Tooltip } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -21,7 +21,6 @@ import VisibilityListener from '../Utils/VisibilityListener';
 import Popover from '@material-ui/core/Popover';
 import SettingsGroup from '../Components/SettingsGroup'
 import TasmotaVersionedConfig from '../Configuration/TasmotaVersionedConfig'
-import TasmotaConfig_06070000 from '../Configuration/TasmotaConfig-6.7.0.0';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -29,7 +28,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import ContactlessIcon from '@material-ui/icons/Contactless';
 
 const styles = theme => ({
     imageContainer: {
@@ -106,6 +105,7 @@ class TasmotaDevice extends Component {
             template: '',
             gpios: '',
             gpio: '',
+            online: false,
         }
     }
 
@@ -133,6 +133,9 @@ class TasmotaDevice extends Component {
         if (!this.deviceConnector) {
             this.deviceConnector = this.props.deviceManager.getDeviceConnector(this.macAddress, this.props.deviceManager.getDevice(this.macAddress).StatusNET.IPAddress);
         }
+        this.setState({
+            online: this.deviceConnector.online
+        })
         this.deviceConnector.connect(this);
         VisibilityListener.addVisibilityChangeCallback(this.onWindowVisibilityChanged.bind(this));
     }
@@ -142,65 +145,70 @@ class TasmotaDevice extends Component {
         this.deviceConnector.disconnect();
     }
 
-    onCommandResponse(cmnd, response) {
+    onCommandResponse(cmnd, success, response) {
         console.log('State %s cmnd: %s response : %O', this.state.displayName, cmnd, response)
 
-        if (cmnd === 'Status 0') {
-            // console.log('Status0 %s :  %O', this.macAddress, response);
-            let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
-            // console.log(newDisplayName);
-            if (this.state.status0.Status.ModuleName) {
-                response.Status.ModuleName = this.state.status0.Status.ModuleName + '' 
-            }
-            this.setState({
-                displayName: newDisplayName,
-                status0: response,
-            })
-            this.props.deviceManager.updateDevice(this.macAddress, response);
-        } else if (cmnd === 'Template') {
-            this.setState({
-                template: response,
-            })
-            this.deviceConnector.performCommandOnDevice('GPIOs')
-        } else if (cmnd === 'GPIO') {
-            // console.log('GPIO Response : %O', response)
-            this.setState({
-                gpio: response,
-            })
-            this.deviceConnector.performCommandOnDevice('GPIOs')
-        } else if (cmnd === 'GPIOs') {
-            this.setState({
-                gpios: response,
-            })
-        } else if (cmnd === 'State') {
+        this.setState( {online: success});
 
-            var status0Clone = Object.assign({}, this.state.status0);
-
-            if (response.Module) {
-                status0Clone.Status.ModuleName = response.Module + '' // Clone
-                delete response.Module
-            }
-            
-            var statusNames = Object.keys(status0Clone)
-            
-            statusNames.forEach((status) => {
-                Object.keys(status0Clone[status]).forEach((param) => {
-                    if (response[param]) {
-                        status0Clone[status][param] = response[param]
-                    }
+        if (success) {
+        
+            if (cmnd === 'Status 0') {
+                // console.log('Status0 %s :  %O', this.macAddress, response);
+                let newDisplayName = response.Status.FriendlyName[0] + ' (' + this.macAddress + ')';
+                // console.log(newDisplayName);
+                if (this.state.status0.Status.ModuleName) {
+                    response.Status.ModuleName = this.state.status0.Status.ModuleName + '' 
+                }
+                this.setState({
+                    displayName: newDisplayName,
+                    status0: response,
                 })
-            })
+                this.props.deviceManager.updateDevice(this.macAddress, response);
+            } else if (cmnd === 'Template') {
+                this.setState({
+                    template: response,
+                })
+                this.deviceConnector.performCommandOnDevice('GPIOs')
+            } else if (cmnd === 'GPIO') {
+                // console.log('GPIO Response : %O', response)
+                this.setState({
+                    gpio: response,
+                })
+                this.deviceConnector.performCommandOnDevice('GPIOs')
+            } else if (cmnd === 'GPIOs') {
+                this.setState({
+                    gpios: response,
+                })
+            } else if (cmnd === 'State') {
 
-            this.setState({ status0: status0Clone})
-            this.props.deviceManager.updateDevice(this.macAddress, status0Clone);
+                var status0Clone = Object.assign({}, this.state.status0);
 
-        } else if (cmnd === 'Status 8') {
+                if (response.Module) {
+                    status0Clone.Status.ModuleName = response.Module + '' // Clone
+                    delete response.Module
+                }
+                
+                var statusNames = Object.keys(status0Clone)
+                
+                statusNames.forEach((status) => {
+                    Object.keys(status0Clone[status]).forEach((param) => {
+                        if (response[param]) {
+                            status0Clone[status][param] = response[param]
+                        }
+                    })
+                })
 
-            var status0Clone = Object.assign({}, this.state.status0);
-            status0Clone.StatusSNS = response.StatusSNS
+                this.setState({ status0: status0Clone})
+                this.props.deviceManager.updateDevice(this.macAddress, status0Clone);
 
-            this.setState({ status0: status0Clone })
-            this.props.deviceManager.updateDevice(this.macAddress, status0Clone);
+            } else if (cmnd === 'Status 8') {
+
+                var status0Clone = Object.assign({}, this.state.status0);
+                status0Clone.StatusSNS = response.StatusSNS
+
+                this.setState({ status0: status0Clone })
+                this.props.deviceManager.updateDevice(this.macAddress, status0Clone);
+            }
         }
     }
 
@@ -222,7 +230,8 @@ class TasmotaDevice extends Component {
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
-              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.renderConnectivityStatus()}</TableCell>
+              <TableCell align="center">{this.props.actionButtons}</TableCell>
               <TableCell>{this.state.status0.Status.ModuleName ? `${this.state.status0.Status.ModuleName} (${this.state.status0.Status.Module})` : this.state.status0.Status.Module}</TableCell>
               <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
               <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
@@ -236,7 +245,8 @@ class TasmotaDevice extends Component {
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
-              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.renderConnectivityStatus()}</TableCell>
+              <TableCell align="center">{this.props.actionButtons}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Uptime}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.MqttCount}</TableCell>
@@ -258,7 +268,8 @@ class TasmotaDevice extends Component {
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
-              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.renderConnectivityStatus()}</TableCell>
+              <TableCell align="center">{this.props.actionButtons}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.BSSId}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.LinkCount}</TableCell>
@@ -279,7 +290,8 @@ class TasmotaDevice extends Component {
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
-              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.renderConnectivityStatus()}</TableCell>
+              <TableCell align="center">{this.props.actionButtons}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.Wifi.RSSI}</TableCell>
               <TableCell>{this.state.status0.StatusSTS.MqttCount}</TableCell>
               <TableCell>{this.state.status0.Status.Topic}</TableCell>
@@ -302,7 +314,8 @@ class TasmotaDevice extends Component {
               <TableCell component="th" scope="row">
                 {this.state.status0.Status.FriendlyName[0]}
               </TableCell>
-              <TableCell>{this.props.actionButtons}</TableCell>
+              <TableCell>{this.renderConnectivityStatus()}</TableCell>
+              <TableCell align="center">{this.props.actionButtons}</TableCell>
               <TableCell>{this.state.status0.StatusFWR.Version}</TableCell>
               <TableCell>{this.state.status0.StatusFWR.Core}</TableCell>
               <TableCell>{this.state.status0.StatusFWR.SDK}</TableCell>
@@ -328,6 +341,14 @@ class TasmotaDevice extends Component {
                     {this.props.actionButtons}
                 </Box>
             </div>
+        )
+    }
+
+    renderConnectivityStatus() {
+        return (
+            <Tooltip title={this.state.online ? "Online" : "Offline"} >
+                <ContactlessIcon color={this.state.online ? "primary" : "secondary"}/>
+            </Tooltip>
         )
     }
 

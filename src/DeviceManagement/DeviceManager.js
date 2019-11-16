@@ -29,6 +29,12 @@ class DeviceManager {
     addDiscoveredDevice(macAddress, deviceInfo) {
         if (macAddress.length > 0) {
             this.discoveredDevices[macAddress] = deviceInfo;
+            if (this.devices[macAddress]) {
+                this.devices[macAddress] =  deviceInfo
+                if (this.deviceConnectors[macAddress]) {
+                    this.deviceConnectors[macAddress].updateIpAddress(deviceInfo.StatusNET.IPAddress)
+                }
+            }
             return true
         }
         return false

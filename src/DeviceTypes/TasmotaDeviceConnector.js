@@ -17,6 +17,13 @@ class TasmotaDeviceConnector {
         this.deviceIPAddress = ipAddress;
     }
 
+    updateIpAddress(ipAddress) {
+        if (this.deviceIPAddress !== ipAddress) {
+            this.deviceIPAddress = ipAddress
+            this.requestDeviceStatus()
+        }
+    }
+
     connect(listener) {
         let index = this.deviceListeners.indexOf(listener)
         if (index === -1) {

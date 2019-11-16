@@ -147,7 +147,7 @@ class FindDevices extends React.Component {
 
     openDeviceDetails = (macAddress, event) => {
         event.stopPropagation();
-        this.props.history.push('/devices/' + macAddress);
+        this.props.history.push('/details/' + macAddress);
     }
 
     addDevice = (macAddress, event) => {

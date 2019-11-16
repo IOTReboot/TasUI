@@ -512,87 +512,6 @@ class TasmotaDevice extends Component {
         
     }  
 
-    renderTypeSettings() {
-        let mqttSettingsGroup = {
-            groupName: "Mqtt Connection Settings",
-            settings: [{
-                name: 'Mqtt Host',
-                command: 'MqttHost',
-            }, {
-                name: 'Mqtt User',
-                command: 'MqttUser',
-            }, {
-                name: 'Mqtt Password',
-                command: 'MqttPassword',
-            }]
-        }
-
-        let wifiSettingsGroup = {
-            groupName: "Wifi Connection Settings",
-            settings: [{
-                name: 'Ssid 1',
-                command: 'Ssid1',
-            }, {
-                name: 'Password 1',
-                command: 'Password1',
-            }, {
-                name: 'Ssid 2',
-                command: 'Ssid2',
-            }, {
-                name: 'Password 2',
-                command: 'Password2',
-            }]
-        }
-
-        let ruleSettingsGroup = {
-            groupName: 'Rules',
-            settings: [{
-                name: 'Rule 1',
-                command: 'Rule1',
-            },{
-                name: 'Rule 2',
-                command: 'Rule2'
-            },{
-                name: 'Rule 3',
-                command: 'Rule3'
-            }]
-        }
-
-        return(
-            <Grid container justify="center" alignItems="center" direction="column" width="sm" xs={12}>
-                <Grid margin={20} className={styles.detailsContainer} >
-                    <Container fixed className={styles.imageContainer}>
-                        {this.renderDetailsImage()}
-                    </Container>
-                </Grid>
-                <Grid xs={12} className={styles.detailsContainer} >
-                    <Typography variant="h5">
-                        {this.state.displayName}
-                    </Typography>
-                </Grid>
-                <Grid xs={12} width="sm">
-                    {this.renderDetailsControlsDimmers()}
-                </Grid>
-                <Grid xs={12}>
-                    {this.renderDetailsControlsButtons()}
-                </Grid>
-
-                <Grid xs={12}>
-                    <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={wifiSettingsGroup} />
-                </Grid>
-
-                <Grid xs={12}>
-                    <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={mqttSettingsGroup} />
-                </Grid>
-{/* 
-                <Grid xs={12}>
-                    <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={ruleSettingsGroup} />
-                </Grid> */}
-
-            </Grid>
-        )
-    }
-
     copyToClipboard() {
         const el = document.createElement('textarea');
         el.value = JSON.stringify(this.state.status0, null, 2)
@@ -855,7 +774,121 @@ class TasmotaDevice extends Component {
         )
     }
 
+    renderTypeSettings() {
+        let mqttSettingsGroup = {
+            groupName: "Mqtt Settings",
+            settings: [{
+                name: 'Mqtt Host',
+                command: 'MqttHost',
+            }, {
+                name: 'Mqtt User',
+                command: 'MqttUser',
+            }, {
+                name: 'Mqtt Password',
+                command: 'MqttPassword',
+            }]
+        }
+
+        let wifiSettingsGroup = {
+            groupName: "Wifi Settings",
+            settings: [{
+                name: 'Ssid 1',
+                command: 'Ssid1',
+            }, {
+                name: 'Password 1',
+                command: 'Password1',
+            }, {
+                name: 'Ssid 2',
+                command: 'Ssid2',
+            }, {
+                name: 'Password 2',
+                command: 'Password2',
+            }, {
+                name: 'Hostname',
+                command: 'Hostname',
+            }]
+        }
+
+        let ruleSettingsGroup = {
+            groupName: 'Rules',
+            settings: [{
+                name: 'Rule 1',
+                command: 'Rule1',
+            },{
+                name: 'Rule 2',
+                command: 'Rule2'
+            },{
+                name: 'Rule 3',
+                command: 'Rule3'
+            }]
+        }
+
+        return(
+            <React.Fragment>
+                
+
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={wifiSettingsGroup} />
+                    </TableCell>
+                </TableRow>                
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={mqttSettingsGroup} />
+                    </TableCell>
+                </TableRow>
+                
+            </React.Fragment>
+        )
+    }
+
     renderTypeDetails() {
+
+        return (
+            <React.Fragment>
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsConnectivity()}
+                    </TableCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsGPIO()}
+                    </TableCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsTemplate()}
+                    </TableCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsSetOptions()}
+                    </TableCell>
+                </TableRow>
+
+                <TableRow>
+                        <TableCell align="left"><Typography>Status Report</Typography></TableCell>
+                        <TableCell align="center" colSpan={2}>
+                            <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
+                        </TableCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsStatuses()}
+                    </TableCell>
+                </TableRow>
+            </React.Fragment>
+        )
+    }
+
+    renderTypeSettingsAndDetails(renderType) {
         return (
             <React.Fragment>
             <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center" style={{maxWidth: 900}}>
@@ -884,45 +917,8 @@ class TasmotaDevice extends Component {
                             <TableCell align="center" colSpan={2}>{this.renderDetailsControlsDimmers('Table')}</TableCell>
                     </TableRow>
 
-
-                    <TableRow>
-                        <TableCell colSpan={3}>
-                            {this.renderDetailsConnectivity()}
-                        </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                        <TableCell colSpan={3}>
-                            {this.renderDetailsGPIO()}
-                        </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                        <TableCell colSpan={3}>
-                            {this.renderDetailsTemplate()}
-                        </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                        <TableCell colSpan={3}>
-                            {this.renderDetailsSetOptions()}
-                        </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                            <TableCell align="left"><Typography>Status Report</Typography></TableCell>
-                            <TableCell align="center" colSpan={2}>
-                                <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
-                            </TableCell>
-                    </TableRow>
-
-                    <TableRow>
-                        <TableCell colSpan={3}>
-                            {this.renderDetailsStatuses()}
-                        </TableCell>
-                    </TableRow>
-
-
+                    {renderType === 'Details' ? this.renderTypeDetails() : null}
+                    {renderType === 'Settings' ? this.renderTypeSettings() : null}
 
                 </TableBody>
             </Table>
@@ -939,10 +935,8 @@ class TasmotaDevice extends Component {
                 return this.renderTypeList();
 
             case 'Settings':
-                return this.renderTypeSettings();
-
             case 'Details':
-                return this.renderTypeDetails();
+                return this.renderTypeSettingsAndDetails(this.props.renderType);
 
             case 'Table_Status':
                 return this.renderTypeTableStatusRow();

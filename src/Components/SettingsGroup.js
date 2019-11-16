@@ -1,6 +1,12 @@
 import React from 'react'
 import TextField from "@material-ui/core/TextField";
 import { Typography, Box, Button } from '@material-ui/core';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Divider from '@material-ui/core/Divider';
 
 class SettingsGroup extends React.Component {
 
@@ -36,6 +42,15 @@ class SettingsGroup extends React.Component {
         this.props.settingsGroup.settings.forEach((setting, index) => {
             this.props.deviceConnector.performCommandOnDeviceDirect(setting.command);
         })
+    }
+
+    getCurrentSettings  = command => (event, isExpanded) => {
+        event.stopPropagation()
+        if (isExpanded) {
+            this.props.settingsGroup.settings.forEach((setting, index) => {
+                this.props.deviceConnector.performCommandOnDeviceDirect(setting.command);
+            })
+        }
     }
 
     handleSettingsChanged(event, command) {
@@ -80,15 +95,26 @@ class SettingsGroup extends React.Component {
 
     render() {
         return (
-            <Box display="flex" flexDirection="column" flexGrow={1} alignContent="left">
-                <Typography variant="h6">{this.props.settingsGroup.groupName}</Typography>
-                <Box display="flex" flexDirection="row" flexWrap="wrap">
-                    {this.renderSettingInputs()}
-                </Box>
-                <Box display="flex" flexDirection="row" alignItems="center" flexGrow={1}>
-                    <Button variant="contained" margin="normal" onClick={(event) => this.saveSettings(event)}>Save {this.props.settingsGroup.groupName}</Button>
-                </Box>
-            </Box>
+
+            <ExpansionPanel key={`SettingsExpansionPanel-${this.props.settingsGroup.groupName}`} onChange={this.getCurrentSettings()}>
+                <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                >
+                <Typography>{this.props.settingsGroup.groupName}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Box display="flex" flexDirection="row" flexWrap="wrap">
+                        {this.renderSettingInputs()}
+                    </Box>
+                </ExpansionPanelDetails>
+                <Divider />
+                <ExpansionPanelActions>
+                    <Button size="small" variant="contained" onClick={(event) => this.saveSettings(event)}>Save {this.props.settingsGroup.groupName}</Button>
+                </ExpansionPanelActions>
+            </ExpansionPanel>
+
         )
     }
 

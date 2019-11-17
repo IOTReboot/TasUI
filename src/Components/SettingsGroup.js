@@ -23,18 +23,20 @@ class SettingsGroup extends React.Component {
     }
 
     onCommandResponse(cmnd, success, response) {
-        console.log('Settings cmnd %s response : %O ', cmnd, response )
-        let newState = Object.assign({}, this.state.settingsStates)
-        Object.keys(response).forEach((key) => {
-            if (key.toUpperCase() === cmnd.toUpperCase()) {
-                newState[cmnd] = response[key];
-                this.commandResponses[cmnd] = response[key]
-            }
-        })
-        // newState[cmnd] = String(response[cmnd])
-        this.setState({
-            settingsStates: newState,
-        })
+        console.log('Settings cmnd %s success %s response : %O ', cmnd, success, response )
+        if (success) {
+            let newState = Object.assign({}, this.state.settingsStates)
+            Object.keys(response).forEach((key) => {
+                if (key.toUpperCase() === cmnd.toUpperCase()) {
+                    newState[cmnd] = response[key];
+                    this.commandResponses[cmnd] = response[key]
+                }
+            })
+            // newState[cmnd] = String(response[cmnd])
+            this.setState({
+                settingsStates: newState,
+            })
+        }
     }
 
     componentDidMount() {

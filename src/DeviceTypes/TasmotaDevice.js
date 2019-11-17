@@ -860,17 +860,22 @@ class TasmotaDevice extends Component {
                     </TableCell>
                 </TableRow>
 
-                <TableRow>
-                    <TableCell colSpan={3}>
-                        {this.renderDetailsTemplate()}
-                    </TableCell>
-                </TableRow>
+                {this.state.status0.Status.Module === 0 ? ( 
+                    <TableRow>
+                        <TableCell colSpan={3}>
+                            {this.renderDetailsTemplate()}
+                        </TableCell>
+                    </TableRow>
+
+                )
+                : null }
 
                 <TableRow>
                     <TableCell colSpan={3}>
                         {this.renderDetailsSetOptions()}
                     </TableCell>
                 </TableRow>
+
 
                 <TableRow>
                         <TableCell align="left"><Typography>Status Report</Typography></TableCell>

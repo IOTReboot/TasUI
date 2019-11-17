@@ -4,6 +4,7 @@ const commands = {
     Status0 : 'Status 0',
     State: 'State',
     Status8: 'Status 8',
+    Module: 'Module',
 }
 
 class TasmotaDeviceConnector {
@@ -68,6 +69,10 @@ class TasmotaDeviceConnector {
         this.performCommandOnDeviceDirect(commands.Status0);
     }
 
+    getModule() {
+        this.performCommandOnDeviceDirect(commands.Module);
+    }
+
     getState() {
         this.performCommandOnDeviceDirect(commands.State);
     }
@@ -80,7 +85,7 @@ class TasmotaDeviceConnector {
         if (args.key === commands.State || args.key == commands.Status0) {
             this.online = args.success
         }
-        // console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response)
+        console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response.body)
         this.deviceListeners.forEach(function (deviceListener, index) {
             deviceListener.onCommandResponse(args.key, args.success, args.success ? args.response.body : null)    
         });
@@ -91,6 +96,8 @@ class TasmotaDeviceConnector {
 
         if(args.key === commands.State) {
             this.getStatus8()
+        } else if (args.key === commands.Status0) {
+            this.getModule()
         }
     }
 

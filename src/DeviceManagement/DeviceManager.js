@@ -8,32 +8,46 @@ class DeviceManager {
     constructor() {
         this.devices = "devices" in localStorage ? JSON.parse(localStorage.getItem('devices')) : {};
         this.discoveredDevices = {};
-        if (Array.isArray(this.devices)) {
-            this.devices = {}
-            localStorage.setItem('devices', JSON.stringify(this.devices));
-        }
+        Object.keys(this.devices).forEach((key) => {
+            if(!this.devices[key].status0Response) {
+                let oldInfo = Object.assign({}, this.devices[key])
+                this.devices[key] = { status0Response: oldInfo}
+            }
+        })
+
+        this.saveDevices()
     }
 
-    addDevice(macAddress, deviceInfo) {
+    addDevice(macAddress, status0Response) {
         if (macAddress.length > 0) {
-            this.devices[macAddress] = deviceInfo;
+            this.devices[macAddress] = {
+                status0Response: status0Response,
+            }
             // if (this.discoveredDevices[macAddress]) {
             //     delete this.discoveredDevices[macAddress]
             // }
-            localStorage.setItem('devices', JSON.stringify(this.devices));
+            this.saveDevices()
             return true;
         } 
         return false;
     }
 
-    addDiscoveredDevice(macAddress, deviceInfo) {
+    saveDevices() {
+        localStorage.setItem('devices', JSON.stringify(this.devices));
+    }
+
+    addDiscoveredDevice(macAddress, status0Response) {
         if (macAddress.length > 0) {
-            this.discoveredDevices[macAddress] = deviceInfo;
-            if (this.devices[macAddress]) {
-                this.devices[macAddress] =  deviceInfo
-                if (this.deviceConnectors[macAddress]) {
-                    this.deviceConnectors[macAddress].updateIpAddress(deviceInfo.StatusNET.IPAddress)
+            if (this.discoveredDevices[macAddress]) {
+                this.discoveredDevices[macAddress].status0Response = status0Response
+            } else {
+                this.discoveredDevices[macAddress] = {
+                    status0Response: status0Response,
                 }
+            }
+            if (this.devices[macAddress]) {
+                this.devices[macAddress].status0Response =  status0Response
+                this.updateDeviceConnector(macAddress)
             }
             return true
         }
@@ -50,12 +64,20 @@ class DeviceManager {
         this.discoveredDevices = {};
     }
 
-    updateDevice(macAddress, deviceInfo) {
-        if (this.devices[macAddress]) {
-            return this.addDevice(macAddress, deviceInfo)
-        } else if (this.discoveredDevices[macAddress]) {
-            return this.addDiscoveredDevice(macAddress, deviceInfo)
+    updateDeviceConnector(macAddress) {
+        if (this.deviceConnectors[macAddress]) {
+            this.deviceConnectors[macAddress].updateIpAddress(this.devices[macAddress].status0Response.StatusNET.IPAddress)
         }
+    }
+
+    updateDevice(macAddress, updatedInfo) {
+        if (this.devices[macAddress]) {
+            this.devices[macAddress] = {...this.devices[macAddress], ...updatedInfo}
+            this.saveDevices()
+        } else if (this.discoveredDevices[macAddress]) {
+            this.discoveredDevices[macAddress] = {...this.discoveredDevices[macAddress], ...updatedInfo}
+        }
+        this.updateDeviceConnector(macAddress)
     }
 
     removeDevice(macAddress) {

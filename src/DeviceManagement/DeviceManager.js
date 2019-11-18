@@ -45,7 +45,7 @@ class DeviceManager {
             }
             if (this.devices[macAddress]) {
                 this.devices[macAddress].status0Response =  status0Response
-                this.updateDeviceConnector(macAddress)
+                this.updateDeviceConnector(macAddress, status0Response.StatusNET.IPAddress)
             }
             return true
         }

@@ -18,11 +18,9 @@ class DeviceManager {
         this.saveDevices()
     }
 
-    addDevice(macAddress, status0Response) {
+    addDevice(macAddress, deviceInfo) {
         if (macAddress.length > 0) {
-            this.devices[macAddress] = {
-                status0Response: status0Response,
-            }
+            this.devices[macAddress] = deviceInfo
             // if (this.discoveredDevices[macAddress]) {
             //     delete this.discoveredDevices[macAddress]
             // }
@@ -64,9 +62,9 @@ class DeviceManager {
         this.discoveredDevices = {};
     }
 
-    updateDeviceConnector(macAddress) {
+    updateDeviceConnector(macAddress, ipAddress) {
         if (this.deviceConnectors[macAddress]) {
-            this.deviceConnectors[macAddress].updateIpAddress(this.devices[macAddress].status0Response.StatusNET.IPAddress)
+            this.deviceConnectors[macAddress].updateIpAddress(ipAddress)
         }
     }
 
@@ -74,14 +72,18 @@ class DeviceManager {
         if (this.devices[macAddress]) {
             this.devices[macAddress] = {...this.devices[macAddress], ...updatedInfo}
             this.saveDevices()
+            this.updateDeviceConnector(macAddress, this.devices[macAddress].status0Response.StatusNET.IPAddress)
         } else if (this.discoveredDevices[macAddress]) {
             this.discoveredDevices[macAddress] = {...this.discoveredDevices[macAddress], ...updatedInfo}
+            this.updateDeviceConnector(macAddress, this.discoveredDevices[macAddress].status0Response.StatusNET.IPAddress)
         }
-        this.updateDeviceConnector(macAddress)
     }
 
     removeDevice(macAddress) {
         if (this.devices[macAddress]) {
+            if(this.deviceConnectors[macAddress]) {
+                this.deviceConnectors[macAddress].disconnectAll()
+            }
             delete this.devices[macAddress]
             localStorage.setItem('devices', JSON.stringify(this.devices));
         }

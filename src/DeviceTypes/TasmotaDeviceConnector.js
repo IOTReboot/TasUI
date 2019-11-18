@@ -48,6 +48,12 @@ class TasmotaDeviceConnector {
         }
     }
 
+    disconnectAll() {
+        this.deviceListeners.forEach((listener) => {
+            this.disconnect(listener)
+        })
+    }
+
     pause() {
         if(this.timer) {
             clearInterval(this.timer);
@@ -82,10 +88,10 @@ class TasmotaDeviceConnector {
     }
 
     onCommandResponse(args) {
-        if (args.key === commands.State || args.key == commands.Status0) {
+        if (args.key === commands.State || args.key === commands.Status0) {
             this.online = args.success
         }
-        console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response.body)
+        console.log(`Command ${args.key} Url : ${args.url} Response: %O`, args.response ? args.response.body : null)
         this.deviceListeners.forEach(function (deviceListener, index) {
             deviceListener.onCommandResponse(args.key, args.success, args.success ? args.response.body : null)    
         });

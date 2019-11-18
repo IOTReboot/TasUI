@@ -154,21 +154,24 @@ class TasmotaDevice extends Component {
         
             if (cmnd === 'Status 0') {
                 // console.log('Status0 %s :  %O', this.macAddress, response);
-                if (this.state.deviceInfo.status0Response.Status.ModuleName) {
-                    response.Status.ModuleName = this.state.deviceInfo.status0Response.Status.ModuleName + '' 
-                }
                 this.updateDeviceInfoState({ status0Response: response})
             } else if (cmnd === 'Template') {
                 this.updateDeviceInfoState({ templateResponse: response})
                 this.deviceConnector.performCommandOnDevice('GPIOs')
-            } else if (cmnd === 'GPIO') {
+            } else if (cmnd === 'GPIO 255') {
                 // console.log('GPIO Response : %O', response)
-                this.updateDeviceInfoState({ gpioResponse: response})
+                this.updateDeviceInfoState({ gpio255Response: response})
                 this.deviceConnector.performCommandOnDevice('GPIOs')
             } else if (cmnd === 'GPIOs') {
                 this.updateDeviceInfoState({ gpiosResponse: response})
             } else if (cmnd === 'State') {
-                
+
+                if (response.Module) {
+                    delete response.Module
+                }
+
+                var status0Clone = Object.assign({}, this.state.deviceInfo.status0Response);
+
                 var statusNames = Object.keys(status0Clone)
                 
                 statusNames.forEach((status) => {
@@ -205,6 +208,20 @@ class TasmotaDevice extends Component {
         this.deviceConnector.performCommandOnDevice(dimmer + ' ' + newValue);
     }
 
+    getModuleDisplayText() {
+        if(this.state.deviceInfo.moduleResponse) {
+            if (typeof this.state.deviceInfo.moduleResponse.Module === 'object') {
+                return `${this.state.deviceInfo.status0Response.Status.Module} (${this.state.deviceInfo.moduleResponse.Module[Object.keys(this.state.deviceInfo.moduleResponse.Module)[0]]})`    
+            } else {
+                return this.state.deviceInfo.moduleResponse.Module
+            }
+             
+        } else {
+            return this.state.deviceInfo.status0Response.Status.Module
+        }
+
+    }
+
     renderTypeTableStatusRow() {
         return(
             <TableRow key={this.props.macAddress}>
@@ -213,7 +230,7 @@ class TasmotaDevice extends Component {
               </TableCell>
               <TableCell>{this.renderConnectivityStatus()}</TableCell>
               <TableCell align="center">{this.props.actionButtons}</TableCell>
-              <TableCell>{this.state.deviceInfo.moduleResponse ? `${this.state.deviceInfo.moduleResponse.Module[Object.keys(this.state.deviceInfo.moduleResponse.Module)[0]]} (${this.state.deviceInfo.status0Response.Status.Module})` : this.state.deviceInfo.status0Response.Status.Module}</TableCell>
+              <TableCell>{this.getModuleDisplayText()}</TableCell>
               <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
               <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
             </TableRow>
@@ -668,20 +685,20 @@ class TasmotaDevice extends Component {
             <Table size="small">
             <TableBody>
 
-            {Object.keys(this.state.deviceInfo.gpioResponse).map((gpio, index) => {
-                if (typeof this.state.deviceInfo.gpioResponse[gpio] === 'object') {
-                    var key = Object.keys(this.state.deviceInfo.gpioResponse[gpio])[0]
+            {Object.keys(this.state.deviceInfo.gpio255Response).map((gpio, index) => {
+                if (typeof this.state.deviceInfo.gpio255Response[gpio] === 'object') {
+                    var key = Object.keys(this.state.deviceInfo.gpio255Response[gpio])[0]
                     return (
                         <TableRow>
                             <TableCell>{gpio}</TableCell>
-                            <TableCell>{`${key} ( ${this.state.deviceInfo.gpioResponse[gpio][key]} )`}</TableCell>
+                            <TableCell>{`${key} ( ${this.state.deviceInfo.gpio255Response[gpio][key]} )`}</TableCell>
                         </TableRow>
                     )
                 } else {
                     return (
                         <TableRow>
                             <TableCell>{gpio}</TableCell>
-                            <TableCell>{this.state.deviceInfo.gpioResponse[gpio]}</TableCell>
+                            <TableCell>{this.state.deviceInfo.gpio255Response[gpio]}</TableCell>
                         </TableRow>
                     )
                 }
@@ -694,7 +711,7 @@ class TasmotaDevice extends Component {
 
     renderDetailsGPIO() {
         return (
-        <ExpansionPanel key="GPIODetailsExpansionPanel" onChange={this.getPanelCommandData('GPIO')}>
+        <ExpansionPanel key="GPIODetailsExpansionPanel" onChange={this.getPanelCommandData('GPIO 255')}>
              <ExpansionPanelSummary
              expandIcon={<ExpandMoreIcon />}
              aria-controls="panel1a-content"
@@ -704,7 +721,7 @@ class TasmotaDevice extends Component {
              </ExpansionPanelSummary>
              <ExpansionPanelDetails>
  
-             {!this.state.deviceInfo.gpioResponse || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> : 
+             {!this.state.deviceInfo.gpio255Response || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> : 
                  this.renderGPIOResponse()
              }
  

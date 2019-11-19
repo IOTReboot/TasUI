@@ -210,7 +210,7 @@ class FindDevices extends React.Component {
 
 
         return (
-            <Container>
+            <Box display="flex" flexGrow={1} flexDirection="column">
                 <Box display="flex" alignItems="baseline" flexDirection="row">
                 <h1>Discover Active Devices</h1>
                 <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
@@ -256,7 +256,7 @@ class FindDevices extends React.Component {
                     deviceManager={this.props.deviceManager}
                 />
 
-            </Container>
+            </Box>
         )
 
     }

@@ -55,7 +55,7 @@ class Devices extends React.Component {
     render() {
 
     return (
-        <Container flexGrow={1}>
+        <Box display="flex" flexGrow={1} flexDirection="column">
             <Box display="flex" flexDirection="row" alignItems="baseline">
                 <h1>Devices</h1>
                 <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
@@ -64,10 +64,9 @@ class Devices extends React.Component {
                 displayMode={this.state.displayMode} 
                 deviceSections={{"" : {devices: this.state.devices, itemButtons: this.buttons}}}
                 deviceManager={this.props.deviceManager}
-                // itemButtons={this.buttons}
             />
             
-        </Container>
+        </Box>
     );
   }
 }

@@ -1,4 +1,5 @@
 import TasmotaDeviceConnector from '../DeviceTypes/TasmotaDeviceConnector';
+import getConfigurationForVersion from '../Configuration/TasmotaVersionedConfig'
 
 class DeviceManager {
 
@@ -18,12 +19,25 @@ class DeviceManager {
         this.saveDevices()
     }
 
+    getTasmotaConfig(macAddress) {
+        let deviceInfo = this.getDevice(macAddress) 
+
+        let versionStr = deviceInfo.status0Response.StatusFWR.Version
+        versionStr = versionStr.substring(0, versionStr.indexOf('('))
+
+        let versionNumbers = versionStr.split('.')
+
+        let version = (parseInt(versionNumbers[0]) << 24) + (parseInt(versionNumbers[1]) << 16) + (parseInt(versionNumbers[2]) << 8) + (parseInt(versionNumbers[3]))
+
+        return getConfigurationForVersion(version)
+    }
+
     addDevice(macAddress, deviceInfo) {
         if (macAddress.length > 0) {
             this.devices[macAddress] = deviceInfo
-            // if (this.discoveredDevices[macAddress]) {
-            //     delete this.discoveredDevices[macAddress]
-            // }
+                // if (this.discoveredDevices[macAddress]) {
+                //     delete this.discoveredDevices[macAddress]
+                // }
             this.saveDevices()
             return true;
         } 

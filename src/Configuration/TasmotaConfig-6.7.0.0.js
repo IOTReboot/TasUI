@@ -313,7 +313,68 @@ const TasmotaConfig_06070000 = {
             description: '',
         }
         ]
-    }]
+    }],
+    settingsGroups: [{
+        groupName: "Mqtt Settings",
+        settings: [{
+            name: 'Mqtt Host',
+            command: 'MqttHost',
+        }, {
+            name: 'Mqtt User',
+            command: 'MqttUser',
+        }, {
+            name: 'Mqtt Password',
+            command: 'MqttPassword',
+        }]
+    } , {
+        groupName: "Wifi Settings",
+        settings: [{
+            name: 'Ssid 1',
+            command: 'Ssid1',
+        }, {
+            name: 'Password 1',
+            command: 'Password1',
+        }, {
+            name: 'Ssid 2',
+            command: 'Ssid2',
+        }, {
+            name: 'Password 2',
+            command: 'Password2',
+        }, {
+            name: 'Hostname',
+            command: 'Hostname',
+        }]
+    // } ,{
+    //     groupName: 'Rules',
+    //     settings: [{
+    //         name: 'Rule 1',
+    //         command: 'Rule1',
+    //     },{
+    //         name: 'Rule 2',
+    //         command: 'Rule2'
+    //     },{
+    //         name: 'Rule 3',
+    //         command: 'Rule3'
+    //     }]
+    }],
+    moduleResponseFormatter: function(moduleResponse) {
+        if (typeof moduleResponse.Module === 'object') {
+            let key = Object.keys(moduleResponse.Module)[0]
+            return `${key} (${moduleResponse.Module[key]})`    
+        } else {
+            return moduleResponse.Module
+        }
+    },
+    gpioResponseFormatter: function(gpioResponse) {
+        return Object.keys(gpioResponse).map((gpio, index) => {
+            if (typeof gpioResponse[gpio] === 'object') {
+                var key = Object.keys(gpioResponse[gpio])[0]
+                return  { gpio: gpio, gpioInfo: `${key} ( ${gpioResponse[gpio][key]} )`}
+            } else {
+                return  { gpio: gpio, gpioInfo: gpioResponse[gpio]} 
+            }
+        })
+    },
 }
 
 export default TasmotaConfig_06070000

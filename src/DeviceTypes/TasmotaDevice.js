@@ -20,7 +20,6 @@ import TableRow from '@material-ui/core/TableRow';
 import VisibilityListener from '../Utils/VisibilityListener';
 import Popover from '@material-ui/core/Popover';
 import SettingsGroup from '../Components/SettingsGroup'
-import TasmotaVersionedConfig from '../Configuration/TasmotaVersionedConfig'
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -94,6 +93,7 @@ const DimmerSlider = withStyles({
 class TasmotaDevice extends Component {
 
     deviceConnector = null;
+    deviceConfig = null;
 
     constructor(props) {
         super(props);
@@ -122,6 +122,7 @@ class TasmotaDevice extends Component {
     }
 
     componentWillMount() {
+        this.deviceConfig = this.props.deviceManager.getTasmotaConfig(this.macAddress)
         this.setState({
             deviceInfo: this.props.deviceManager.getDevice(this.macAddress)
         })
@@ -210,16 +211,10 @@ class TasmotaDevice extends Component {
 
     getModuleDisplayText() {
         if(this.state.deviceInfo.moduleResponse) {
-            if (typeof this.state.deviceInfo.moduleResponse.Module === 'object') {
-                return `${this.state.deviceInfo.status0Response.Status.Module} (${this.state.deviceInfo.moduleResponse.Module[Object.keys(this.state.deviceInfo.moduleResponse.Module)[0]]})`    
-            } else {
-                return this.state.deviceInfo.moduleResponse.Module
-            }
-             
+            return this.deviceConfig.moduleResponseFormatter(this.state.deviceInfo.moduleResponse)             
         } else {
             return this.state.deviceInfo.status0Response.Status.Module
         }
-
     }
 
     renderTypeTableStatusRow() {
@@ -564,9 +559,9 @@ class TasmotaDevice extends Component {
         return this.state.deviceInfo.status0Response.StatusLOG.SetOption.map((setOptionStr,index) => {
             if (index !== 1) {
             let valueArray = this.convertHexStringToBitArray(setOptionStr)
-            return TasmotaVersionedConfig.TasmotaConfig_06070000.setOptionsStatusMaps[index].items.map((item, itemIndex) => {
+            return this.deviceConfig.setOptionsStatusMaps[index].items.map((item, itemIndex) => {
                 if (item.name !== '' && item.description !== '') {
-                    var soValue = itemIndex + TasmotaVersionedConfig.TasmotaConfig_06070000.setOptionsStatusMaps[index].setOptionStart;
+                    var soValue = itemIndex + this.deviceConfig.setOptionsStatusMaps[index].setOptionStart;
                     // console.log('SetOption%d (%s) : %d', soValue, item.name, valueArray[itemIndex])
                     return (
                         <React.Fragment>
@@ -685,23 +680,13 @@ class TasmotaDevice extends Component {
             <Table size="small">
             <TableBody>
 
-            {Object.keys(this.state.deviceInfo.gpio255Response).map((gpio, index) => {
-                if (typeof this.state.deviceInfo.gpio255Response[gpio] === 'object') {
-                    var key = Object.keys(this.state.deviceInfo.gpio255Response[gpio])[0]
-                    return (
-                        <TableRow>
-                            <TableCell>{gpio}</TableCell>
-                            <TableCell>{`${key} ( ${this.state.deviceInfo.gpio255Response[gpio][key]} )`}</TableCell>
-                        </TableRow>
-                    )
-                } else {
-                    return (
-                        <TableRow>
-                            <TableCell>{gpio}</TableCell>
-                            <TableCell>{this.state.deviceInfo.gpio255Response[gpio]}</TableCell>
-                        </TableRow>
-                    )
-                }
+            {this.deviceConfig.gpioResponseFormatter(this.state.deviceInfo.gpio255Response).map((gpioObj, index) => {
+                return (
+                    <TableRow>
+                        <TableCell>{gpioObj.gpio}</TableCell>
+                        <TableCell>{gpioObj.gpioInfo}</TableCell>
+                    </TableRow>
+                )
             })} 
 
             </TableBody>
@@ -773,70 +758,20 @@ class TasmotaDevice extends Component {
     }
 
     renderTypeSettings() {
-        let mqttSettingsGroup = {
-            groupName: "Mqtt Settings",
-            settings: [{
-                name: 'Mqtt Host',
-                command: 'MqttHost',
-            }, {
-                name: 'Mqtt User',
-                command: 'MqttUser',
-            }, {
-                name: 'Mqtt Password',
-                command: 'MqttPassword',
-            }]
-        }
 
-        let wifiSettingsGroup = {
-            groupName: "Wifi Settings",
-            settings: [{
-                name: 'Ssid 1',
-                command: 'Ssid1',
-            }, {
-                name: 'Password 1',
-                command: 'Password1',
-            }, {
-                name: 'Ssid 2',
-                command: 'Ssid2',
-            }, {
-                name: 'Password 2',
-                command: 'Password2',
-            }, {
-                name: 'Hostname',
-                command: 'Hostname',
-            }]
-        }
-
-        let ruleSettingsGroup = {
-            groupName: 'Rules',
-            settings: [{
-                name: 'Rule 1',
-                command: 'Rule1',
-            },{
-                name: 'Rule 2',
-                command: 'Rule2'
-            },{
-                name: 'Rule 3',
-                command: 'Rule3'
-            }]
-        }
 
         return(
             <React.Fragment>
                 
-
-
-                <TableRow>
-                    <TableCell colSpan={3}>
-                        <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={wifiSettingsGroup} />
-                    </TableCell>
-                </TableRow>                
-
-                <TableRow>
-                    <TableCell colSpan={3}>
-                        <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={mqttSettingsGroup} />
-                    </TableCell>
-                </TableRow>
+                {this.deviceConfig.settingsGroups.map((settings) => {
+                    return (
+                        <TableRow>
+                            <TableCell colSpan={3}>
+                                <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={settings} />
+                            </TableCell>
+                        </TableRow>                
+                    )
+                })}
                 
             </React.Fragment>
         )

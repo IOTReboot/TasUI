@@ -5,7 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^4.5.1",
     "@material-ui/icons": "^4.5.1",
+    "electron-is-dev": "^1.1.0",
     "ip-address": "^6.1.0",
+    "node": "^13.1.0",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-inlinesvg": "^1.1.7",
@@ -13,11 +15,40 @@
     "react-scripts": "0.9.x",
     "superagent": "^5.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^5.0.0",
+    "electron": "^7.1.2",
+    "electron-builder": "^21.2.0",
+    "typescript": "^3.7.2",
+    "wait-on": "^3.3.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "electron-builder -mwl -c.mac.identity=null"
+  },
+  "main": "public/electron.js",
+  "homepage": "./",
+  "author": {
+    "name": "IOTReboot",
+    "email": "iotreboot@shantur.com",
+    "url": "http://iotreboot.shantur.com"
+  },
+  "build": {
+    "appId": "com.shantur.iotreboot",
+    "productName": "IOTReboot UI",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ]
   }
 }

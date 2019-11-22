@@ -165,7 +165,7 @@ class DeviceList extends React.Component {
         )
     }
     renderTableHeader() {
-        console.log(this.props.displayMode)
+        // console.log(this.props.displayMode)
         switch (this.props.displayMode) {
             case 'Table_Status':
                 return this.renderTableHeaderStatus()

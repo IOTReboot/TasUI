@@ -359,7 +359,7 @@ class TasmotaDevice extends Component {
                 }
             })
 
-            console.log('DetailsControls buttons : %O', buttons)
+            // console.log('DetailsControls buttons : %O', buttons)
 
             return buttons.map(([key, value]) => {
                 
@@ -414,7 +414,7 @@ class TasmotaDevice extends Component {
                 }
             })
 
-            console.log('DetailsControls dimmers : %O', dimmers)
+            // console.log('DetailsControls dimmers : %O', dimmers)
 
             return dimmers.map(([key, value]) => {
 
@@ -600,7 +600,7 @@ class TasmotaDevice extends Component {
         }
 
         for(let n = 0; n < keys.length; n++) {
-            console.log("Keys %s", this.state.deviceInfo.gpiosResponse[keys[n]])
+            // console.log("Keys %s", this.state.deviceInfo.gpiosResponse[keys[n]])
             if (!Array.isArray(this.state.deviceInfo.gpiosResponse[keys[n]])) {
                 if (this.state.deviceInfo.gpiosResponse[keys[n]][gpio]) {
                     return this.state.deviceInfo.gpiosResponse[keys[n]][gpio]
@@ -867,7 +867,7 @@ class TasmotaDevice extends Component {
     }
 
     render() {
-        console.log('Tasmota Device renderType : %s', this.props.renderType)
+        // console.log('Tasmota Device renderType : %s', this.props.renderType)
         switch(this.props['renderType']) {
             case 'List':
                 return this.renderTypeList();

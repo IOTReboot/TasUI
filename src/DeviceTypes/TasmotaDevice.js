@@ -117,6 +117,7 @@ class TasmotaDevice extends Component {
         if (nextProps.macAddress !== this.macAddress) {
             this.deviceConnector.disconnect();
             this.deviceConnector = this.props.deviceManager.getDeviceConnector(nextProps.macAddress, this.props.deviceManager.getDevice(nextProps.macAddress).status0Response.StatusNET.IPAddress);
+            this.deviceConfig = this.props.deviceManager.getTasmotaConfig(nextProps.macAddress)
             this.deviceConnector.connect();
         }
     }
@@ -543,7 +544,7 @@ class TasmotaDevice extends Component {
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                         >
-                        <Typography>SetOption Flags List</Typography>
+                        <Typography>SetOption Flags</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                         <List dense >
@@ -552,6 +553,11 @@ class TasmotaDevice extends Component {
             </ExpansionPanelDetails>
             </ExpansionPanel>
         )
+    }
+
+    changeSetOption(setOption, event) {
+        event.stopPropagation()
+        this.deviceConnector.performCommandOnDevice(setOption + (event.target.checked ? ' 1' : ' 0'));
     }
 
     renderDetailsSetOptionsListItems() {
@@ -572,7 +578,8 @@ class TasmotaDevice extends Component {
                                 <Checkbox
                                     edge="end"
                                     checked={valueArray[itemIndex] === 1}
-                                    disabled
+                                    onChange={(event) => this.changeSetOption('SetOption' + soValue, event)}
+                                    // disabled
                                 />
                                 </ListItemSecondaryAction>
                             </ListItem>
@@ -772,6 +779,13 @@ class TasmotaDevice extends Component {
                         </TableRow>                
                     )
                 })}
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsSetOptions()}
+                    </TableCell>
+                </TableRow>
+
                 
             </React.Fragment>
         )

@@ -45,7 +45,15 @@ class FindDevices extends React.Component {
         this.setState({
             ipFrom: event.target.value,
         });
-        this.calculateTotalIPs(event.target.value, this.state.ipTo);
+        let nets = event.target.value.split('.')
+        let to = this.state.ipTo
+        if (nets.length === 4) {
+            to = `${nets[0]}.${nets[1]}.${nets[2]}.254`
+            this.setState({
+                ipTo: to
+            })
+        }
+        this.calculateTotalIPs(event.target.value, to);
     }
 
     handleIPToChange = event => {

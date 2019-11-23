@@ -13,6 +13,7 @@
     "react-inlinesvg": "^1.1.7",
     "react-router-dom": "^5.1.2",
     "react-scripts": "0.9.x",
+    "react-scrollbars-custom": "^4.0.21",
     "superagent": "^5.1.0"
   },
   "devDependencies": {
@@ -30,7 +31,7 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
-    "electron-pack": "electron-builder -mwl -c.mac.identity=null"
+    "electron-pack": "electron-builder -w -c.mac.identity=null"
   },
   "main": "public/electron.js",
   "homepage": "./",
@@ -45,6 +46,9 @@
     "copyright": "Copyright © 2019 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "zip"
     },
     "files": [
       "build/**/*",

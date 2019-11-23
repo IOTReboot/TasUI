@@ -28,6 +28,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Checkbox from '@material-ui/core/Checkbox';
 import ContactlessIcon from '@material-ui/icons/Contactless';
+import CommandGroup from '../Components/CommandGroup';
 
 const styles = theme => ({
     imageContainer: {
@@ -538,7 +539,7 @@ class TasmotaDevice extends Component {
 
     renderDetailsSetOptions() {
         return (
-            <ExpansionPanel key="SetOptionFlagExpansionPanel">
+            <ExpansionPanel key="SetOptionFlagExpansionPanel" TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}>
                         <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
@@ -786,6 +787,22 @@ class TasmotaDevice extends Component {
                     </TableCell>
                 </TableRow>
 
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        <Typography>Commands Section</Typography>
+                    </TableCell>
+                </TableRow>
+
+                {Object.entries(this.deviceConfig.commands).map(([commandGroupName, commandGroup]) => {
+                    return (
+                        <TableRow>
+                            <TableCell colSpan={3}>
+                                <CommandGroup commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector}/>
+                            </TableCell>
+                        </TableRow>
+                    )
+                })}
+
                 
             </React.Fragment>
         )
@@ -823,7 +840,6 @@ class TasmotaDevice extends Component {
                     </TableCell>
                 </TableRow>
 
-
                 <TableRow>
                         <TableCell align="left"><Typography>Status Report</Typography></TableCell>
                         <TableCell align="center" colSpan={2}>
@@ -843,7 +859,7 @@ class TasmotaDevice extends Component {
     renderTypeSettingsAndDetails(renderType) {
         return (
             <React.Fragment>
-            <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center" style={{maxWidth: 900}}>
+            <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center" style={{minWidth: 900}}>
             <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center">
                     <Paper align="center" style={{width: 200, height: 200}}>
                         {this.renderDetailsImage()}

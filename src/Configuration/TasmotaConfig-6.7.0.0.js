@@ -1,3 +1,5 @@
+import Commands from './Commands.json'
+
 const TasmotaConfig_06070000 = {
     setOptionsStatusMaps : [{
         structName: "SysBitfield",
@@ -375,6 +377,8 @@ const TasmotaConfig_06070000 = {
             }
         })
     },
+    commands: Commands,
+
 }
 
 export default TasmotaConfig_06070000

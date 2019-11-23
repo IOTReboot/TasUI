@@ -8,8 +8,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
-import { Typography, Box, Radio, TableBody, TableRow, Table, TableCell, TextField, Button, Divider, TextareaAutosize } from '@material-ui/core';
+import { Typography, Box, Radio, TextField, Button, Divider, TextareaAutosize } from '@material-ui/core';
 import { Scrollbar } from 'react-scrollbars-custom';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+
+import ActionButton from './ActionButton'
 
 class CommandDisplay extends React.Component {
 
@@ -17,7 +20,16 @@ class CommandDisplay extends React.Component {
 
     constructor(props) {
         super(props)
-        let defaultOption = this.props.command.options.length > 0 ? this.props.command.options[0] : null
+
+        this.commandOptions = this.props.command.options.concat([])
+
+        this.commandOptions.unshift({
+                display: "Read",
+                description: "Read current value from device",
+                type: "select"
+        })
+        
+        let defaultOption = this.commandOptions[0]
 
         let defaultInputSelection
         if (this.props.commandName.endsWith("<x>")) {
@@ -59,6 +71,11 @@ class CommandDisplay extends React.Component {
         }
     }
 
+    onClearLog(event) {
+        event.stopPropagation()
+        this.setState({logsOutput: ''})
+    }
+
     addLog(newLog) {
         this.setState({logsOutput: (this.state.logsOutput + `\n${new Date().toLocaleTimeString()} : ${newLog}`).trim()})
     }
@@ -73,10 +90,6 @@ class CommandDisplay extends React.Component {
 
     sendCommand(event) {
         this.sendCommandInternal(event, this.state.commandToSend)
-    }
-
-    readCurrentValue(event) {
-        this.sendCommandInternal(event, this.state.currentSelectedCommand)
     }
 
     onCommandInputChanged(event) {
@@ -128,7 +141,9 @@ class CommandDisplay extends React.Component {
         if (option) {
             switch(option.type) {
                 case "select" :
-                    command += ` ${option.display}`
+                    if (option.display !== "Read") {
+                        command += ` ${option.display}`
+                    }
                     break
 
                 case "input":
@@ -168,7 +183,7 @@ class CommandDisplay extends React.Component {
                         </Scrollbar>
                         <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
                             <List dense>
-                                {this.props.command.options.map(option => {
+                                {this.commandOptions.map(option => {
                                     return (
                                         <ListItem key={option.display} role={undefined} button onClick={(event) => this.onOptionItemSelected(event, option)}>
                                         <ListItemIcon>
@@ -221,11 +236,25 @@ class CommandDisplay extends React.Component {
                     </form>
 
                     <Typography px={5} flexGrow={1}>Logs</Typography>
-                    <TextareaAutosize aria-label="minimum height" rows={6} rowsMax={8} value={this.state.logsOutput} disabled />
+                    <Box display="flex" flexDirection="row" flexGrow={0}>
+                        <TextareaAutosize 
+                            aria-label="minimum height" 
+                            rows={6} 
+                            rowsMax={8} 
+                            value={this.state.logsOutput} 
+                            disabled
+                            style={{ width: 1000, height: 100 }} />
+
+                        <ActionButton 
+                            key={this.props.commandName+'clearlog'}
+                            toolTip="Clear Log" 
+                            label="Clear Log" 
+                            icon={<HighlightOffIcon />}
+                            onButtonClick={(event) => this.onClearLog(event)}
+                        />
+                    </Box>
     
                 </Box>
-
-            // </React.Fragment>
         )
     }
 
@@ -235,9 +264,9 @@ class CommandDisplay extends React.Component {
         return (
             <ExpansionPanel key={`CommandDisplay-${this.props.commandName}`} TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}>
                 <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
                 >
                 <Typography style={{flexBasis: "33%"}}>{this.props.commandName}</Typography>
                 <Typography color="textSecondary" >{this.props.command.description.substring(0, 60)}</Typography>
@@ -251,7 +280,6 @@ class CommandDisplay extends React.Component {
                 <Divider />
                 <ExpansionPanelActions>
                     <Button size="small" variant="contained" onClick={(event) => this.sendCommand(event)}>Send Command</Button>
-                    <Button size="small" variant="contained" onClick={(event) => this.readCurrentValue(event)}>Read Current</Button>
                 </ExpansionPanelActions>
             </ExpansionPanel>
         )

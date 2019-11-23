@@ -22,9 +22,12 @@ class CommandDisplay extends React.Component {
             commandIndex: 0,
             selectedOption: defaultOption,
             valueToSend: "",
-            commandToSend: this.generateCommand(defaultOption, ""),
+            commandToSend: this.generateCommand(defaultOption, "", 1),
             logsOutput: "",
+            currentSelectedInputRangeValue: 1,
+            currentSelectedCommand: this.generateCurrentCommand(1),
         }
+        this.inputRange = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     }
 
 
@@ -60,7 +63,7 @@ class CommandDisplay extends React.Component {
     }
 
     readCurrentValue(event) {
-        this.sendCommandInternal(event, this.props.commandName)
+        this.sendCommandInternal(event, this.state.currentSelectedCommand)
     }
 
     onCommandInputChanged(event) {
@@ -68,14 +71,19 @@ class CommandDisplay extends React.Component {
         this.setState({commandToSend: event.target.value})
     }
 
+    onInputRangeItemSelected(event, value) {
+        event.stopPropagation()
+        this.setState({currentSelectedInputRangeValue: value, currentSelectedCommand: this.generateCurrentCommand(value), commandToSend: this.generateCommand(this.state.selectedOption, this.state.valueToSend, value)})
+    }
+
     onValueInputChanged(event) {
         event.stopPropagation()
-        this.setState({ valueToSend: event.target.value, commandToSend: this.generateCommand(this.state.selectedOption, event.target.value)})
+        this.setState({ valueToSend: event.target.value, commandToSend: this.generateCommand(this.state.selectedOption, event.target.value, this.state.currentSelectedInputRangeValue)})
     }
 
     onOptionItemSelected(event, option) {
         event.stopPropagation()
-        this.setState({ selectedOption: option, commandToSend: this.generateCommand(option, this.state.valueToSend)})
+        this.setState({ selectedOption: option, commandToSend: this.generateCommand(option, this.state.valueToSend, this.state.currentSelectedInputRangeValue)})
     }
 
     isCurrentSelectedOption(option) {
@@ -94,8 +102,16 @@ class CommandDisplay extends React.Component {
         }
     }
 
-    generateCommand(option, valueToSend) {
-        let command = `${this.props.commandName}`
+    generateCurrentCommand(rangeValue) {
+        if (this.props.commandName.endsWith('<x>')) {
+            return this.props.commandName.replace("<x>", rangeValue)
+        } else {
+            return this.props.commandName
+        }
+    }
+
+    generateCommand(option, valueToSend, rangeValue) {
+        let command = this.generateCurrentCommand(rangeValue)
         if (option) {
             switch(option.type) {
                 case "select" :
@@ -117,7 +133,32 @@ class CommandDisplay extends React.Component {
             // <React.Fragment>
                 <Box display="flex" flexDirection="column" flexGrow={1}>
                     <Box display="flex" flexDirection="row" alignItems="center" flexGrow={1}>
-                        <Typography px={5} flexGrow={1}>{this.props.commandName}</Typography>
+                        {this.props.commandName.endsWith("<x>") ? 
+                        ( <Scrollbar style={{ width: 500, height: 200 }} px={5} flexGrow={4}>
+                            <List dense>
+                                {this.inputRange.map(value => {
+                                    let command = this.generateCurrentCommand(value)
+                                    return (
+                                        <ListItem key={value} role={undefined} button onClick={(event) => this.onInputRangeItemSelected(event, value)}>
+                                        <ListItemIcon>
+                                        <Radio
+                                            checked={this.state.currentSelectedInputRangeValue === value}
+                                            // onChange={handleChange}
+                                            value={value}
+                                            name={value}
+                                            inputProps={{ 'aria-label': 'A' }}
+                                        />
+                                        </ListItemIcon>
+                                        <ListItemText id={command} primary={command} />
+                                    </ListItem>
+                                    )
+                                })}
+                            </List>
+                            {/* </Box> */}
+                        </Scrollbar>
+                        ) : (
+                            <Typography px={5} flexGrow={1}>{this.state.currentSelectedCommand}</Typography>
+                        )}
                         <Scrollbar style={{ width: 500, height: 200 }} px={5} flexGrow={4}>
                             <List dense>
                                 {this.props.command.options.map(option => {

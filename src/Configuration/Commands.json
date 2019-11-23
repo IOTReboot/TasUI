@@ -2,7 +2,7 @@
   "Control": {
     "Backlog": {
       "options": [],
-      "description": "List of commands to be executed in sequence separated by ';' See Using Backlog for examples. "
+      "description": "List of commands to be executed in sequence separated by ';'\nSee Using Backlog for examples."
     },
     "BlinkCount": {
       "options": [
@@ -17,7 +17,7 @@
           "type": "range"
         }
       ],
-      "description": "Number of relay toggles (blinks) (does not control the status LED) "
+      "description": "Number of relay toggles (blinks) (does not control the status LED)"
     },
     "BlinkTime": {
       "options": [
@@ -37,7 +37,7 @@
           "type": "range"
         }
       ],
-      "description": "User control over button debounce timing   »6.2.0 "
+      "description": "User control over button debounce timing   »6.2.0"
     },
     "Buzzer": {
       "options": [
@@ -52,7 +52,7 @@
           "type": "input"
         }
       ],
-      "description": "'2,3' - Beep twice with 300 milliseconds duration and 100 milliseconds pause '2,3,4' - Beep twice with 300 milliseconds duration and 400 milliseconds pause '1,2,3,0xF54' (0000 0000 0000 0000 0000 1111 0101 0100). Each '1' bit beeps for 200 milliseconds and each bounded '0' bit pauses for 300 milliseconds "
+      "description": "'2,3' - Beep twice with 300 milliseconds duration and 100 milliseconds pause\n'2,3,4' - Beep twice with 300 milliseconds duration and 400 milliseconds pause\n'1,2,3,0xF54' (0000 0000 0000 0000 0000 1111 0101 0100). Each '1' bit beeps for 200 milliseconds and each bounded '0' bit pauses for 300 milliseconds"
     },
     "FanSpeed": {
       "options": [
@@ -77,7 +77,7 @@
           "type": "select"
         }
       ],
-      "description": "Fan speed control (iFan02/iFan03 only)  »6.1.0 "
+      "description": "Fan speed control (iFan02/iFan03 only)  »6.1.0"
     },
     "Interlock": {
       "options": [
@@ -107,7 +107,7 @@
           "type": "input"
         }
       ],
-      "description": "Relay interlock mode and group selection.  »6.5.0 Add up to 8 relays in 1 to 4 interlock groups, each separated by a space. For example "
+      "description": "Relay interlock mode and group selection.  »6.5.0Add up to 8 relays in 1 to 4 interlock groups, each separated by a space. For example"
     },
     "LedMask": {
       "options": [
@@ -122,7 +122,7 @@
           "type": "input"
         }
       ],
-      "description": "Set a bitmask specifiying which relays control the LED indicator. Read more...   »6.6.0 LedState must be enabled (i.e., '!= 0') in order for 'LedMask' to take effect. "
+      "description": "Set a bitmask specifiying which relays control the LED indicator. Read more...   »6.6.0\nLedState must be enabled (i.e., '!= 0') in order for 'LedMask' to take effect."
     },
     "LedPower": {
       "options": [
@@ -142,7 +142,7 @@
           "type": "select"
         }
       ],
-      "description": "LED power state as on or off  (Use 'Backlog LedPower 0; SetOption31 1' to disable LED even when Wi-Fi or MQTT is not connected) "
+      "description": "LED power state as on or off \n(Use 'Backlog LedPower 0; SetOption31 1' to disable LED even when Wi-Fi or MQTT is not connected)"
     },
     "LedPower<x>": {
       "options": [
@@ -162,7 +162,7 @@
           "type": "select"
         }
       ],
-      "description": "LED<x> power state control. Enabled only when LedLink(i) is configured  »6.6.0 "
+      "description": "LED<x> power state control. Enabled only when LedLink(i) is configured  »6.6.0"
     },
     "LedState": {
       "options": [
@@ -212,7 +212,7 @@
           "type": "select"
         }
       ],
-      "description": "Manage LED state Cannot be issued directly and is only activated when 'LedPower' is switched from '0' to '1' due to a software function "
+      "description": "Manage LED state\nCannot be issued directly and is only activated when 'LedPower' is switched from '0' to '1' due to a software function"
     },
     "Power0": {
       "options": [
@@ -232,7 +232,7 @@
           "type": "select"
         }
       ],
-      "description": "Control the power state simultaneously for all relays on the device  »6.6.0.9 "
+      "description": "Control the power state simultaneously for all relays on the device  »6.6.0.9"
     },
     "Power<x>": {
       "options": [
@@ -262,7 +262,7 @@
           "type": "select"
         }
       ],
-      "description": "Control the corresponding Relay (enumerated) power state and also restart PulseTime<x> "
+      "description": "Control the corresponding Relay (enumerated) power state and also restart PulseTime<x>"
     },
     "PowerOnState": {
       "options": [
@@ -297,7 +297,7 @@
           "type": "select"
         }
       ],
-      "description": "Control relay state when the device is powered up. More information "
+      "description": "Control relay state when the device is powered up. More information"
     },
     "PulseTime<x>": {
       "options": [
@@ -317,7 +317,7 @@
           "type": "range"
         }
       ],
-      "description": "Display the amount of 'PulseTime' remaining on the corresponding Relay (enumerated) '<value>' Set the duration to keep the corresponding Relay 'ON' when 'Power<x> ON' command is issued. After this amount of time, the relay will be turned 'OFF'. "
+      "description": "Display the amount of 'PulseTime' remaining on the corresponding Relay (enumerated)\n'<value>' Set the duration to keep the corresponding Relay 'ON' when 'Power<x> ON' command is issued. After this amount of time, the relay will be turned 'OFF'."
     },
     "SwitchDebounce": {
       "options": [
@@ -327,7 +327,7 @@
           "type": "range"
         }
       ],
-      "description": "User control over switch debounce timing   »6.2.0 "
+      "description": "User control over switch debounce timing   »6.2.0"
     },
     "SwitchMode<x>": {
       "options": [
@@ -372,11 +372,7 @@
           "type": "select"
         }
       ],
-      "description": "Switch mode  "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption1' - Set button multipress mode 'SetOption11' - Swap pushbutton single and double press functionality 'SetOption13' - Allow immediate action on single button press 'SetOption26' - Use indexes even when only one relay is present 'SetOption31' - Disable Wi-Fi LED status blinking 'SetOption32' - Set hold interval before sending 'HOLD' action 'SetOption40' - Stop detecting any input change on button GPIO 'SetOption67' - Enable/Disable Buzzer "
+      "description": "Switch mode"
     }
   },
   "Management": {
@@ -403,7 +399,7 @@
           "type": "range"
         }
       ],
-      "description": "Time to enter deep sleep mode  »6.6.0.18 "
+      "description": "Time to enter deep sleep mode  »6.6.0.18"
     },
     "Emulation": {
       "options": [
@@ -442,11 +438,11 @@
     },
     "Gpios": {
       "options": [],
-      "description": "Show list of available components by name and index '255' / 'All' Show list of all components by name and index  »6.6.0.12 "
+      "description": "Show list of available components by name and index\n'255' / 'All' Show list of all components by name and index  »6.6.0.12"
     },
     "Gpio": {
       "options": [],
-      "description": "Show current component assignments of the Module's configurable GPIO '255' / 'All' Show component assignments for all the devices available GPIO  »6.6.0.17 "
+      "description": "Show current component assignments of the Module's configurable GPIO\n'255' / 'All' Show component assignments for all the devices available GPIO  »6.6.0.17"
     },
     "Gpio<x>": {
       "options": [
@@ -456,15 +452,15 @@
           "type": "input"
         }
       ],
-      "description": "For built-in Modules only. This command does not work for device's configured with a device Template. "
+      "description": "For built-in Modules only. This command does not work for device's configured with a device Template."
     },
     "I2Cscan": {
       "options": [],
-      "description": "Scan I<sup>2</sup>C bus and show addresses for found devices "
+      "description": "Scan I<sup>2</sup>C bus and show addresses for found devices"
     },
     "I2CDriver": {
       "options": [],
-      "description": "Enable / Disable I<sup>2</sup>C bus sensor drivers   »7.0.0.3 "
+      "description": "Enable / Disable I<sup>2</sup>C bus sensor drivers   »7.0.0.3"
     },
     "LogHost": {
       "options": [
@@ -498,7 +494,7 @@
     },
     "Modules": {
       "options": [],
-      "description": "Show available modules by name and index "
+      "description": "Show available modules by name and index"
     },
     "Module": {
       "options": [
@@ -513,7 +509,7 @@
           "type": "select"
         }
       ],
-      "description": "Displays active module by name and index "
+      "description": "Displays active module by name and index"
     },
     "MqttLog": {
       "options": [
@@ -563,7 +559,7 @@
           "type": "input"
         }
       ],
-      "description": "NTP server setup (x= '1..3') "
+      "description": "NTP server setup (x= '1..3')"
     },
     "OtaUrl": {
       "options": [
@@ -578,7 +574,7 @@
           "type": "input"
         }
       ],
-      "description": "Display current OTA URL "
+      "description": "Display current OTA URL"
     },
     "Pwm<x>": {
       "options": [
@@ -658,7 +654,7 @@
           "type": "select"
         }
       ],
-      "description": "(Erase of flash can take a few seconds to complete and there is no output during the erase process on the serial or web console) "
+      "description": "(Erase of flash can take a few seconds to complete and there is no output during the erase process on the serial or web console)"
     },
     "Restart": {
       "options": [
@@ -723,7 +719,7 @@
           "type": "select"
         }
       ],
-      "description": "Disable hardware serial bridge and 'SerialLog' will be disabled automatically 10 minutes after the device reboots. "
+      "description": "Disable hardware serial bridge and\n'SerialLog' will be disabled automatically 10 minutes after the device reboots."
     },
     "Sleep": {
       "options": [
@@ -742,7 +738,7 @@
     },
     "State": {
       "options": [],
-      "description": "Display current device state and publish to '%prefix%/%topic%/RESULT' topic  »5.12.0 "
+      "description": "Display current device state and publish to '%prefix%/%topic%/RESULT' topic  »5.12.0"
     },
     "Status": {
       "options": [
@@ -867,7 +863,7 @@
           "type": "range"
         }
       ],
-      "description": "Show current Template  »6.5.0 Does not activate the template. To activate use 'Module 0'. "
+      "description": "Show current Template  »6.5.0\nDoes not activate the template. To activate use 'Module 0'."
     },
     "Time": {
       "options": [
@@ -937,7 +933,7 @@
           "type": "input"
         }
       ],
-      "description": "Set policies for the beginning of daylight saving time (DST) and return back to standard time (STD)  »5.14.0 'H','W','M','D','h','T' Example: 'TIMEDST 1,1,10,1,2,660' "
+      "description": "Set policies for the beginning of daylight saving time (DST) and return back to standard time (STD)  »5.14.0\n'H','W','M','D','h','T'\nExample: 'TIMEDST 1,1,10,1,2,660'"
     },
     "Timezone": {
       "options": [
@@ -972,7 +968,7 @@
           "type": "input"
         }
       ],
-      "description": "Used to map functions in TuyaMCU   »6.7.1 "
+      "description": "Used to map functions in TuyaMCU   »6.7.1"
     },
     "Upgrade": {
       "options": [
@@ -1033,10 +1029,6 @@
         }
       ],
       "description": ""
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption68' - PWM Channel control 'SetOption76' - DeepSleep disable bootcount incrementing "
     }
   },
   "WiFi": {
@@ -1073,13 +1065,28 @@
           "type": "input"
         }
       ],
-      "description": "If using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed. "
+      "description": "If using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed."
     },
     "IPAddress<x>": {
       "options": [
         {
           "display": "IPAddress1",
           "description": "set device IP address ",
+          "type": "input"
+        },
+        {
+          "display": "0.0.0.0",
+          "description": "use dynamic IP address (DHCP) ",
+          "type": "input"
+        },
+        {
+          "display": "XXX.XXX.XXX.XXX",
+          "description": "set static IP address ",
+          "type": "input"
+        },
+        {
+          "display": "IPAddress2",
+          "description": "set gateway IP address ",
           "type": "input"
         },
         {
@@ -1093,7 +1100,7 @@
           "type": "input"
         }
       ],
-      "description": "Set networking IP ('XXX.XXX.XXX.XXX') addresses <li>'0.0.0.0' = use dynamic IP address (DHCP)</li><li>'XXX.XXX.XXX.XXX' = set static IP address</li>'IPAddress2' = set gateway IP address  follow IPAddress commands with 'restart 1' to apply changes "
+      "description": "Set networking IP ('XXX.XXX.XXX.XXX') addresses\n\nfollow IPAddress commands with 'restart 1' to apply changes"
     },
     "Password<x>": {
       "options": [
@@ -1113,7 +1120,7 @@
           "type": "select"
         }
       ],
-      "description": "Passwords are limited to 64 characters. Do not use special characters or white spaces in the password. Note that 'Password' and 'Password1' are equivalent commands. "
+      "description": "Passwords are limited to 64 characters. Do not use special characters or white spaces in the password.\nNote that 'Password' and 'Password1' are equivalent commands."
     },
     "Ssid<x>": {
       "options": [
@@ -1133,7 +1140,7 @@
           "type": "select"
         }
       ],
-      "description": "SSID are limited to 32 characters. Do not use special characters or white spaces in the SSID "
+      "description": "SSID are limited to 32 characters. Do not use special characters or white spaces in the SSID"
     },
     "WebColor<x>": {
       "options": [
@@ -1238,7 +1245,7 @@
           "type": "select"
         }
       ],
-      "description": "Configure Web GUI colors (x = '1..19')  »6.6.0 User themes "
+      "description": "Configure Web GUI colors (x = '1..19')  »6.6.0\nUser themes"
     },
     "WebPassword": {
       "options": [
@@ -1258,7 +1265,7 @@
           "type": "input"
         }
       ],
-      "description": "Show current web server password "
+      "description": "Show current web server password"
     },
     "WebRefresh": {
       "options": [
@@ -1268,7 +1275,7 @@
           "type": "range"
         }
       ],
-      "description": "Web page refresh  »6.3.0 "
+      "description": "Web page refresh  »6.3.0"
     },
     "WebSend": {
       "options": [
@@ -1298,7 +1305,7 @@
           "type": "input"
         }
       ],
-      "description": "Send a command to Tasmota host over http. If a command starts with a '\\' it will be used as a link.  »6.1.0 '[<host>:<port>,<user>:<password>] <command>' example: '[<ip>] POWER1 ON' sends 'http://<ip>/cm?cmnd=POWER1 ON' "
+      "description": "Send a command to Tasmota host over http. If a command starts with a '\\' it will be used as a link.  »6.1.0\n'[<host>:<port>,<user>:<password>] <command>'\nexample: '[<ip>] POWER1 ON' sends 'http://<ip>/cm?cmnd=POWER1 ON'"
     },
     "WebSensor<x>": {
       "options": [
@@ -1313,7 +1320,7 @@
           "type": "input"
         }
       ],
-      "description": "Control display of sensor telemetry in the web UI  »6.6.0.5 '0' - Do not display sensor's telemetry '1' - Display sensor's telemetry (default) Issue a 'Status 4' to obtain a list of sensor types enabled in the firmware loaded on the device. "
+      "description": "Control display of sensor telemetry in the web UI  »6.6.0.5\n'0' - Do not display sensor's telemetry\n'1' - Display sensor's telemetry (default)\nIssue a 'Status 4' to obtain a list of sensor types enabled in the firmware loaded on the device."
     },
     "WebServer": {
       "options": [
@@ -1373,15 +1380,11 @@
           "type": "select"
         }
       ],
-      "description": "'0' - disable Wi-Fi Manager and reboot (used with alternate AP) This setting is recommended for devices without an external control/reset button.  No longer supported » v6.6.0.21 "
+      "description": "'0' - disable Wi-Fi Manager and reboot (used with alternate AP)\nThis setting is recommended for devices without an external control/reset button.\n No longer supported » v6.6.0.21"
     },
     "WifiPower": {
       "options": [],
-      "description": "set Wi-Fi transmit power level in decibel-milliwatts (dBm) (default = '17') "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption55' - mDNS service control 'SetOption56' - Wi-Fi network scan to select strongest signal on restart 'SetOption57' - Wi-Fi network re-scan, alternate AP "
+      "description": "set Wi-Fi transmit power level in decibel-milliwatts (dBm) (default = '17')"
     }
   },
   "MQTT": {
@@ -1423,7 +1426,7 @@
           "type": "select"
         }
       ],
-      "description": "If using MQTT to issue this command, if it is published to the device 'GroupTopic', the command will not be executed. "
+      "description": "If using MQTT to issue this command, if it is published to the device 'GroupTopic', the command will not be executed."
     },
     "FullTopic": {
       "options": [
@@ -1438,7 +1441,7 @@
           "type": "input"
         }
       ],
-      "description": "If using MQTT to issue this command, if it is published to the device 'GroupTopic', you must ensure uniqueness of the resulting fulltopic on each destination device by using one or more of these substitution tokens. "
+      "description": "If using MQTT to issue this command, if it is published to the device 'GroupTopic', you must ensure uniqueness of the resulting fulltopic on each destination device by using one or more of these substitution tokens."
     },
     "GroupTopic": {
       "options": [
@@ -1468,7 +1471,7 @@
           "type": "input"
         }
       ],
-      "description": "You can use the '%06X' substitution token to replace with last six characters of MAC address. If using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed. "
+      "description": "You can use the '%06X' substitution token to replace with last six characters of MAC address.\nIf using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed."
     },
     "MqttFingerprint": {
       "options": [
@@ -1478,7 +1481,7 @@
           "type": "input"
         }
       ],
-      "description": "TLS needs to be enabled in firmware for this command  »5.13.1 "
+      "description": "TLS needs to be enabled in firmware for this command  »5.13.1"
     },
     "MqttHost": {
       "options": [
@@ -1578,7 +1581,7 @@
           "type": "select"
         }
       ],
-      "description": "MQTT power retain state "
+      "description": "MQTT power retain state"
     },
     "Prefix1": {
       "options": [
@@ -1728,7 +1731,7 @@
           "type": "input"
         }
       ],
-      "description": "Subscribes to an MQTT topic and assigns an Event name to it.  »6.5.0 "
+      "description": "Subscribes to an MQTT topic and assigns an Event name to it.  »6.5.0"
     },
     "SwitchTopic": {
       "options": [
@@ -1753,7 +1756,7 @@
           "type": "select"
         }
       ],
-      "description": "Read more about this. If using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed. "
+      "description": "Read more about this.\nIf using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed."
     },
     "TelePeriod": {
       "options": [
@@ -1788,7 +1791,7 @@
           "type": "input"
         }
       ],
-      "description": "If using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed. (Mqtt Topic can't be equal to Mqtt Client) "
+      "description": "If using MQTT to issue this command, if it is used with the device 'GroupTopic', the command will not be executed. (Mqtt Topic can't be equal to Mqtt Client)"
     },
     "Unsubscribe": {
       "options": [
@@ -1803,11 +1806,7 @@
           "type": "input"
         }
       ],
-      "description": "Unsubscribe from topics subsribed to with 'Subscribe'   »6.5.0 "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption4' - Return MQTT response as 'RESULT' or '%COMMAND%' topic 'SetOption10' - Main topic change behavior "
+      "description": "Unsubscribe from topics subsribed to with 'Subscribe'   »6.5.0"
     }
   },
   "Rules": {
@@ -1829,11 +1828,11 @@
           "type": "range"
         }
       ],
-      "description": "Current calculation resolution  »6.4.0 "
+      "description": "Current calculation resolution  »6.4.0"
     },
     "Event": {
       "options": [],
-      "description": "Execute an event to trigger a rule as documented  »5.13.0 "
+      "description": "Execute an event to trigger a rule as documented  »5.13.0"
     },
     "Mem<x>": {
       "options": [
@@ -1848,7 +1847,7 @@
           "type": "input"
         }
       ],
-      "description": "Manage up to 5 variables stored on flash (x = '1..5')  »6.1.0 'Mem' returns all current values. 'Mem<x>' returns the variable's current value.  »6.6.0.2 "
+      "description": "Manage up to 5 variables stored on flash (x = '1..5')  »6.1.0\n'Mem' returns all current values. 'Mem<x>' returns the variable's current value.  »6.6.0.2"
     },
     "Mult<x>": {
       "options": [
@@ -1923,7 +1922,7 @@
           "type": "input"
         }
       ],
-      "description": "Rules. Read more...  »6.1.0 "
+      "description": "Rules. Read more...  »6.1.0"
     },
     "RuleTimer<x>": {
       "options": [
@@ -1933,7 +1932,7 @@
           "type": "range"
         }
       ],
-      "description": "Up to eight timers to be used as countdown event (x = '1..8')  »5.13.0 "
+      "description": "Up to eight timers to be used as countdown event (x = '1..8')  »5.13.0"
     },
     "Scale<x>": {
       "options": [
@@ -1963,7 +1962,7 @@
           "type": "input"
         }
       ],
-      "description": "Scale value from a low and high limit to another low and high limits and save in Var<x> (example)  »6.1.0 "
+      "description": "Scale value from a low and high limit to another low and high limits and save in Var<x> (example)  »6.1.0"
     },
     "Sub<x>": {
       "options": [
@@ -1988,7 +1987,7 @@
           "type": "input"
         }
       ],
-      "description": "Manage up to 5 variables stored in memory (x = '1..5')  »6.1.0 'Var' returns all current values. 'Var<x>' returns the variable's current value.  »6.6.0.2 "
+      "description": "Manage up to 5 variables stored in memory (x = '1..5')  »6.1.0\n'Var' returns all current values. 'Var<x>' returns the variable's current value.  »6.6.0.2"
     }
   },
   "Timers": {
@@ -2030,7 +2029,7 @@
           "type": "select"
         }
       ],
-      "description": "Timers control "
+      "description": "Timers control"
     },
     "Timer<x>": {
       "options": [
@@ -2050,15 +2049,20 @@
           "type": "range"
         }
       ],
-      "description": "Parameters for Timer<x> where x = '1..16' "
+      "description": "Parameters for Timer<x> where x = '1..16'"
     }
   },
   "Sensors": {
     "AdcParam": {
       "options": [
         {
-          "display": "sensorli2",
-          "description": "Temperature Steinhart-Hart thermistor equation parameters:</li>'<param1>' NTC Voltage bridge resistor in Ohms (default '32000') ",
+          "display": "sensor2",
+          "description": "Temperature Steinhart-Hart thermistor equation parameters: ",
+          "type": "input"
+        },
+        {
+          "display": "param1",
+          "description": "NTC Voltage bridge resistor in Ohms (default '32000') ",
           "type": "input"
         },
         {
@@ -2068,7 +2072,12 @@
         },
         {
           "display": "param3",
-          "description": "NTC Beta Coefficient (default '3350')<li>'3' Light Lux equation parameters:</li>'<param1>' LDR Voltage bridge resistor in Ohms (default '10000') ",
+          "description": "NTC Beta Coefficient (default '3350')'3' Light Lux equation parameters: ",
+          "type": "input"
+        },
+        {
+          "display": "param1",
+          "description": "LDR Voltage bridge resistor in Ohms (default '10000') ",
           "type": "input"
         },
         {
@@ -2082,7 +2091,7 @@
           "type": "input"
         }
       ],
-      "description": "ADC0 analog input tuning parameters  »6.6.0 '<sensor>, <param1>, <param2>, <param3>' "
+      "description": "ADC0 analog input tuning parameters  »6.6.0\n'<sensor>, <param1>, <param2>, <param3>'"
     },
     "Altitude": {
       "options": [
@@ -2102,7 +2111,7 @@
           "type": "range"
         }
       ],
-      "description": "Current sensor resolution "
+      "description": "Current sensor resolution"
     },
     "Counter<x>": {
       "options": [
@@ -2127,7 +2136,7 @@
           "type": "range"
         }
       ],
-      "description": "In order to define and use a Counter, you must configure one of the free device GPIO as 'Counter<x>' "
+      "description": "In order to define and use a Counter, you must configure one of the free device GPIO as 'Counter<x>'"
     },
     "CounterDebounce": {
       "options": [
@@ -2167,7 +2176,7 @@
           "type": "range"
         }
       ],
-      "description": "Humidity sensor resolution "
+      "description": "Humidity sensor resolution"
     },
     "PressRes": {
       "options": [
@@ -2177,7 +2186,7 @@
           "type": "range"
         }
       ],
-      "description": "Pressure sensor resolution "
+      "description": "Pressure sensor resolution"
     },
     "Sensor13": {
       "options": [
@@ -2197,7 +2206,7 @@
           "type": "select"
         }
       ],
-      "description": "INA219 low voltage current sensor calibration mode "
+      "description": "INA219 low voltage current sensor calibration mode"
     },
     "Sensor15": {
       "options": [
@@ -2242,11 +2251,11 @@
           "type": "select"
         }
       ],
-      "description": "Automatic Baseline Correction for MH-Z19B CO<sub>2</sub> sensor "
+      "description": "Automatic Baseline Correction for MH-Z19B CO<sub>2</sub> sensor"
     },
     "Sensor20": {
       "options": [],
-      "description": "Nova Fitness SDS011 dust sensor.  »6.5.0.3 1..255` = number of seconds before TelePeriod to poll the sensor "
+      "description": "Nova Fitness SDS011 dust sensor.  »6.5.0.3\n1..255` = number of seconds before TelePeriod to poll the sensor"
     },
     "Sensor27": {
       "options": [
@@ -2271,7 +2280,7 @@
           "type": "range"
         }
       ],
-      "description": "APDS-9960 sensor commands "
+      "description": "APDS-9960 sensor commands"
     },
     "Sensor29": {
       "options": [
@@ -2311,7 +2320,7 @@
           "type": "select"
         }
       ],
-      "description": "MCP23008 / MCP23017 I<sup>2</sup>C GPIO Expander configuration (additional details) x = '1..6'  'pin,pinmode{,intpullup|outstate{,repmode}}' Continue reading... "
+      "description": "MCP23008 / MCP23017 I<sup>2</sup>C GPIO Expander configuration (additional details)\nx = '1..6'\n\n'pin,pinmode{,intpullup|outstate{,repmode}}'\nContinue reading..."
     },
     "Sensor34": {
       "options": [
@@ -2376,7 +2385,7 @@
           "type": "select"
         }
       ],
-      "description": "  »6.6.0 HX711 load cell sensor calibration '8' '0/1'   »6.6.0.13  '0' = disable JSON message on weight change over 4 grams  '1' = enable JSON message on weight change over 4 grams "
+      "description": "  »6.6.0\nHX711 load cell sensor calibration\n'8' '0/1'   »6.6.0.13\n '0' = disable JSON message on weight change over 4 grams\n '1' = enable JSON message on weight change over 4 grams"
     },
     "Sensor50": {
       "options": [
@@ -2411,7 +2420,7 @@
           "type": "select"
         }
       ],
-      "description": "PAJ7620 gesture sensor "
+      "description": "PAJ7620 gesture sensor"
     },
     "Sensor53": {
       "options": [
@@ -2436,7 +2445,7 @@
           "type": "input"
         }
       ],
-      "description": "Smart Meter Interface "
+      "description": "Smart Meter Interface"
     },
     "TempRes": {
       "options": [
@@ -2446,7 +2455,7 @@
           "type": "range"
         }
       ],
-      "description": "Temperature sensor resolution "
+      "description": "Temperature sensor resolution"
     },
     "TempOffset": {
       "options": [
@@ -2456,7 +2465,7 @@
           "type": "range"
         }
       ],
-      "description": "This setting affects all temperature sensors on the device. "
+      "description": "This setting affects all temperature sensors on the device."
     },
     "VoltRes": {
       "options": [
@@ -2466,7 +2475,7 @@
           "type": "range"
         }
       ],
-      "description": "Voltage sensor resolution "
+      "description": "Voltage sensor resolution"
     },
     "WattRes": {
       "options": [
@@ -2476,7 +2485,7 @@
           "type": "range"
         }
       ],
-      "description": "Power sensor resolution "
+      "description": "Power sensor resolution"
     },
     "WeightRes": {
       "options": [
@@ -2486,11 +2495,7 @@
           "type": "range"
         }
       ],
-      "description": "Load cell sensor resolution  »6.3.0 "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption8' - Show temperature in Celsius (default) or Fahrenheit 'SetOption18' - Set status of signal light paired with CO<sub>2</sub> sensor 'SetOption24' - Set pressure units "
+      "description": "Load cell sensor resolution  »6.3.0"
     }
   },
   "PowerMonitoring": {
@@ -2502,7 +2507,7 @@
           "type": "range"
         }
       ],
-      "description": "Current sensor resolution "
+      "description": "Current sensor resolution"
     },
     "CurrentCal": {
       "options": [
@@ -2512,7 +2517,7 @@
           "type": "range"
         }
       ],
-      "description": "Set calibration offset value for reported 'Current' telemetry reading  »6.4.1.6 Allows finer calibration for HLW8012, HJL01, and BL0937 energy monitoring devices "
+      "description": "Set calibration offset value for reported 'Current' telemetry reading  »6.4.1.6\nAllows finer calibration for HLW8012, HJL01, and BL0937 energy monitoring devices"
     },
     "CurrentHigh": {
       "options": [
@@ -2562,7 +2567,7 @@
           "type": "range"
         }
       ],
-      "description": "Energy sensor resolution "
+      "description": "Energy sensor resolution"
     },
     "EnergyReset<x>": {
       "options": [
@@ -2592,7 +2597,7 @@
           "type": "input"
         }
       ],
-      "description": "'0..42500' (for '3', Total, upper limit is '4250000') in watt-hours (Wh) x = '1..5'   »6.6.0.13 "
+      "description": "'0..42500' (for '3', Total, upper limit is '4250000') in watt-hours (Wh)\nx = '1..5'\n  »6.6.0.13"
     },
     "FreqRes": {
       "options": [
@@ -2602,7 +2607,7 @@
           "type": "range"
         }
       ],
-      "description": "Frequency sensor resolution  »6.2.1.3 "
+      "description": "Frequency sensor resolution  »6.2.1.3"
     },
     "FrequencySet": {
       "options": [
@@ -2622,7 +2627,7 @@
           "type": "input"
         }
       ],
-      "description": "'0' - disable use maximum power monitoring "
+      "description": "'0' - disable use maximum power monitoring"
     },
     "MaxPowerHold": {
       "options": [
@@ -2667,7 +2672,7 @@
           "type": "input"
         }
       ],
-      "description": "Set the address of a PZEM module  »6.6.0.12 Prior to setting the module address, the PZEM must be connected to both RX and TX, and AC voltage. Connect one PZEM at a time and issue this command. Repeat for each PZEM to be connected for multi-phase monitoring. The command without an argument cannot be used to read the address of the connected PZEM. "
+      "description": "Set the address of a PZEM module  »6.6.0.12\nPrior to setting the module address, the PZEM must be connected to both RX and TX, and AC voltage.\nConnect one PZEM at a time and issue this command. Repeat for each PZEM to be connected for multi-phase monitoring.\nThe command without an argument cannot be used to read the address of the connected PZEM."
     },
     "PowerCal": {
       "options": [
@@ -2677,7 +2682,7 @@
           "type": "range"
         }
       ],
-      "description": "Set calibration offset value for reported 'Power' telemetry reading  »6.4.1.6 Allows finer calibration for HLW8012, HJL01, and BL0937 energy monitoring devices "
+      "description": "Set calibration offset value for reported 'Power' telemetry reading  »6.4.1.6\nAllows finer calibration for HLW8012, HJL01, and BL0937 energy monitoring devices"
     },
     "PowerDelta": {
       "options": [
@@ -2697,7 +2702,7 @@
           "type": "range"
         }
       ],
-      "description": "Set maximum delta for energy monitoring devices to report on active power load change  »5.13.0 "
+      "description": "Set maximum delta for energy monitoring devices to report on active power load change  »5.13.0"
     },
     "PowerHigh": {
       "options": [
@@ -2756,7 +2761,7 @@
     },
     "Tariff<x>": {
       "options": [],
-      "description": "P1 Smart Meter tariff configuration  »6.6.0.14 x = '1, 2, 9' '1' 'STD,DST' Start times for off-peak tariff '2' 'STD,DST' End times for off-peak tariff '9' '0/1'  '0' = use Start/End times also on weekends.  '1' = use off-peak tariff all weekend. 'STD' and 'DST' may be specified as:  '<hour>' = '0..23' or  '<time>' = '00:00..23:59' or  '<minutes>' = '0..1439' (since midnight) If both 'Tariff1' STD and 'Tariff2' STD are equal, all tariffs are disabled. "
+      "description": "P1 Smart Meter tariff configuration  »6.6.0.14\nx = '1, 2, 9'\n'1' 'STD,DST' Start times for off-peak tariff\n'2' 'STD,DST' End times for off-peak tariff\n'9' '0/1'\n '0' = use Start/End times also on weekends.\n '1' = use off-peak tariff all weekend.\n'STD' and 'DST' may be specified as:\n '<hour>' = '0..23' or\n '<time>' = '00:00..23:59' or\n '<minutes>' = '0..1439' (since midnight)\nIf both 'Tariff1' STD and 'Tariff2' STD are equal, all tariffs are disabled."
     },
     "VoltageCal": {
       "options": [
@@ -2766,7 +2771,7 @@
           "type": "range"
         }
       ],
-      "description": "Set calibration offset value for reported 'Voltage' telemetry reading  »6.4.1.6 Allows finer calibration for HLW8012, HJL01, and BL0937 energy monitoring devices "
+      "description": "Set calibration offset value for reported 'Voltage' telemetry reading  »6.4.1.6\nAllows finer calibration for HLW8012, HJL01, and BL0937 energy monitoring devices"
     },
     "VoltageHigh": {
       "options": [
@@ -2816,7 +2821,7 @@
           "type": "range"
         }
       ],
-      "description": "Voltage sensor resolution "
+      "description": "Voltage sensor resolution"
     },
     "WattRes": {
       "options": [
@@ -2826,11 +2831,7 @@
           "type": "range"
         }
       ],
-      "description": "Power sensor resolution "
-    },
-    "See Also": {
-      "options": [],
-      "description": "'SetOption21' - Energy monitoring when power is off 'SetOption33' - Configure power monitoring Max_Power_Retry count number "
+      "description": "Power sensor resolution"
     }
   },
   "Light": {
@@ -2852,7 +2853,7 @@
           "type": "select"
         }
       ],
-      "description": "When 'SetOption68' is set to '1', channel numbering begins with Relays first then PWM channels. 'Channel<x>' will be aligned to 'Power<x>' numbering. Example: 2 Relays and 3 PWM:  Relay1 = 'Power1'  Relay2 = 'Power2'  PWM1 = 'Power3' and 'Channel3'  PWM2 = 'Power4' and 'Channel4'  PWM3 = 'Power5' and 'Channel5' "
+      "description": "When 'SetOption68' is set to '1', channel numbering begins with Relays first then PWM channels. 'Channel<x>' will be aligned to 'Power<x>' numbering.\nExample: 2 Relays and 3 PWM:\n Relay1 = 'Power1'\n Relay2 = 'Power2'\n PWM1 = 'Power3' and 'Channel3'\n PWM2 = 'Power4' and 'Channel4'\n PWM3 = 'Power5' and 'Channel5'"
     },
     "Color<x>": {
       "options": [
@@ -2912,7 +2913,7 @@
           "type": "select"
         }
       ],
-      "description": "x = '1..6' White Blend Mode   »6.3.0 "
+      "description": "x = '1..6'\nWhite Blend Mode   »6.3.0"
     },
     "CT": {
       "options": [
@@ -2956,7 +2957,7 @@
     },
     "Dimmer<x>": {
       "options": [],
-      "description": "Commands available only when 'SetOption37 >= 128' (#6819)  »7.0.0.1 '<value>' same as in 'Dimmer' 'Dimmer0 <value>' - set dimming for all channels 'Dimmer1 <value>' - set dimming for RGB channels 'Dimmer2 <value>' - set dimming for white channels "
+      "description": "Commands available only when 'SetOption37 >= 128' (#6819)  »7.0.0.1\n'<value>' same as in 'Dimmer'\n'Dimmer0 <value>' - set dimming for all channels\n'Dimmer1 <value>' - set dimming for RGB channels\n'Dimmer2 <value>' - set dimming for white channels"
     },
     "DimmerRange": {
       "options": [
@@ -2966,7 +2967,7 @@
           "type": "input"
         }
       ],
-      "description": "Change dimming range  »6.6.0.18 Works only with TuyaMCU and PS_16_DZ serial dimmers. "
+      "description": "Change dimming range  »6.6.0.18\nWorks only with TuyaMCU and PS_16_DZ serial dimmers."
     },
     "Fade": {
       "options": [
@@ -3031,7 +3032,7 @@
           "type": "input"
         }
       ],
-      "description": "(applies only to addressable LEDs) "
+      "description": "(applies only to addressable LEDs)"
     },
     "LedTable": {
       "options": [
@@ -3066,7 +3067,7 @@
           "type": "input"
         }
       ],
-      "description": "Control compensation of unbalanced PWM channels or White Blend Mode   »6.2.1.10 Range adjustment is computed after Gamma correction. "
+      "description": "Control compensation of unbalanced PWM channels or White Blend Mode   »6.2.1.10\nRange adjustment is computed after Gamma correction."
     },
     "Rotation": {
       "options": [
@@ -3116,7 +3117,7 @@
           "type": "select"
         }
       ],
-      "description": "Light effects "
+      "description": "Light effects"
     },
     "Speed": {
       "options": [
@@ -3146,7 +3147,7 @@
           "type": "range"
         }
       ],
-      "description": "Start wake up sequence from OFF to stored 'Dimmer' value "
+      "description": "Start wake up sequence from OFF to stored 'Dimmer' value"
     },
     "WakeupDuration": {
       "options": [
@@ -3166,7 +3167,7 @@
           "type": "range"
         }
       ],
-      "description": "  »6.4.0 "
+      "description": "  »6.4.0"
     },
     "Width<x>": {
       "options": [
@@ -3191,11 +3192,7 @@
           "type": "range"
         }
       ],
-      "description": "x = '1..4' "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption15', 'SetOption16', 'SetOption17', 'SetOption20', 'SetOption37' and 'SetOption68' "
+      "description": "x = '1..4'"
     }
   },
   "RF Bridge": {
@@ -3212,7 +3209,7 @@
           "type": "range"
         }
       ],
-      "description": "Show last sent 24-bit user code "
+      "description": "Show last sent 24-bit user code"
     },
     "RfHigh": {
       "options": [
@@ -3252,7 +3249,7 @@
           "type": "range"
         }
       ],
-      "description": "Show 16-bit host part of user code "
+      "description": "Show 16-bit host part of user code"
     },
     "RfKey<x>": {
       "options": [
@@ -3287,7 +3284,7 @@
           "type": "select"
         }
       ],
-      "description": "Send learned or default RF data for RfKey<x> (x = '1 – 16') "
+      "description": "Send learned or default RF data for RfKey<x> (x = '1 – 16')"
     },
     "RfLow": {
       "options": [
@@ -3367,7 +3364,7 @@
           "type": "input"
         }
       ],
-      "description": "  »6.1.0 This command only works when the firmware has been updated with Portisch firmware. Refer to the Portisch wiki for details. Learning and Decoding RF Codes with Portisch Firmware "
+      "description": "  »6.1.0\nThis command only works when the firmware has been updated with Portisch firmware. Refer to the Portisch wiki for details.\nLearning and Decoding RF Codes with Portisch Firmware"
     },
     "RfSync": {
       "options": [
@@ -3388,10 +3385,6 @@
         }
       ],
       "description": ""
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption28' - Set RF received data format "
     }
   },
   "IR Remote": {
@@ -3408,7 +3401,7 @@
           "type": "select"
         },
         {
-          "display": "\"Protocol\" (select one of the following):li\"NEC\"/lili\"SONY\"/lili\"RC5\"/lili\"RC6\"/lili\"DISH\"/lili\"JVC\"/lili\"PANASONIC\"/lili\"SAMSUNG\"/lili\"PIONEER\"/li\"Bits\":1..32",
+          "display": "\"Bits\":1..32",
           "description": "required number of data bits ",
           "type": "range"
         },
@@ -3423,15 +3416,11 @@
           "type": "range"
         }
       ],
-      "description": "Send an IR remote control code as a decimal or hexadecimal string in a JSON payload. In order to send IR data, you must configure one of the free device GPIO as 'IRsend (8)'. GPIO01 nor GPIO03 can be used.  '{\"Protocol\":\"<value>\",\"Bits\":<value>,\"Data\":<value>}'  &nbsp;&nbsp;&nbsp;&nbsp;for PANASONIC protocol this parameter is the the address, not the number of bits  &nbsp;&nbsp;&nbsp;&nbsp;e.g., 'IRsend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":2170978686}' or &nbsp;&nbsp;&nbsp;&nbsp;e.g., 'IRsend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":0x8166817E}'  Alternatively, you can send IR remote control codes using RAW command encoding.  Information on Receiving Infrared Data "
+      "description": "Send an IR remote control code as a decimal or hexadecimal string in a JSON payload. In order to send IR data, you must configure one of the free device GPIO as 'IRsend (8)'. GPIO01 nor GPIO03 can be used.\n\n'{\"Protocol\":\"<value>\",\"Bits\":<value>,\"Data\":<value>}'\n\n'\"Protocol\"' (select one of the following):'\"NEC\"'\n'\"SONY\"'\n'\"RC5\"'\n'\"RC6\"'\n'\"DISH\"'\n'\"JVC\"'\n'\"PANASONIC\"'\n'\"SAMSUNG\"'\n'\"PIONEER\"'\n&nbsp;&nbsp;&nbsp;&nbsp;for PANASONIC protocol this parameter is the the address, not the number of bits\n\n&nbsp;&nbsp;&nbsp;&nbsp;e.g., 'IRsend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":2170978686}'\nor\n&nbsp;&nbsp;&nbsp;&nbsp;e.g., 'IRsend {\"Protocol\":\"NEC\",\"Bits\":32,\"Data\":0x8166817E}'\n\nAlternatively, you can send IR remote control codes using RAW command encoding.\n\nInformation on Receiving Infrared Data"
     },
     "IRhvac": {
       "options": [],
-      "description": "Send HVAC IR remote control code as JSON payload '{\"Vendor\":\"<value>\",\"Power\":<value>,\"Mode\":”<value>”, \"FanSpeed\":”<value>”,\"Temp\":<value>}' '\"Vendor\":\"Toshiba\"|\"Mitsubishi\"|\"LG\"|\"Fujitsu\"' '\"Power\":0|1' '\"Mode\":\"Hot\"|\"Cold\"|\"Dry\"|\"Auto\"' '\"FanSpeed\":\"1\"|\"2\"|\"3\"|\"4\"|\"5\"|\"Auto\"|\"Silence\"'  '\"Temp\":17..30' "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption29' - Set IR received data format 'SetOption38' - Set IR received protocol sensitivity 'SetOption58' - IR Raw data in JSON payload "
+      "description": "Send HVAC IR remote control code as JSON payload\n'{\"Vendor\":\"<value>\",\"Power\":<value>,\"Mode\":”<value>”, \"FanSpeed\":”<value>”,\"Temp\":<value>}'\n'\"Vendor\":\"Toshiba\"|\"Mitsubishi\"|\"LG\"|\"Fujitsu\"'\n'\"Power\":0|1'\n'\"Mode\":\"Hot\"|\"Cold\"|\"Dry\"|\"Auto\"'\n'\"FanSpeed\":\"1\"|\"2\"|\"3\"|\"4\"|\"5\"|\"Auto\"|\"Silence\"' \n'\"Temp\":17..30'"
     }
   },
   "SetOptions": {
@@ -3448,7 +3437,7 @@
           "type": "select"
         }
       ],
-      "description": "Save power state and use after restart (=SaveState) "
+      "description": "Save power state and use after restart (=SaveState)"
     },
     "SetOption1": {
       "options": [
@@ -3463,7 +3452,7 @@
           "type": "select"
         }
       ],
-      "description": "Set button multipress mode to "
+      "description": "Set button multipress mode to"
     },
     "SetOption3": {
       "options": [
@@ -3478,7 +3467,7 @@
           "type": "select"
         }
       ],
-      "description": "MQTT  "
+      "description": "MQTT"
     },
     "SetOption4": {
       "options": [
@@ -3493,7 +3482,7 @@
           "type": "select"
         }
       ],
-      "description": "Return MQTT response as "
+      "description": "Return MQTT response as"
     },
     "SetOption8": {
       "options": [
@@ -3508,7 +3497,7 @@
           "type": "select"
         }
       ],
-      "description": "Show temperature in "
+      "description": "Show temperature in"
     },
     "SetOption10": {
       "options": [
@@ -3523,7 +3512,7 @@
           "type": "select"
         }
       ],
-      "description": "When the device MQTT topic changes  "
+      "description": "When the device MQTT topic changes"
     },
     "SetOption11": {
       "options": [
@@ -3538,7 +3527,7 @@
           "type": "select"
         }
       ],
-      "description": "Swap button single and double press functionality "
+      "description": "Swap button single and double press functionality"
     },
     "SetOption12": {
       "options": [
@@ -3553,7 +3542,7 @@
           "type": "select"
         }
       ],
-      "description": "Configuration saving to flash option "
+      "description": "Configuration saving to flash option"
     },
     "SetOption13": {
       "options": [
@@ -3568,7 +3557,7 @@
           "type": "select"
         }
       ],
-      "description": "Allow immediate action on single button press "
+      "description": "Allow immediate action on single button press"
     },
     "SetOption15": {
       "options": [
@@ -3583,7 +3572,7 @@
           "type": "select"
         }
       ],
-      "description": "Set PWM control for LED lights "
+      "description": "Set PWM control for LED lights"
     },
     "SetOption16": {
       "options": [
@@ -3598,7 +3587,7 @@
           "type": "select"
         }
       ],
-      "description": "Set addressable LED Clock scheme parameter "
+      "description": "Set addressable LED Clock scheme parameter"
     },
     "SetOption17": {
       "options": [
@@ -3613,7 +3602,7 @@
           "type": "select"
         }
       ],
-      "description": "Show 'Color' string as "
+      "description": "Show 'Color' string as"
     },
     "SetOption18": {
       "options": [
@@ -3628,7 +3617,7 @@
           "type": "select"
         }
       ],
-      "description": "Set status of signal light paired with CO<sub>2</sub> sensor "
+      "description": "Set status of signal light paired with CO<sub>2</sub> sensor"
     },
     "SetOption19": {
       "options": [
@@ -3643,7 +3632,7 @@
           "type": "select"
         }
       ],
-      "description": "Home Assistant automatic discovery. WARNING On version 6.4.1.x enabling may cause a watchdog reset if used on a device with a configured sensor  If you enable and then disable 'SetOption19', doing so does not set 'SetOption59''= 0' and does not revert to default '%prefix%/%topic%/' 'FullTopic' "
+      "description": "Home Assistant automatic discovery.\nWARNING On version 6.4.1.x enabling may cause a watchdog reset if used on a device with a configured sensor \nIf you enable and then disable 'SetOption19', doing so does not set 'SetOption59''= 0' and does not revert to default '%prefix%/%topic%/' 'FullTopic'"
     },
     "SetOption20": {
       "options": [
@@ -3658,7 +3647,7 @@
           "type": "select"
         }
       ],
-      "description": "Update of Dimmer/Color/CT without turning power on "
+      "description": "Update of Dimmer/Color/CT without turning power on"
     },
     "SetOption21": {
       "options": [
@@ -3673,7 +3662,7 @@
           "type": "select"
         }
       ],
-      "description": "Energy monitoring when power is off "
+      "description": "Energy monitoring when power is off"
     },
     "SetOption24": {
       "options": [
@@ -3688,7 +3677,7 @@
           "type": "select"
         }
       ],
-      "description": "Set pressure units   »6.4.0 "
+      "description": "Set pressure units   »6.4.0"
     },
     "SetOption26": {
       "options": [
@@ -3703,7 +3692,7 @@
           "type": "select"
         }
       ],
-      "description": "Use indexes even when only one relay is present "
+      "description": "Use indexes even when only one relay is present"
     },
     "SetOption28": {
       "options": [
@@ -3718,7 +3707,7 @@
           "type": "select"
         }
       ],
-      "description": "RF received data format  »6.1.0 "
+      "description": "RF received data format  »6.1.0"
     },
     "SetOption29": {
       "options": [
@@ -3733,7 +3722,7 @@
           "type": "select"
         }
       ],
-      "description": "IR received data format  »6.1.0 "
+      "description": "IR received data format  »6.1.0"
     },
     "SetOption30": {
       "options": [
@@ -3748,7 +3737,7 @@
           "type": "select"
         }
       ],
-      "description": "Enforce Home Assistant auto-discovery as light  »6.1.0 "
+      "description": "Enforce Home Assistant auto-discovery as light  »6.1.0"
     },
     "SetOption31": {
       "options": [
@@ -3763,7 +3752,7 @@
           "type": "select"
         }
       ],
-      "description": "Disable status LED blinking during Wi-Fi and MQTT connection problems.  »6.2.0 'LedPower' must be set to '0' for this feature to work. "
+      "description": "Disable status LED blinking during Wi-Fi and MQTT connection problems.  »6.2.0\n'LedPower' must be set to '0' for this feature to work."
     },
     "SetOption32": {
       "options": [
@@ -3773,7 +3762,7 @@
           "type": "range"
         }
       ],
-      "description": "Number of 0.1 seconds to hold button before sending 'HOLD' action message. "
+      "description": "Number of 0.1 seconds to hold button before sending 'HOLD' action message."
     },
     "SetOption33": {
       "options": [
@@ -3783,7 +3772,7 @@
           "type": "range"
         }
       ],
-      "description": "Max power limit can be exceeded by number of seconds before the relay is turned off "
+      "description": "Max power limit can be exceeded by number of seconds before the relay is turned off"
     },
     "SetOption34": {
       "options": [
@@ -3804,11 +3793,11 @@
         },
         {
           "display": "1..200",
-          "description": "set number of boot loops (a restart caused by any exception or watchdog timer within less than 'BOOT_LOOP_TIME' (default 10 seconds) before beginning to restore settings (default '1'). Once this number is reached, subsequent restarts will:<li>1<sup>st</sup> restart: disable ESP8285 generic GPIOs interfering with flash SPI</li><li>2<sup>nd</sup> restart: disable rules causing boot loop</li><li>3<sup>rd</sup> restart: disable all rules</li><li>4<sup>th</sup> restart: reset user defined GPIOs to disable any attached peripherals</li><li>5<sup>th</sup> restart: reset module to Sonoff Basic (1)</li> ",
+          "description": "set number of boot loops (a restart caused by any exception or watchdog timer within less than 'BOOT_LOOP_TIME' (default 10 seconds) before beginning to restore settings (default '1'). Once this number is reached, subsequent restarts will:1st restart: disable ESP8285 generic GPIOs interfering with flash SPI ",
           "type": "range"
         }
       ],
-      "description": "Boot loop defaults restoration control.  »6.6.0.17 "
+      "description": "Boot loop defaults restoration control.  »6.6.0.17\n2nd restart: disable rules causing boot loop\n3rd restart: disable all rules\n4th restart: reset user defined GPIOs to disable any attached peripherals\n5th restart: reset module to Sonoff Basic (1)"
     },
     "SetOption37": {
       "options": [
@@ -3833,7 +3822,7 @@
           "type": "range"
         }
       ],
-      "description": "Color remapping for led channels, also provides an option for allowing independent handling of RGB and white channels. Setting changes require a device reboot.  »6.5.0 "
+      "description": "Color remapping for led channels, also provides an option for allowing independent handling of RGB and white channels. Setting changes require a device reboot.  »6.5.0"
     },
     "SetOption38": {
       "options": [
@@ -3858,7 +3847,7 @@
           "type": "range"
         }
       ],
-      "description": "Control handling of invalid power measurements. Read more...  »6.6.0 "
+      "description": "Control handling of invalid power measurements. Read more...  »6.6.0"
     },
     "SetOption40": {
       "options": [
@@ -3868,7 +3857,7 @@
           "type": "range"
         }
       ],
-      "description": "Stop detecting input change on the button GPIO. Solves #5449  »6.6.0 Active only when 'SetOption1 1' and 'SetOption13 0'. This disables all long press functionality. Example: 'Backlog SetOption1 1; SetOption13 0; SetOption40 10' - discard any button press over 1 second "
+      "description": "Stop detecting input change on the button GPIO. Solves #5449  »6.6.0\nActive only when 'SetOption1 1' and 'SetOption13 0'. This disables all long press functionality.\nExample: 'Backlog SetOption1 1; SetOption13 0; SetOption40 10' - discard any button press over 1 second"
     },
     "SetOption42": {
       "options": [
@@ -3888,7 +3877,7 @@
           "type": "range"
         }
       ],
-      "description": "Deprecated in favor of 'DimmerRange'   »6.6.0.18 Available for Tuya (» v6.6.0.7) and PS_16_DZ (» v6.6.0.14) dimmers "
+      "description": "Deprecated in favor of 'DimmerRange'   »6.6.0.18\nAvailable for Tuya (» v6.6.0.7) and PS_16_DZ (» v6.6.0.14) dimmers"
     },
     "SetOption51": {
       "options": [
@@ -3903,7 +3892,7 @@
           "type": "select"
         }
       ],
-      "description": "Enable GPIO9 and GPIO10 component selections in Module Configuration for ESP8285  »6.1.1.14 WARNING Do not use on ESP8266 devices!  "
+      "description": "Enable GPIO9 and GPIO10 component selections in Module Configuration for ESP8285  »6.1.1.14\nWARNING Do not use on ESP8266 devices!"
     },
     "SetOption52": {
       "options": [
@@ -3918,7 +3907,7 @@
           "type": "select"
         }
       ],
-      "description": "Control display of optional time offset from UTC in JSON payloads  »6.2.1.2 "
+      "description": "Control display of optional time offset from UTC in JSON payloads  »6.2.1.2"
     },
     "SetOption53": {
       "options": [
@@ -3933,7 +3922,7 @@
           "type": "select"
         }
       ],
-      "description": "Display hostname and IP address in GUI  »6.2.1.20 "
+      "description": "Display hostname and IP address in GUI  »6.2.1.20"
     },
     "SetOption54": {
       "options": [
@@ -3948,7 +3937,7 @@
           "type": "select"
         }
       ],
-      "description": "Apply 'SetOption20' settings to commands from Tuya device  »6.3.0.4 "
+      "description": "Apply 'SetOption20' settings to commands from Tuya device  »6.3.0.4"
     },
     "SetOption55": {
       "options": [
@@ -3963,7 +3952,7 @@
           "type": "select"
         }
       ],
-      "description": "mDNS service  »6.4.1.4 "
+      "description": "mDNS service  »6.4.1.4"
     },
     "SetOption56": {
       "options": [
@@ -3978,7 +3967,7 @@
           "type": "select"
         }
       ],
-      "description": "Wi-Fi network scan to select strongest signal on restart (network has to be visible)  »6.3.0.10 "
+      "description": "Wi-Fi network scan to select strongest signal on restart (network has to be visible)  »6.3.0.10"
     },
     "SetOption57": {
       "options": [
@@ -3993,7 +3982,7 @@
           "type": "select"
         }
       ],
-      "description": "Wi-Fi network re-scan every 44 minutes with alternate to +10dB stronger signal if detected (only visible networks)  »6.3.0.10 "
+      "description": "Wi-Fi network re-scan every 44 minutes with alternate to +10dB stronger signal if detected (only visible networks)  »6.3.0.10"
     },
     "SetOption58": {
       "options": [
@@ -4008,7 +3997,7 @@
           "type": "select"
         }
       ],
-      "description": "IR Raw data in JSON payload  »6.3.0.11 "
+      "description": "IR Raw data in JSON payload  »6.3.0.11"
     },
     "SetOption59": {
       "options": [
@@ -4023,7 +4012,7 @@
           "type": "select"
         }
       ],
-      "description": "Send 'tele/%topic%/STATE' in addition to 'stat/%topic%/RESULT' for commands: 'State', 'Power' and any command causing a light to be turned on.  »6.3.0.13 "
+      "description": "Send 'tele/%topic%/STATE' in addition to 'stat/%topic%/RESULT' for commands: 'State', 'Power' and any command causing a light to be turned on.  »6.3.0.13"
     },
     "SetOption60": {
       "options": [
@@ -4038,7 +4027,7 @@
           "type": "select"
         }
       ],
-      "description": "Enable normal sleep instead of dynamic sleep  »6.3.0.15 "
+      "description": "Enable normal sleep instead of dynamic sleep  »6.3.0.15"
     },
     "SetOption61": {
       "options": [
@@ -4053,7 +4042,7 @@
           "type": "select"
         }
       ],
-      "description": "Force local operation when 'ButtonTopic' or 'SwitchTopic' is set.  »6.3.0.16 "
+      "description": "Force local operation when 'ButtonTopic' or 'SwitchTopic' is set.  »6.3.0.16"
     },
     "SetOption62": {
       "options": [
@@ -4068,7 +4057,7 @@
           "type": "select"
         }
       ],
-      "description": "Set retain on Button or Switch hold messages  »6.4.1.19 "
+      "description": "Set retain on Button or Switch hold messages  »6.4.1.19"
     },
     "SetOption63": {
       "options": [
@@ -4083,7 +4072,7 @@
           "type": "select"
         }
       ],
-      "description": "Set relay state feedback scan at restart (#5594, #5663)  »6.5.0.9 "
+      "description": "Set relay state feedback scan at restart (#5594, #5663)  »6.5.0.9"
     },
     "SetOption64": {
       "options": [
@@ -4098,7 +4087,7 @@
           "type": "select"
         }
       ],
-      "description": "Switch between '-' or '_' as sensor name separator  »6.5.0.12 Affects DS18X20, DHT, BMP and SHT3X sensor names in tele messages "
+      "description": "Switch between '-' or '_' as sensor name separator  »6.5.0.12\nAffects DS18X20, DHT, BMP and SHT3X sensor names in tele messages"
     },
     "SetOption65": {
       "options": [
@@ -4113,7 +4102,7 @@
           "type": "select"
         }
       ],
-      "description": "Control fast power cycle detection device recovery  »6.7.1 "
+      "description": "Control fast power cycle detection device recovery  »6.7.1"
     },
     "SetOption66": {
       "options": [
@@ -4128,7 +4117,7 @@
           "type": "select"
         }
       ],
-      "description": "Set publishing TuyaReceived to MQTT  »6.7.0 "
+      "description": "Set publishing TuyaReceived to MQTT  »6.7.0"
     },
     "SetOption67": {
       "options": [
@@ -4143,7 +4132,7 @@
           "type": "select"
         }
       ],
-      "description": "iFan03 Buzzer control  »6.6.0.2 "
+      "description": "iFan03 Buzzer control  »6.6.0.2"
     },
     "SetOption68": {
       "options": [
@@ -4158,7 +4147,7 @@
           "type": "select"
         }
       ],
-      "description": "Multi-channel PWM instead of a single light  »6.6.0.3 'Color' still works to set all channels at once. Requires restart after change "
+      "description": "Multi-channel PWM instead of a single light  »6.6.0.3\n'Color' still works to set all channels at once.\nRequires restart after change"
     },
     "SetOption69": {
       "options": [
@@ -4173,7 +4162,7 @@
           "type": "select"
         }
       ],
-      "description": "Deprecated in favor of DimmerRange   »6.6.0.18 By default Tuya dimmers won't dim below 10% because some don't function very well that way.  »6.6.0.5 "
+      "description": "Deprecated in favor of DimmerRange   »6.6.0.18\nBy default Tuya dimmers won't dim below 10% because some don't function very well that way.  »6.6.0.5"
     },
     "SetOption71": {
       "options": [
@@ -4188,7 +4177,7 @@
           "type": "select"
         }
       ],
-      "description": "Set DDS238 Modbus register for active energy  »6.6.0.14 "
+      "description": "Set DDS238 Modbus register for active energy  »6.6.0.14"
     },
     "SetOption72": {
       "options": [
@@ -4203,7 +4192,7 @@
           "type": "select"
         }
       ],
-      "description": "Set reference used for total energy   »6.6.0.15 "
+      "description": "Set reference used for total energy   »6.6.0.15"
     },
     "SetOption73": {
       "options": [
@@ -4218,7 +4207,7 @@
           "type": "select"
         }
       ],
-      "description": "Set HTTP Cross-Origin Resource Sharing (CORS)   »7.0.0.1 "
+      "description": "Set HTTP Cross-Origin Resource Sharing (CORS)   »7.0.0.1"
     },
     "SetOption74": {
       "options": [
@@ -4233,7 +4222,7 @@
           "type": "select"
         }
       ],
-      "description": "Enable internal pullup for single DS18x20 sensor   »7.0.0.1 "
+      "description": "Enable internal pullup for single DS18x20 sensor   »7.0.0.1"
     },
     "SetOption75": {
       "options": [
@@ -4248,7 +4237,7 @@
           "type": "select"
         }
       ],
-      "description": "Set grouptopic behaviour (#6779)  »7.0.0.1 "
+      "description": "Set grouptopic behaviour (#6779)  »7.0.0.1"
     },
     "SetOption76": {
       "options": [
@@ -4263,7 +4252,7 @@
           "type": "select"
         }
       ],
-      "description": "Bootcount incrementing when DeepSleep is enabled (#6930)  »7.0.0.4 "
+      "description": "Bootcount incrementing when DeepSleep is enabled (#6930)  »7.0.0.4"
     },
     "SetOption80": {
       "options": [
@@ -4278,7 +4267,7 @@
           "type": "select"
         }
       ],
-      "description": "Blinds and shutters support  »6.6.0.14 "
+      "description": "Blinds and shutters support  »6.6.0.14"
     },
     "SetOption81": {
       "options": [
@@ -4293,7 +4282,7 @@
           "type": "select"
         }
       ],
-      "description": "Set PCF8574 component behavior for all ports  »6.6.0.14 "
+      "description": "Set PCF8574 component behavior for all ports  »6.6.0.14"
     }
   },
   "Serial Bridge": {
@@ -4375,7 +4364,7 @@
           "type": "select"
         }
       ],
-      "description": "'<string>' Disable serial logging and send using hardware serial x = '1..5' "
+      "description": "'<string>'\nDisable serial logging and send using hardware serial\nx = '1..5'"
     },
     "SSerialSend<x>": {
       "options": [
@@ -4405,7 +4394,7 @@
           "type": "select"
         }
       ],
-      "description": "'<string>' Send using software serial protocol x = '1..5' "
+      "description": "'<string>'\nSend using software serial protocol\nx = '1..5'"
     },
     "TuyaSend<x>": {
       "options": [
@@ -4435,7 +4424,7 @@
           "type": "input"
         }
       ],
-      "description": "Send data to MCU with TuyaMCU  » v7.0.0.1 x = '1..4' "
+      "description": "Send data to MCU with TuyaMCU  » v7.0.0.1\nx = '1..4'"
     }
   },
   "MP3 Player": {
@@ -4467,7 +4456,7 @@
           "type": "select"
         }
       ],
-      "description": "Specify playback device "
+      "description": "Specify playback device"
     },
     "MP3EQ": {
       "options": [
@@ -4502,23 +4491,23 @@
           "type": "select"
         }
       ],
-      "description": "Set equalizer mode: "
+      "description": "Set equalizer mode:"
     },
     "MP3Pause": {
       "options": [],
-      "description": "Pause "
+      "description": "Pause"
     },
     "MP3Play": {
       "options": [],
-      "description": "Play, works as a normal play on a real MP3 Player, starts at first MP3 file "
+      "description": "Play, works as a normal play on a real MP3 Player, starts at first MP3 file"
     },
     "MP3Reset": {
       "options": [],
-      "description": "Reset the MP3 player to defaults "
+      "description": "Reset the MP3 player to defaults"
     },
     "MP3Stop": {
       "options": [],
-      "description": "Stop "
+      "description": "Stop"
     },
     "MP3Track": {
       "options": [
@@ -4555,7 +4544,7 @@
           "type": "input"
         }
       ],
-      "description": "Show Domoticz Relay idx <x> (x = '1..4') "
+      "description": "Show Domoticz Relay idx <x> (x = '1..4')"
     },
     "DomoticzKeyIdx<x>": {
       "options": [
@@ -4570,7 +4559,7 @@
           "type": "input"
         }
       ],
-      "description": "Show Domoticz Key idx <x> (x = '1..4') "
+      "description": "Show Domoticz Key idx <x> (x = '1..4')"
     },
     "DomoticzSensorIdx<x>": {
       "options": [
@@ -4585,7 +4574,7 @@
           "type": "input"
         }
       ],
-      "description": "Show Domoticz Sensor idx <x> (x = '1..5') "
+      "description": "Show Domoticz Sensor idx <x> (x = '1..5')"
     },
     "DomoticzSwitchIdx<x>": {
       "options": [
@@ -4600,7 +4589,7 @@
           "type": "input"
         }
       ],
-      "description": "Show Domoticz Switch idx <x> (x = '1..4') "
+      "description": "Show Domoticz Switch idx <x> (x = '1..4')"
     },
     "DomoticzUpdateTimer": {
       "options": [
@@ -4615,7 +4604,7 @@
           "type": "range"
         }
       ],
-      "description": "Show current update timer value in seconds "
+      "description": "Show current update timer value in seconds"
     }
   },
   "KNX": {
@@ -4652,7 +4641,7 @@
           "type": "select"
         }
       ],
-      "description": "Status of KNX Communications "
+      "description": "Status of KNX Communications"
     },
     "KNX_ENHANCED": {
       "options": [
@@ -4667,7 +4656,7 @@
           "type": "select"
         }
       ],
-      "description": "Status of Enhanced mode for KNX Communications "
+      "description": "Status of Enhanced mode for KNX Communications"
     },
     "KNX_PA": {
       "options": [
@@ -4682,11 +4671,11 @@
           "type": "input"
         }
       ],
-      "description": "KNX Physical Address "
+      "description": "KNX Physical Address"
     },
     "KNX_GA": {
       "options": [],
-      "description": "Return the amount of Group Address to Send Data/Commands configured "
+      "description": "Return the amount of Group Address to Send Data/Commands configured"
     },
     "KNX_GA<x>": {
       "options": [
@@ -4696,11 +4685,11 @@
           "type": "select"
         }
       ],
-      "description": "Setup Group Address to Send Data/Commands (<x> = KNX Group Address number) '<option>, <area>, <line>, <member>' to set configuration of GA<x> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<option>' = see table below for OPTION list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<area>, <line>, <member>' = KNX Address to Send Data/Commands "
+      "description": "Setup Group Address to Send Data/Commands (<x> = KNX Group Address number)\n'<option>, <area>, <line>, <member>' to set configuration of GA<x>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<option>' = see table below for OPTION list\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<area>, <line>, <member>' = KNX Address to Send Data/Commands"
     },
     "KNX_CB": {
       "options": [],
-      "description": "Return the amount of Group Address to Receive Data/Commands configured "
+      "description": "Return the amount of Group Address to Receive Data/Commands configured"
     },
     "KNX_CB<x>": {
       "options": [
@@ -4710,13 +4699,13 @@
           "type": "select"
         }
       ],
-      "description": "Setup Group Address to Receive Data/Commands  '<option>, <area>, <line>, <member>' to set configuration of CB<x> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<option>' = see table below for OPTION list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<area>, <line>, <member>' = KNX Address to Receive Data/Commands "
+      "description": "Setup Group Address to Receive Data/Commands \n'<option>, <area>, <line>, <member>' to set configuration of CB<x>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<option>' = see table below for OPTION list\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'<area>, <line>, <member>' = KNX Address to Receive Data/Commands"
     }
   },
   "Displays": {
     "Display": {
       "options": [],
-      "description": "Show current display setting as a JSON payload "
+      "description": "Show current display setting as a JSON payload"
     },
     "DisplayAddress": {
       "options": [
@@ -4811,7 +4800,7 @@
           "type": "select"
         }
       ],
-      "description": "Set display model: "
+      "description": "Set display model:"
     },
     "DisplayRefresh": {
       "options": [
@@ -4856,7 +4845,7 @@
           "type": "select"
         }
       ],
-      "description": "Set rotation angle "
+      "description": "Set rotation angle"
     },
     "DisplayText": {
       "options": [
@@ -4906,15 +4895,15 @@
           "type": "select"
         }
       ],
-      "description": "Specify the current font '0' use classic GFX font '7' use RA8876 internal font "
+      "description": "Specify the current font\n'0' use classic GFX font\n'7' use RA8876 internal font"
     },
     "DisplayWidth": {
       "options": [],
-      "description": "Specify the display width in pixels (SSD1306 only)  »6.6.0.2 "
+      "description": "Specify the display width in pixels (SSD1306 only)  »6.6.0.2"
     },
     "DisplayHeight": {
       "options": [],
-      "description": "Specify the display height in pixels (SSD1306 only)  »6.6.0.2 "
+      "description": "Specify the display height in pixels (SSD1306 only)  »6.6.0.2"
     }
   },
   "Stepper Motors": {
@@ -4936,7 +4925,7 @@
           "type": "input"
         }
       ],
-      "description": "This is dependent on the type of motor and micro stepping. Most common motors are 1.8° per step. "
+      "description": "This is dependent on the type of motor and micro stepping. Most common motors are 1.8° per step."
     },
     "MotorRPM": {
       "options": [
@@ -4982,7 +4971,7 @@
   "Shutters": {
     "ShutterCalibration<x>": {
       "options": [],
-      "description": "Granular shutter position calibration. Real position in cm must be put in at 30 50 70 90 percent "
+      "description": "Granular shutter position calibration. Real position in cm must be put in at 30 50 70 90 percent"
     },
     "ShutterCloseDuration<x>": {
       "options": [
@@ -4992,11 +4981,11 @@
           "type": "range"
         }
       ],
-      "description": "Define the time, in seconds, it takes to fully close the shutter. A fraction of a second can be specified (e.g. '45.7'). "
+      "description": "Define the time, in seconds, it takes to fully close the shutter. A fraction of a second can be specified (e.g. '45.7')."
     },
     "ShutterClose<x>": {
       "options": [],
-      "description": "Engage the relay to close the shutter. This action can be requested at any time. "
+      "description": "Engage the relay to close the shutter. This action can be requested at any time."
     },
     "ShutterInvert<x>": {
       "options": [
@@ -5021,7 +5010,7 @@
           "type": "range"
         }
       ],
-      "description": "Define the time, in seconds, that it takes the motor to start moving once power is turned on. "
+      "description": "Define the time, in seconds, that it takes the motor to start moving once power is turned on."
     },
     "ShutterOpenDuration<x>": {
       "options": [
@@ -5031,11 +5020,11 @@
           "type": "range"
         }
       ],
-      "description": "time, in seconds, to fully open the shutter. Fraction of a second can be specified (e.g. '45.7'). "
+      "description": "time, in seconds, to fully open the shutter. Fraction of a second can be specified (e.g. '45.7')."
     },
     "ShutterOpen<x>": {
       "options": [],
-      "description": "Engage the relay to open the shutter. This action can be requested at any time. "
+      "description": "Engage the relay to open the shutter. This action can be requested at any time."
     },
     "ShutterPosition<x>": {
       "options": [
@@ -5045,7 +5034,7 @@
           "type": "select"
         }
       ],
-      "description": "'0..100', 'UP', 'DOWN', 'STOP' If the shutter is inverted (e.g., if used with KNX), '100' = Closed, '0' = Open A shutter position change can be requested at any time. The shutter will stop and revert or update to the requested position. The shutter's actual position will be saved after the movement is completed. In this case, the position will be restored during reboot. An interruption during shutter movement (e.g., a device restart) will lose the current position. "
+      "description": "'0..100', 'UP', 'DOWN', 'STOP'\nIf the shutter is inverted (e.g., if used with KNX), '100' = Closed, '0' = Open\nA shutter position change can be requested at any time. The shutter will stop and revert or update to the requested position. The shutter's actual position will be saved after the movement is completed. In this case, the position will be restored during reboot. An interruption during shutter movement (e.g., a device restart) will lose the current position."
     },
     "ShutterRelay<x>": {
       "options": [
@@ -5060,7 +5049,7 @@
           "type": "range"
         }
       ],
-      "description": "'<value>'  The 'ShutterRelay' command must be executed first before any other shutter commands for 'Shutter<x>' can be executed. "
+      "description": "'<value>' \nThe 'ShutterRelay' command must be executed first before any other shutter commands for 'Shutter<x>' can be executed."
     },
     "ShutterSetClose<x>": {
       "options": [
@@ -5080,15 +5069,11 @@
           "type": "range"
         }
       ],
-      "description": "Define shutter half open position (in percent) "
+      "description": "Define shutter half open position (in percent)"
     },
     "ShutterStop<x>": {
       "options": [],
-      "description": "Disengage the relays to stop the shutter "
-    },
-    "See also": {
-      "options": [],
-      "description": "'SetOption80' - Enable shutter support "
+      "description": "Disengage the relays to stop the shutter"
     }
   },
   "Zibgee": {
@@ -5110,15 +5095,15 @@
           "type": "select"
         }
       ],
-      "description": "Sets new device pairing mode Leaving your Zigbee network pairing open to join will allow any Zigbee device to connect and retrieve your network encryption key. This can lead to a compromise of your Zigbee network. "
+      "description": "Sets new device pairing mode\nLeaving your Zigbee network pairing open to join will allow any Zigbee device to connect and retrieve your network encryption key. This can lead to a compromise of your Zigbee network."
     },
     "ZigbeeProbe": {
       "options": [],
-      "description": "Probe a Zigbee device to get additional information including its IEEEaddress, vendor and model names, endpoints, and supported clusters per endpoint. '<shortaddr>' (e.g., '0x1234') A device probe is performed automatically when a new Zigbee device connects. A probe may be needed after a Tasmota reboot. Battery powered Zigbee devices can generally not be probed because they are in sleep mode most of the time. "
+      "description": "Probe a Zigbee device to get additional information including its IEEEaddress, vendor and model names, endpoints, and supported clusters per endpoint.\n'<shortaddr>' (e.g., '0x1234')\nA device probe is performed automatically when a new Zigbee device connects.\nA probe may be needed after a Tasmota reboot.\nBattery powered Zigbee devices can generally not be probed because they are in sleep mode most of the time."
     },
     "ZigbeeRead": {
       "options": [],
-      "description": "Read Zigbee device attributes '{ \"Device\":\"<shortaddr>\", \"Endpoint\":\"<endpoint>\", \"Cluster\":\"<cluster>\", \"Read\":[<attrlist>] }'  '<shortaddr>' the short address of the Zigbee device on the network.  '<endpoint>' the target endpoint on the device (identifying endpoints)  '<cluster>' the cluster number of the attributes  '<attrlist>' requested attributes array  Ex: 'ZigbeeRead { \"device\":\"0x69CF\", \"endpoint\":\"0x03\", \"cluster\":\"0x0006\", \"read\":[\"0x0000\"] }' "
+      "description": "Read Zigbee device attributes\n'{ \"Device\":\"<shortaddr>\", \"Endpoint\":\"<endpoint>\", \"Cluster\":\"<cluster>\", \"Read\":[<attrlist>] }'\n '<shortaddr>' the short address of the Zigbee device on the network.\n '<endpoint>' the target endpoint on the device (identifying endpoints)\n '<cluster>' the cluster number of the attributes\n '<attrlist>' requested attributes array\n\nEx: 'ZigbeeRead { \"device\":\"0x69CF\", \"endpoint\":\"0x03\", \"cluster\":\"0x0006\", \"read\":[\"0x0000\"] }'"
     },
     "ZigbeeReset": {
       "options": [
@@ -5128,11 +5113,11 @@
           "type": "select"
         }
       ],
-      "description": "You will need to re-pair all Zigbee devices "
+      "description": "You will need to re-pair all Zigbee devices"
     },
     "ZigbeeSend": {
       "options": [],
-      "description": "'{ \"Device\":\"<shortaddr>\", \"Endpoint\":\"<endpoint>\", \"Send\":{\"<sendcmd>\":<sendparam>} }'  '<shortaddr>' the short address of the Zigbee device on the network.  '<endpoint>' the target endpoint on the device (identifying endpoints)  '\"<sendcmd>\":<sendparam>' the command and parameters to send (Zigbee Device Commands) Note: Use 'ZigbeeZCLSend' to send a raw form low-level message  Ex: 'ZigbeeSend { \"Device\":\"0x1234\", \"Endpoint\":\"0x03\", \"Send\":{\"Power\":\"on\"} }' "
+      "description": "'{ \"Device\":\"<shortaddr>\", \"Endpoint\":\"<endpoint>\", \"Send\":{\"<sendcmd>\":<sendparam>} }'\n '<shortaddr>' the short address of the Zigbee device on the network.\n '<endpoint>' the target endpoint on the device (identifying endpoints)\n '\"<sendcmd>\":<sendparam>' the command and parameters to send (Zigbee Device Commands)\nNote: Use 'ZigbeeZCLSend' to send a raw form low-level message\n\nEx: 'ZigbeeSend { \"Device\":\"0x1234\", \"Endpoint\":\"0x03\", \"Send\":{\"Power\":\"on\"} }'"
     },
     "ZigbeeStatus<x>": {
       "options": [
@@ -5147,11 +5132,11 @@
           "type": "input"
         }
       ],
-      "description": "Display Zigbee devices seen on the network since boot This command provides three levels of increasing detail according to '<x>' 'ZigbeeStatus1' Display Short Address, and Friendly Name 'ZigbeeStatus2' Also include Manufacturer ID and Model ID 'ZigbeeStatus3' Also include a list of endpoints and the clusterIds supported by each endpoint Ex: 'ZigbeeStatus3 1' requests all details for device number 1  The information requested may exceed the maximum result size allowed by Tasmota. In this case, the output will be truncated. To get all of the desired information, request results for a specific device individually. "
+      "description": "Display Zigbee devices seen on the network since boot\nThis command provides three levels of increasing detail according to '<x>'\n'ZigbeeStatus1' Display Short Address, and Friendly Name\n'ZigbeeStatus2' Also include Manufacturer ID and Model ID\n'ZigbeeStatus3' Also include a list of endpoints and the clusterIds supported by each endpoint\nEx: 'ZigbeeStatus3 1' requests all details for device number 1\n\nThe information requested may exceed the maximum result size allowed by Tasmota. In this case, the output will be truncated. To get all of the desired information, request results for a specific device individually."
     },
     "ZigbeeZCLSend": {
       "options": [],
-      "description": "Do not use unless you know exactly what you are doing.    Send a raw ZCL message to a Zigbee device. This is a low-level command, and requires to manually build the ZCL parameters. Most common usage will be provided as high-level functions. "
+      "description": "Do not use unless you know exactly what you are doing.   \nSend a raw ZCL message to a Zigbee device. This is a low-level command, and requires to manually build the ZCL parameters. Most common usage will be provided as high-level functions."
     }
   }
 }

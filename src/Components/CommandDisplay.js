@@ -18,16 +18,25 @@ class CommandDisplay extends React.Component {
     constructor(props) {
         super(props)
         let defaultOption = this.props.command.options.length > 0 ? this.props.command.options[0] : null
+
+        let defaultInputSelection
+        if (this.props.commandName.endsWith("<x>")) {
+            this.inputRange = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            defaultInputSelection = 1
+        } else {
+            this.inputRange = [""]
+            defaultInputSelection = ""
+        }
+
         this.state = {
             commandIndex: 0,
             selectedOption: defaultOption,
             valueToSend: "",
             commandToSend: this.generateCommand(defaultOption, "", 1),
             logsOutput: "",
-            currentSelectedInputRangeValue: 1,
+            currentSelectedInputRangeValue: defaultInputSelection,
             currentSelectedCommand: this.generateCurrentCommand(1),
         }
-        this.inputRange = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     }
 
 
@@ -42,17 +51,21 @@ class CommandDisplay extends React.Component {
     onCommandResponse(cmnd, success, response) {
         
         if (this.commandSent && cmnd === this.commandSent) {
-            let log = `${this.state.logsOutput}\nCommand ${cmnd} : ${success ? "Success" : "Failed"}`
+            let log = `Command ${cmnd} : ${success ? "Success" : "Failed"}`
             if (success) {
                 log += `\nResponse : ${JSON.stringify(response, null, 2)}`
             }
-            this.setState({ logsOutput: log})
+            this.addLog(log)
         }
+    }
+
+    addLog(newLog) {
+        this.setState({logsOutput: (this.state.logsOutput + `\n${new Date().toLocaleTimeString()} : ${newLog}`).trim()})
     }
 
     sendCommandInternal(event, command) {
         event.stopPropagation()
-        this.setState({ logsOutput: this.state.logsOutput + '\n' + 'Sending command : ' +  command})
+        this.addLog('Sending command : ' +  command)
         this.commandSent = command
         this.props.deviceConnector.performCommandOnDevice(command)
 
@@ -96,7 +109,7 @@ class CommandDisplay extends React.Component {
 
     shouldShowValueInput() {
         if (this.state.selectedOption) {
-            return this.state.selectedOption.type === "input"
+            return this.state.selectedOption.type === "input" || this.state.selectedOption.type === "range"
         } else {
             return false
         }
@@ -131,10 +144,9 @@ class CommandDisplay extends React.Component {
     renderCommandDetails() {
         return (
             // <React.Fragment>
-                <Box display="flex" flexDirection="column" flexGrow={1}>
-                    <Box display="flex" flexDirection="row" alignItems="center" flexGrow={1}>
-                        {this.props.commandName.endsWith("<x>") ? 
-                        ( <Scrollbar style={{ width: 500, height: 200 }} px={5} flexGrow={4}>
+                <Box display="flex" flexDirection="column" flexGrow={1} paddingTop={3}>
+                    <Box display="flex" flexDirection="row" flexGrow={1}>
+                        <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
                             <List dense>
                                 {this.inputRange.map(value => {
                                     let command = this.generateCurrentCommand(value)
@@ -143,7 +155,6 @@ class CommandDisplay extends React.Component {
                                         <ListItemIcon>
                                         <Radio
                                             checked={this.state.currentSelectedInputRangeValue === value}
-                                            // onChange={handleChange}
                                             value={value}
                                             name={value}
                                             inputProps={{ 'aria-label': 'A' }}
@@ -154,12 +165,8 @@ class CommandDisplay extends React.Component {
                                     )
                                 })}
                             </List>
-                            {/* </Box> */}
                         </Scrollbar>
-                        ) : (
-                            <Typography px={5} flexGrow={1}>{this.state.currentSelectedCommand}</Typography>
-                        )}
-                        <Scrollbar style={{ width: 500, height: 200 }} px={5} flexGrow={4}>
+                        <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
                             <List dense>
                                 {this.props.command.options.map(option => {
                                     return (
@@ -178,7 +185,6 @@ class CommandDisplay extends React.Component {
                                     )
                                 })}
                             </List>
-                            {/* </Box> */}
                         </Scrollbar>
                         {this.shouldShowValueInput() ? 
                             <form noValidate autoComplete="off">
@@ -215,7 +221,7 @@ class CommandDisplay extends React.Component {
                     </form>
 
                     <Typography px={5} flexGrow={1}>Logs</Typography>
-                    <TextareaAutosize aria-label="minimum height" rows={4} rowsMax={5} value={this.state.logsOutput} disabled />
+                    <TextareaAutosize aria-label="minimum height" rows={6} rowsMax={8} value={this.state.logsOutput} disabled />
     
                 </Box>
 
@@ -233,11 +239,12 @@ class CommandDisplay extends React.Component {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 >
-                <Typography>{this.props.commandName}</Typography>
+                <Typography style={{flexBasis: "33%"}}>{this.props.commandName}</Typography>
+                <Typography color="textSecondary" >{this.props.command.description.substring(0, 60)}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Box display="flex" flexDirection="column" flexWrap="wrap">
-                        <Typography>{this.props.command.description}</Typography>
+                        <Typography style={{whiteSpace: 'pre-line'}}>{this.props.command.description}</Typography>
                         {this.renderCommandDetails()}
                     </Box>
                 </ExpansionPanelDetails>

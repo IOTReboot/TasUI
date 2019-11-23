@@ -378,6 +378,34 @@ const TasmotaConfig_06070000 = {
         })
     },
     commands: Commands,
+    configuration: {
+        Button: {
+            ButtonDebounce: Commands.Control.ButtonDebounce,
+            ButtonRetain: Commands.MQTT.ButtonRetain,
+            SetOption11: Commands.SetOptions.SetOption11,
+            SetOption13: Commands.SetOptions.SetOption13,
+            SetOption32: Commands.SetOptions.SetOption32,
+            SetOption40: Commands.SetOptions.SetOption40,
+            SetOption61: Commands.SetOptions.SetOption61,
+        },
+        Switch: {
+            SwitchDebounce: Commands.Control.ButtonDebounce,
+            SwitchRetain: Commands.MQTT.ButtonRetain,
+            'SwitchMode<x>': Commands.Control['SwitchMode<x>'],
+            SetOption32: Commands.SetOptions.SetOption32,
+        },
+        Relay: {
+            BlinkCount: Commands.Control.BlinkCount,
+            BlinkTime: Commands.Control.BlinkTime,
+            PowerOnState: Commands.Control.PowerOnState,
+            PowerRetain: Commands.MQTT.PowerRetain,
+            Interlock: Commands.Control.Interlock,
+            'PusleTime<x>': Commands.Control['PulseTime<x>'],
+            SetOption0: Commands.SetOptions.SetOption0,
+            SetOption26: Commands.SetOptions.SetOption26,
+            SetOption63: Commands.SetOptions.SetOption63,
+        }
+    }
 
 }
 

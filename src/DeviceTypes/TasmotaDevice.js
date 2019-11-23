@@ -789,6 +789,22 @@ class TasmotaDevice extends Component {
 
                 <TableRow>
                     <TableCell colSpan={3}>
+                        <Typography>Configuration Section</Typography>
+                    </TableCell>
+                </TableRow>
+
+                {Object.entries(this.deviceConfig.configuration).map(([commandGroupName, commandGroup]) => {
+                    return (
+                        <TableRow>
+                            <TableCell colSpan={3}>
+                                <CommandGroup groupType="Configuration" commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector}/>
+                            </TableCell>
+                        </TableRow>
+                    )
+                })}
+
+                <TableRow>
+                    <TableCell colSpan={3}>
                         <Typography>Commands Section</Typography>
                     </TableCell>
                 </TableRow>
@@ -797,7 +813,7 @@ class TasmotaDevice extends Component {
                     return (
                         <TableRow>
                             <TableCell colSpan={3}>
-                                <CommandGroup commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector}/>
+                                <CommandGroup groupType="Commands" commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector}/>
                             </TableCell>
                         </TableRow>
                     )

@@ -22,6 +22,7 @@ import DeviceManager from './DeviceManagement/DeviceManager';
 import DeviceDetails from './Components/DeviceDetails';
 import DeviceSettings from './Components/DeviceSettings';
 import FindDevices from './Components/FindDevices';
+import Console from './Components/Console'
 
 const drawerWidth = 240;
 
@@ -178,6 +179,7 @@ class App extends Component {
               <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
               <Route path="/details/:mac" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
               <Route path="/settings/:mac" render={(props) => <DeviceSettings {...props} deviceManager={deviceManager} />} />
+              <Route path="/console/:mac" render={(props) => <Console {...props} deviceManager={deviceManager} />} />
               {/* <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} /> */}
               <Redirect exact from="/" to="/devices" />
             </Switch>

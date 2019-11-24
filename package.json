@@ -9,6 +9,7 @@
     "ip-address": "^6.1.0",
     "node": "^13.1.0",
     "react": "^16.10.2",
+    "react-console-emulator": "^3.0.2",
     "react-dom": "^16.10.2",
     "react-inlinesvg": "^1.1.7",
     "react-router-dom": "^5.1.2",

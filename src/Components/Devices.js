@@ -6,6 +6,7 @@ import React from 'react';
 import DeviceList from './DeviceList';
 import DisplayTypeButtons from './DisplayTypeButtons';
 import InfoIcon from '@material-ui/icons/Info';
+import CallToActionIcon from '@material-ui/icons/CallToAction';
 
 class Devices extends React.Component {
     constructor(props) {
@@ -27,6 +28,11 @@ class Devices extends React.Component {
         icon: <SettingsApplicationsIcon />,
         onButtonClick: (mac, event) => this.openDeviceSettings(mac, event),
     },{
+        toolTip: "Console", 
+        label: "console", 
+        icon: <CallToActionIcon />,
+        onButtonClick: (mac, event) => this.openDeviceConsole(mac, event),
+    },{
         toolTip: "Delete", 
         label: "delete", 
         icon: <DeleteIcon />,
@@ -41,6 +47,11 @@ class Devices extends React.Component {
     openDeviceSettings = (macAddress, event) => {
         event.stopPropagation();
         this.props.history.push('/settings/' + macAddress);
+    }
+
+    openDeviceConsole = (macAddress, event) => {
+        event.stopPropagation();
+        this.props.history.push('/console/' + macAddress);
     }
 
     deleteDevice = (macAddress, event) => {

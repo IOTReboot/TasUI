@@ -2,6 +2,10 @@ import React from 'react'
 import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Terminal from 'react-console-emulator'
 import { Box, Container, FormControlLabel, Checkbox } from '@material-ui/core'
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import superagent from 'superagent';
 import ActionButton from './ActionButton';
 import HelpIcon from '@material-ui/icons/Help';
@@ -26,6 +30,7 @@ class Console extends React.Component {
         this.state = {
             deviceName: '',
             webLogEnabled: false,
+            weblogLevel: 2,
         }
         this.terminal = React.createRef()
         this.deviceManager = this.props.deviceManager
@@ -33,12 +38,21 @@ class Console extends React.Component {
     }
 
     onCommandResponse(cmnd, success, response) {
+        console.log(`onCommandResponse ${cmnd} === ${this.commandFired}`)
         if (cmnd === this.commandFired) {
             this.commandFired = null
             if (success) {
                 this.addLog(JSON.stringify(response))
             } else {
                 this.addLog(`${cmnd} Failed`)
+            }
+        }
+
+        if (cmnd.toLowerCase().startsWith('weblog ') && success) {
+            if (response.WebLog) {
+                this.setState({ weblogLevel: response.WebLog })
+            } else {
+                this.setState({ weblogLevel: 1 })
             }
         }
     }
@@ -56,6 +70,11 @@ class Console extends React.Component {
         if (!scrolledUp) {
             this.terminal.current.scrollToBottom()
         }
+    }
+
+    onWebLogLevelChanged(event) {
+        event.stopPropagation()
+        this.fireCommand('WebLog ' + event.target.value)
     }
 
     onWegLogEnableChanged(event) {
@@ -94,6 +113,7 @@ class Console extends React.Component {
 
     fireCommand(command, args) {
         this.commandFired = `${command} ${args}`
+        console.log(`FireCommand ${this.commandFired}`)
         this.deviceConnector.performCommandOnDeviceDirect(this.commandFired)
     }
 
@@ -103,7 +123,7 @@ class Console extends React.Component {
                 this.commands[commandName.toLowerCase()] = {
                     description: ' ', //command.description,
                     usage: `${commandName} ${command.options.length > 0 ? ` <value>` : ''}`,
-                    fn: (args) => this.fireCommand(commandName, `${args && args.length > 0 ? Array.from(args).join(' ') : ''}`)
+                    fn: (args) => this.fireCommand(commandName, args ? args : '')
                 }
             }
         }
@@ -124,6 +144,10 @@ class Console extends React.Component {
         if (this.state.webLogEnabled) {
             this.startWebLog()
         }
+    }
+
+    componentDidMount() {
+        this.fireCommand('Weblog')
     }
 
     startWebLog() {
@@ -180,6 +204,24 @@ class Console extends React.Component {
                         icon={<HelpIcon />}
                         onButtonClick={() => this.sendConsoleCommand('help')}
                     />
+
+                    <FormControl>
+                        <InputLabel id="weblog-select-label">
+                            Weblog Level
+                        </InputLabel>
+                        <Select
+                            labelId="weblog-select-label"
+                            id="weblog-select"
+                            value={this.state.weblogLevel}
+                            onChange={(event) => this.onWebLogLevelChanged(event)}
+                        // labelWidth={labelWidth}
+                        >
+                            <MenuItem value={1}>Error Messages</MenuItem>
+                            <MenuItem value={2}>Error and Info</MenuItem>
+                            <MenuItem value={3}>Error, Info and Debug</MenuItem>
+                            <MenuItem value={4}>Error, Info and More Debug</MenuItem>
+                        </Select>
+                    </FormControl>
 
                 </Box>
                 <Terminal

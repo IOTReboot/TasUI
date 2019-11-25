@@ -6,10 +6,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 class ActionButton extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         let display = this.props.icon
         if (this.props.selected) {

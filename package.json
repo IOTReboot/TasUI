@@ -8,16 +8,17 @@
     "electron-is-dev": "^1.1.0",
     "ip-address": "^6.1.0",
     "node": "^13.1.0",
-    "react": "^16.10.2",
+    "react": "^16.12.0",
     "react-console-emulator": "^3.0.2",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.12.0",
     "react-inlinesvg": "^1.1.7",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "0.9.x",
+    "react-scripts": "3.2.0",
     "react-scrollbars-custom": "^4.0.21",
     "superagent": "^5.1.0"
   },
   "devDependencies": {
+    "@babel/helper-create-class-features-plugin": "^7.7.4",
     "concurrently": "^5.0.0",
     "electron": "^7.1.2",
     "electron-builder": "^21.2.0",
@@ -54,6 +55,18 @@
     "files": [
       "build/**/*",
       "node_modules/**/*"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

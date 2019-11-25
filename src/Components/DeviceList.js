@@ -43,8 +43,8 @@ class DeviceList extends React.Component {
         return Object.keys(this.props.devices).map((mac, index) => {
             let buttons = (
                 <div>
-                    {this.renderButton("Details", "details", () => this.openDeviceDetails(mac, event), <SettingsApplicationsIcon />)}
-                    {this.renderButton("Delete", "delete", () => this.deleteDevice(mac, event), <DeleteIcon />)}
+                    {this.renderButton("Details", "details", (event) => this.openDeviceDetails(mac, event), <SettingsApplicationsIcon />)}
+                    {this.renderButton("Delete", "delete", (event) => this.deleteDevice(mac, event), <DeleteIcon />)}
                 </div>
             )    
     
@@ -195,7 +195,7 @@ class DeviceList extends React.Component {
                 {Object.keys(this.props.deviceSections[section].devices).length > 0 ? 
                     <TableRow><h3>{section}</h3></TableRow> : null}
 
-                {index == 0 ? 
+                {index === 0 ? 
                 <TableHead>
                     {this.renderTableHeader()}
                 </TableHead>

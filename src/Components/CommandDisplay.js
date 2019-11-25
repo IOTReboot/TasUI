@@ -148,6 +148,7 @@ class CommandDisplay extends React.Component {
 
                 case "input":
                 case "range":
+                default:
                     command += ` ${valueToSend}`
                     break
 

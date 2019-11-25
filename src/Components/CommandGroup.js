@@ -9,10 +9,6 @@ import Typography from '@material-ui/core/Typography'
 
 class CommandGroup extends React.Component {
 
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         return (
 

@@ -10,9 +10,9 @@ class DeviceManager {
         this.devices = "devices" in localStorage ? JSON.parse(localStorage.getItem('devices')) : {};
         this.discoveredDevices = {};
         Object.keys(this.devices).forEach((key) => {
-            if(!this.devices[key].status0Response) {
+            if (!this.devices[key].status0Response) {
                 let oldInfo = Object.assign({}, this.devices[key])
-                this.devices[key] = { status0Response: oldInfo}
+                this.devices[key] = { status0Response: oldInfo }
             }
         })
 
@@ -20,7 +20,7 @@ class DeviceManager {
     }
 
     getTasmotaConfig(macAddress) {
-        let deviceInfo = this.getDevice(macAddress) 
+        let deviceInfo = this.getDevice(macAddress)
 
         let versionStr = deviceInfo.status0Response.StatusFWR.Version
         versionStr = versionStr.substring(0, versionStr.indexOf('('))
@@ -35,12 +35,12 @@ class DeviceManager {
     addDevice(macAddress, deviceInfo) {
         if (macAddress.length > 0) {
             this.devices[macAddress] = deviceInfo
-                // if (this.discoveredDevices[macAddress]) {
-                //     delete this.discoveredDevices[macAddress]
-                // }
+            // if (this.discoveredDevices[macAddress]) {
+            //     delete this.discoveredDevices[macAddress]
+            // }
             this.saveDevices()
             return true;
-        } 
+        }
         return false;
     }
 
@@ -58,7 +58,7 @@ class DeviceManager {
                 }
             }
             if (this.devices[macAddress]) {
-                this.devices[macAddress].status0Response =  status0Response
+                this.devices[macAddress].status0Response = status0Response
                 this.updateDeviceConnector(macAddress, status0Response.StatusNET.IPAddress)
             }
             return true
@@ -70,7 +70,7 @@ class DeviceManager {
         for (let deviceMac in Object.keys(this.discoveredDevices)) {
             if (this.deviceConnectors[deviceMac]) {
                 this.deviceConnectors[deviceMac].disconnect();
-                delete this.deviceConnectors[deviceMac] 
+                delete this.deviceConnectors[deviceMac]
             }
         }
         this.discoveredDevices = {};
@@ -84,18 +84,18 @@ class DeviceManager {
 
     updateDevice(macAddress, updatedInfo) {
         if (this.devices[macAddress]) {
-            this.devices[macAddress] = {...this.devices[macAddress], ...updatedInfo}
+            this.devices[macAddress] = { ...this.devices[macAddress], ...updatedInfo }
             this.saveDevices()
             this.updateDeviceConnector(macAddress, this.devices[macAddress].status0Response.StatusNET.IPAddress)
         } else if (this.discoveredDevices[macAddress]) {
-            this.discoveredDevices[macAddress] = {...this.discoveredDevices[macAddress], ...updatedInfo}
+            this.discoveredDevices[macAddress] = { ...this.discoveredDevices[macAddress], ...updatedInfo }
             this.updateDeviceConnector(macAddress, this.discoveredDevices[macAddress].status0Response.StatusNET.IPAddress)
         }
     }
 
     removeDevice(macAddress) {
         if (this.devices[macAddress]) {
-            if(this.deviceConnectors[macAddress]) {
+            if (this.deviceConnectors[macAddress]) {
                 this.deviceConnectors[macAddress].disconnectAll()
             }
             delete this.devices[macAddress]

@@ -23,7 +23,7 @@ class SettingsGroup extends React.Component {
     }
 
     onCommandResponse(cmnd, success, response) {
-        console.log('Settings cmnd %s success %s response : %O ', cmnd, success, response )
+        console.log('Settings cmnd %s success %s response : %O ', cmnd, success, response)
         if (success) {
             let newState = Object.assign({}, this.state.settingsStates)
             Object.keys(response).forEach((key) => {
@@ -46,7 +46,7 @@ class SettingsGroup extends React.Component {
         })
     }
 
-    getCurrentSettings  = command => (event, isExpanded) => {
+    getCurrentSettings = command => (event, isExpanded) => {
         event.stopPropagation()
         if (isExpanded) {
             this.props.settingsGroup.settings.forEach((setting, index) => {
@@ -67,15 +67,15 @@ class SettingsGroup extends React.Component {
     renderSettingInputs() {
         return this.props.settingsGroup.settings.map((setting, index) => {
             return <TextField
-                    key={'settings' + setting.command}
-                    id={'id' + setting.name}
-                    label={setting.name}
-                    // placeholder={setting.name}
-                    margin="normal"
-                    variant="outlined"
-                    value={this.state.settingsStates[setting.command]}
-                    onChange={(event) => this.handleSettingsChanged(event, setting.command)}
-                />
+                key={'settings' + setting.command}
+                id={'id' + setting.name}
+                label={setting.name}
+                // placeholder={setting.name}
+                margin="normal"
+                variant="outlined"
+                value={this.state.settingsStates[setting.command]}
+                onChange={(event) => this.handleSettingsChanged(event, setting.command)}
+            />
         })
     }
 
@@ -83,7 +83,7 @@ class SettingsGroup extends React.Component {
         event.stopPropagation()
         let command = 'backlog'
         this.props.settingsGroup.settings.forEach((setting, index) => {
-            if(this.state.settingsStates[setting.command] !== this.commandResponses[setting.command]) {
+            if (this.state.settingsStates[setting.command] !== this.commandResponses[setting.command]) {
                 command += ' ' + setting.command + ' ' + this.state.settingsStates[setting.command] + ';'
             }
         })
@@ -100,11 +100,11 @@ class SettingsGroup extends React.Component {
 
             <ExpansionPanel key={`SettingsExpansionPanel-${this.props.settingsGroup.groupName}`} onChange={this.getCurrentSettings()}>
                 <ExpansionPanelSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
                 >
-                <Typography>{this.props.settingsGroup.groupName}</Typography>
+                    <Typography>{this.props.settingsGroup.groupName}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Box display="flex" flexDirection="row" flexWrap="wrap">

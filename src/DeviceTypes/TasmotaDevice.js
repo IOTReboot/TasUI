@@ -35,7 +35,7 @@ const styles = theme => ({
         padding: theme.spacing(2),
         height: 200,
         width: 200,
-    }, 
+    },
     root: {
         padding: theme.spacing(3, 2),
         margin: theme.spacing(2),
@@ -48,9 +48,9 @@ const styles = theme => ({
 
 const onButtonTheme = createMuiTheme({
     palette: {
-      primary: blue,
+        primary: blue,
     },
-  });
+});
 
 const powerRegex = RegExp('POWER\D*')
 const dimmerRegex = RegExp('Dimmer\D*')
@@ -58,38 +58,38 @@ const dimmerRegex = RegExp('Dimmer\D*')
 
 const DimmerSlider = withStyles({
     root: {
-      color: '#52af77',
-      height: 8,
-      width: 300,
-      paddingTop: 70,
-      paddingBottom: 10,
-      paddingLeft: 10,
-      paddingRight: 10,
+        color: '#52af77',
+        height: 8,
+        width: 300,
+        paddingTop: 70,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
     },
     thumb: {
-      height: 24,
-      width: 24,
-      backgroundColor: '#fff',
-      border: '2px solid currentColor',
-      marginTop: -8,
-      marginLeft: -12,
-      '&:focus,&:hover,&$active': {
-        boxShadow: 'inherit',
-      },
+        height: 24,
+        width: 24,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        marginTop: -8,
+        marginLeft: -12,
+        '&:focus,&:hover,&$active': {
+            boxShadow: 'inherit',
+        },
     },
     active: {},
     valueLabel: {
-      left: 'calc(-50% + 4px)',
+        left: 'calc(-50% + 4px)',
     },
     track: {
-      height: 8,
-      borderRadius: 4,
+        height: 8,
+        borderRadius: 4,
     },
     rail: {
-      height: 8,
-      borderRadius: 4,
+        height: 8,
+        borderRadius: 4,
     },
-  })(Slider);
+})(Slider);
 
 class TasmotaDevice extends Component {
 
@@ -114,7 +114,7 @@ class TasmotaDevice extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) { 
+    componentWillReceiveProps(nextProps) {
         if (nextProps.macAddress !== this.macAddress) {
             this.deviceConnector.disconnect();
             this.deviceConnector = this.props.deviceManager.getDeviceConnector(nextProps.macAddress, this.props.deviceManager.getDevice(nextProps.macAddress).status0Response.StatusNET.IPAddress);
@@ -144,29 +144,29 @@ class TasmotaDevice extends Component {
     }
 
     updateDeviceInfoState(updatedInfo) {
-        this.setState({ deviceInfo: {...this.state.deviceInfo, ...updatedInfo}})
+        this.setState({ deviceInfo: { ...this.state.deviceInfo, ...updatedInfo } })
         this.props.deviceManager.updateDevice(this.macAddress, updatedInfo)
     }
 
     onCommandResponse(cmnd, success, response) {
         // console.log('State %s cmnd: %s response : %O', this.state.displayName, cmnd, response)
 
-        this.setState( {online: success});
+        this.setState({ online: success });
 
         if (success) {
-        
+
             if (cmnd === 'Status 0') {
                 // console.log('Status0 %s :  %O', this.macAddress, response);
-                this.updateDeviceInfoState({ status0Response: response})
+                this.updateDeviceInfoState({ status0Response: response })
             } else if (cmnd === 'Template') {
-                this.updateDeviceInfoState({ templateResponse: response})
+                this.updateDeviceInfoState({ templateResponse: response })
                 this.deviceConnector.performCommandOnDevice('GPIOs')
             } else if (cmnd === 'GPIO 255') {
                 // console.log('GPIO Response : %O', response)
-                this.updateDeviceInfoState({ gpio255Response: response})
+                this.updateDeviceInfoState({ gpio255Response: response })
                 this.deviceConnector.performCommandOnDevice('GPIOs')
             } else if (cmnd === 'GPIOs') {
-                this.updateDeviceInfoState({ gpiosResponse: response})
+                this.updateDeviceInfoState({ gpiosResponse: response })
             } else if (cmnd === 'State') {
 
                 if (response.Module) {
@@ -176,7 +176,7 @@ class TasmotaDevice extends Component {
                 var status0Clone = Object.assign({}, this.state.deviceInfo.status0Response);
 
                 var statusNames = Object.keys(status0Clone)
-                
+
                 statusNames.forEach((status) => {
                     Object.keys(status0Clone[status]).forEach((param) => {
                         if (response[param]) {
@@ -185,7 +185,7 @@ class TasmotaDevice extends Component {
                     })
                 })
 
-                this.updateDeviceInfoState({ status0Response: status0Clone})
+                this.updateDeviceInfoState({ status0Response: status0Clone })
 
             } else if (cmnd === 'Status 8') {
 
@@ -194,7 +194,7 @@ class TasmotaDevice extends Component {
 
                 this.updateDeviceInfoState({ status0Response: status0Clone })
             } else if (cmnd === 'Module') {
-                this.updateDeviceInfoState({ moduleResponse: response})
+                this.updateDeviceInfoState({ moduleResponse: response })
             }
         }
     }
@@ -212,123 +212,123 @@ class TasmotaDevice extends Component {
     }
 
     getModuleDisplayText() {
-        if(this.state.deviceInfo.moduleResponse) {
-            return this.deviceConfig.moduleResponseFormatter(this.state.deviceInfo.moduleResponse)             
+        if (this.state.deviceInfo.moduleResponse) {
+            return this.deviceConfig.moduleResponseFormatter(this.state.deviceInfo.moduleResponse)
         } else {
             return this.state.deviceInfo.status0Response.Status.Module
         }
     }
 
     renderTypeTableStatusRow() {
-        return(
+        return (
             <TableRow key={this.props.macAddress}>
-              <TableCell component="th" scope="row">
-                {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
-              </TableCell>
-              <TableCell>{this.renderConnectivityStatus()}</TableCell>
-              <TableCell align="center">{this.props.actionButtons}</TableCell>
-              <TableCell>{this.getModuleDisplayText()}</TableCell>
-              <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
-              <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
+                <TableCell component="th" scope="row">
+                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                </TableCell>
+                <TableCell>{this.renderConnectivityStatus()}</TableCell>
+                <TableCell align="center">{this.props.actionButtons}</TableCell>
+                <TableCell>{this.getModuleDisplayText()}</TableCell>
+                <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
+                <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
             </TableRow>
         )
     }
 
     renderTypeTableHealthRow() {
-        return(
+        return (
             <TableRow key={this.props.macAddress}>
-              <TableCell component="th" scope="row">
-                {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
-              </TableCell>
-              <TableCell>{this.renderConnectivityStatus()}</TableCell>
-              <TableCell align="center">{this.props.actionButtons}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Uptime}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.MqttCount}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.LinkCount}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Downtime}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Version}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Core}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.BootCount}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.RestartReason}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.LoadAvg}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Sleep}</TableCell>
+                <TableCell component="th" scope="row">
+                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                </TableCell>
+                <TableCell>{this.renderConnectivityStatus()}</TableCell>
+                <TableCell align="center">{this.props.actionButtons}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Uptime}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.MqttCount}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.LinkCount}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Downtime}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Version}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Core}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.BootCount}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.RestartReason}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.LoadAvg}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Sleep}</TableCell>
             </TableRow>
         )
     }
 
     renderTypeTableWifiRow() {
-        return(
+        return (
             <TableRow key={this.props.macAddress}>
-              <TableCell component="th" scope="row">
-                {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
-              </TableCell>
-              <TableCell>{this.renderConnectivityStatus()}</TableCell>
-              <TableCell align="center">{this.props.actionButtons}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.BSSId}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.LinkCount}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Downtime}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusNET.Hostname}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusNET.Mac}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusNET.IPAddress}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusNET.Gateway}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.SSId}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Channel}</TableCell>
+                <TableCell component="th" scope="row">
+                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                </TableCell>
+                <TableCell>{this.renderConnectivityStatus()}</TableCell>
+                <TableCell align="center">{this.props.actionButtons}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.BSSId}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.LinkCount}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Downtime}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusNET.Hostname}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusNET.Mac}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusNET.IPAddress}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusNET.Gateway}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.SSId}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Channel}</TableCell>
             </TableRow>
         )
     }
 
     renderTypeTableMqttRow() {
-        return(
+        return (
             <TableRow key={this.props.macAddress}>
-              <TableCell component="th" scope="row">
-                {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
-              </TableCell>
-              <TableCell>{this.renderConnectivityStatus()}</TableCell>
-              <TableCell align="center">{this.props.actionButtons}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.MqttCount}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.Status.Topic}</TableCell>
-              <TableCell>'Full Topic - N/A'</TableCell>
-              <TableCell>'Command Topic - N/A'</TableCell>
-              <TableCell>'Stat Topic - N/A'</TableCell>
-              <TableCell>'Tele Topic - N/A'</TableCell>
-              <TableCell>'Fallback Topic - N/A'</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.GroupTopic}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusMQT.MqttHost}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusMQT.MqttPort}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusMQT.MqttClient}</TableCell>
+                <TableCell component="th" scope="row">
+                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                </TableCell>
+                <TableCell>{this.renderConnectivityStatus()}</TableCell>
+                <TableCell align="center">{this.props.actionButtons}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.MqttCount}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.Status.Topic}</TableCell>
+                <TableCell>'Full Topic - N/A'</TableCell>
+                <TableCell>'Command Topic - N/A'</TableCell>
+                <TableCell>'Stat Topic - N/A'</TableCell>
+                <TableCell>'Tele Topic - N/A'</TableCell>
+                <TableCell>'Fallback Topic - N/A'</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.GroupTopic}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusMQT.MqttHost}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusMQT.MqttPort}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusMQT.MqttClient}</TableCell>
             </TableRow>
         )
     }
 
     renderTypeTableFirmwareRow() {
-        return(
+        return (
             <TableRow key={this.props.macAddress}>
-              <TableCell component="th" scope="row">
-                {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
-              </TableCell>
-              <TableCell>{this.renderConnectivityStatus()}</TableCell>
-              <TableCell align="center">{this.props.actionButtons}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Version}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Core}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.SDK}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusMEM.ProgramSize}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusMEM.Free}</TableCell>
-              <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.OtaUrl}</TableCell>
+                <TableCell component="th" scope="row">
+                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                </TableCell>
+                <TableCell>{this.renderConnectivityStatus()}</TableCell>
+                <TableCell align="center">{this.props.actionButtons}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Version}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Core}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.SDK}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusMEM.ProgramSize}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusMEM.Free}</TableCell>
+                <TableCell>{this.state.deviceInfo.status0Response.StatusPRM.OtaUrl}</TableCell>
             </TableRow>
         )
     }
 
     renderTypeList() {
-        return(
+        return (
             <div style={{ width: '100%' }}>
                 <Box display="flex">
-                    <DeveloperBoardIcon/>
+                    <DeveloperBoardIcon />
                     <Box display="flex" flexGrow={1} marginLeft={2}>
                         <Typography>
-                        {/* {this.state.displayName} */}
+                            {/* {this.state.displayName} */}
                         </Typography>
                         {this.renderDetailsControlsDimmers()}
                         {this.renderDetailsControlsButtons()}
@@ -342,20 +342,20 @@ class TasmotaDevice extends Component {
     renderConnectivityStatus() {
         return (
             <Tooltip title={this.state.online ? "Online" : "Offline"} >
-                <ContactlessIcon color={this.state.online ? "primary" : "secondary"}/>
+                <ContactlessIcon color={this.state.online ? "primary" : "secondary"} />
             </Tooltip>
         )
     }
 
     renderDetailsImage() {
         return (
-            <Svg src="https://raw.githubusercontent.com/arendst/Tasmota/development/tools/logo/TASMOTA_Symbol_Vector.svg" width="90%" height="90%" padding="20"/>
+            <Svg src="https://raw.githubusercontent.com/arendst/Tasmota/development/tools/logo/TASMOTA_Symbol_Vector.svg" width="90%" height="90%" padding="20" />
         )
     }
 
     renderDetailsControlsButtons(type = 'Details') {
         if (this.state.deviceInfo.status0Response) {
-            let buttons =  Object.entries(this.state.deviceInfo.status0Response['StatusSTS']).filter(([key, value]) => {
+            let buttons = Object.entries(this.state.deviceInfo.status0Response['StatusSTS']).filter(([key, value]) => {
                 if (powerRegex.test(key)) {
                     return [key, value];
                 }
@@ -364,7 +364,7 @@ class TasmotaDevice extends Component {
             // console.log('DetailsControls buttons : %O', buttons)
 
             return buttons.map(([key, value]) => {
-                
+
                 let display = key;
                 if (type === 'Table') {
                     display = key.replace('POWER', '');
@@ -410,7 +410,7 @@ class TasmotaDevice extends Component {
 
     renderDetailsControlsDimmers(type = 'Details') {
         if (this.state.deviceInfo.status0Response) {
-            let dimmers =  Object.entries(this.state.deviceInfo.status0Response['StatusSTS']).filter(([key, value]) => {
+            let dimmers = Object.entries(this.state.deviceInfo.status0Response['StatusSTS']).filter(([key, value]) => {
                 if (dimmerRegex.test(key)) {
                     return [key, value];
                 }
@@ -423,7 +423,7 @@ class TasmotaDevice extends Component {
                 let display = key + ' ' + value;
                 if (type === 'Table') {
                     display = key.replace('Dimmer', 'Dim');
-                    display += ':'+value
+                    display += ':' + value
                 }
 
                 return (
@@ -463,49 +463,49 @@ class TasmotaDevice extends Component {
     }
 
     renderDetailsStatuses() {
-        
-            return Object.entries(this.state.deviceInfo.status0Response).map(([cmnd, cmndData]) => {
-                
-                return (
-                    <ExpansionPanel key={cmnd}>
-                        <ExpansionPanelSummary
+
+        return Object.entries(this.state.deviceInfo.status0Response).map(([cmnd, cmndData]) => {
+
+            return (
+                <ExpansionPanel key={cmnd}>
+                    <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
-                        >
+                    >
                         <Typography>{cmnd}</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
                         <Table aria-label="simple table" size="small">
                             <TableHead>
                                 <TableRow>
-                                <TableCell>Key</TableCell>
-                                <TableCell>Value</TableCell>
+                                    <TableCell>Key</TableCell>
+                                    <TableCell>Value</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                            {Object.entries(cmndData).map(([key, value]) => {
-                                return (
-                                    <TableRow key={key}>
-                                        <TableCell align="left">{key}</TableCell>
-                                        <TableCell align="left">
-                                            <Typography display="inline">
-                                                {JSON.stringify(value, null, 2)}
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })}
+                                {Object.entries(cmndData).map(([key, value]) => {
+                                    return (
+                                        <TableRow key={key}>
+                                            <TableCell align="left">{key}</TableCell>
+                                            <TableCell align="left">
+                                                <Typography display="inline">
+                                                    {JSON.stringify(value, null, 2)}
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}
                             </TableBody>
                         </Table>
-                        </ExpansionPanelDetails>
-                    </ExpansionPanel>
-                )
-                
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            )
 
-            })
-        
-    }  
+
+        })
+
+    }
 
     copyToClipboard() {
         const el = document.createElement('textarea');
@@ -527,7 +527,7 @@ class TasmotaDevice extends Component {
 
         charArray.forEach((char, index) => {
             digitValue = '0123456789abcdefgh'.indexOf(char);
-            for(let n = 3; n >= 0; n--) {
+            for (let n = 3; n >= 0; n--) {
                 bitArray.push((digitValue >> n) & 1)
             }
         })
@@ -540,18 +540,18 @@ class TasmotaDevice extends Component {
     renderDetailsSetOptions() {
         return (
             <ExpansionPanel key="SetOptionFlagExpansionPanel" TransitionProps={{ unmountOnExit: true, mountOnEnter: true }}>
-                        <ExpansionPanelSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                        >
-                        <Typography>SetOption Flags</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                        <List dense >
-                            {this.renderDetailsSetOptionsListItems()}
-                        </List>
-            </ExpansionPanelDetails>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>SetOption Flags</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <List dense >
+                        {this.renderDetailsSetOptionsListItems()}
+                    </List>
+                </ExpansionPanelDetails>
             </ExpansionPanel>
         )
     }
@@ -563,32 +563,32 @@ class TasmotaDevice extends Component {
 
     renderDetailsSetOptionsListItems() {
 
-        return this.state.deviceInfo.status0Response.StatusLOG.SetOption.map((setOptionStr,index) => {
+        return this.state.deviceInfo.status0Response.StatusLOG.SetOption.map((setOptionStr, index) => {
             if (index !== 1) {
-            let valueArray = this.convertHexStringToBitArray(setOptionStr)
-            return this.deviceConfig.setOptionsStatusMaps[index].items.map((item, itemIndex) => {
-                if (item.name !== '' && item.description !== '') {
-                    var soValue = itemIndex + this.deviceConfig.setOptionsStatusMaps[index].setOptionStart;
-                    // console.log('SetOption%d (%s) : %d', soValue, item.name, valueArray[itemIndex])
-                    return (
-                        <React.Fragment>
-                            <ListItem key={'SetOption' + soValue}>
-                                <ListItemText id={'checkbox-lable-SetOption' + soValue} primary={`SetOption${soValue}`} 
-                                    secondary={item.description}/>
-                                <ListItemSecondaryAction>
-                                <Checkbox
-                                    edge="end"
-                                    checked={valueArray[itemIndex] === 1}
-                                    onChange={(event) => this.changeSetOption('SetOption' + soValue, event)}
-                                    // disabled
-                                />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                            <Divider variant="fullWidth" component="li" />
-                        </React.Fragment>
-                    )
-                }
-            })
+                let valueArray = this.convertHexStringToBitArray(setOptionStr)
+                return this.deviceConfig.setOptionsStatusMaps[index].items.map((item, itemIndex) => {
+                    if (item.name !== '' && item.description !== '') {
+                        var soValue = itemIndex + this.deviceConfig.setOptionsStatusMaps[index].setOptionStart;
+                        // console.log('SetOption%d (%s) : %d', soValue, item.name, valueArray[itemIndex])
+                        return (
+                            <React.Fragment>
+                                <ListItem key={'SetOption' + soValue}>
+                                    <ListItemText id={'checkbox-lable-SetOption' + soValue} primary={`SetOption${soValue}`}
+                                        secondary={item.description} />
+                                    <ListItemSecondaryAction>
+                                        <Checkbox
+                                            edge="end"
+                                            checked={valueArray[itemIndex] === 1}
+                                            onChange={(event) => this.changeSetOption('SetOption' + soValue, event)}
+                                        // disabled
+                                        />
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                                <Divider variant="fullWidth" component="li" />
+                            </React.Fragment>
+                        )
+                    }
+                })
             }
         })
     }
@@ -607,7 +607,7 @@ class TasmotaDevice extends Component {
             return 'User'
         }
 
-        for(let n = 0; n < keys.length; n++) {
+        for (let n = 0; n < keys.length; n++) {
             // console.log("Keys %s", this.state.deviceInfo.gpiosResponse[keys[n]])
             if (!Array.isArray(this.state.deviceInfo.gpiosResponse[keys[n]])) {
                 if (this.state.deviceInfo.gpiosResponse[keys[n]][gpio]) {
@@ -617,7 +617,7 @@ class TasmotaDevice extends Component {
                 }
             } else {
                 for (let i = 0; i < this.state.deviceInfo.gpiosResponse[keys[n]].length; i++) {
-                    if(this.state.deviceInfo.gpiosResponse[keys[n]][i].startsWith(gpio.toString() + ' ')) {
+                    if (this.state.deviceInfo.gpiosResponse[keys[n]][i].startsWith(gpio.toString() + ' ')) {
                         return this.state.deviceInfo.gpiosResponse[keys[n]][i].replace(gpio.toString(), "")
                     }
                 }
@@ -642,7 +642,7 @@ class TasmotaDevice extends Component {
                                     <TableCell>{`${gpio} ( ${this.getGPIOName(gpio)} )`}</TableCell>
                                 </TableRow>
                             )
-                        }) 
+                        })
                     }
 
                     <TableRow>
@@ -662,122 +662,122 @@ class TasmotaDevice extends Component {
     }
 
     renderDetailsTemplate() {
-       return (
-       <ExpansionPanel key="TemplateDetailsExpansionPanel" onChange={this.getPanelCommandData('Template')}>
-            <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-            >
-            <Typography>Template</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+        return (
+            <ExpansionPanel key="TemplateDetailsExpansionPanel" onChange={this.getPanelCommandData('Template')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Template</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
 
-            {!this.state.deviceInfo.templateResponse || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> : 
-                this.renderTemplateResponse()
-            }
+                    {!this.state.deviceInfo.templateResponse || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> :
+                        this.renderTemplateResponse()
+                    }
 
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
-       )
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+        )
     }
 
     renderGPIOResponse() {
 
         return (
             <Table size="small">
-            <TableBody>
+                <TableBody>
 
-            {this.deviceConfig.gpioResponseFormatter(this.state.deviceInfo.gpio255Response).map((gpioObj, index) => {
-                return (
-                    <TableRow>
-                        <TableCell>{gpioObj.gpio}</TableCell>
-                        <TableCell>{gpioObj.gpioInfo}</TableCell>
-                    </TableRow>
-                )
-            })} 
+                    {this.deviceConfig.gpioResponseFormatter(this.state.deviceInfo.gpio255Response).map((gpioObj, index) => {
+                        return (
+                            <TableRow>
+                                <TableCell>{gpioObj.gpio}</TableCell>
+                                <TableCell>{gpioObj.gpioInfo}</TableCell>
+                            </TableRow>
+                        )
+                    })}
 
-            </TableBody>
+                </TableBody>
             </Table>
         )
     }
 
     renderDetailsGPIO() {
         return (
-        <ExpansionPanel key="GPIODetailsExpansionPanel" onChange={this.getPanelCommandData('GPIO 255')}>
-             <ExpansionPanelSummary
-             expandIcon={<ExpandMoreIcon />}
-             aria-controls="panel1a-content"
-             id="panel1a-header"
-             >
-             <Typography>Module GPIO</Typography>
-             </ExpansionPanelSummary>
-             <ExpansionPanelDetails>
- 
-             {!this.state.deviceInfo.gpio255Response || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> : 
-                 this.renderGPIOResponse()
-             }
- 
-             </ExpansionPanelDetails>
-         </ExpansionPanel>
+            <ExpansionPanel key="GPIODetailsExpansionPanel" onChange={this.getPanelCommandData('GPIO 255')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Module GPIO</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+
+                    {!this.state.deviceInfo.gpio255Response || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> :
+                        this.renderGPIOResponse()
+                    }
+
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
         )
-     }
+    }
 
     renderDetailsConnectivity() {
         return (
-        <React.Fragment>
-            <ExpansionPanel key="ConnectivityDetailsExpansionPanel">
-                        <ExpansionPanelSummary
+            <React.Fragment>
+                <ExpansionPanel key="ConnectivityDetailsExpansionPanel">
+                    <ExpansionPanelSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
-                        >
+                    >
                         <Typography>Connectivity</Typography>
-                        </ExpansionPanelSummary>
-                        <ExpansionPanelDetails>
-                <Table size="small">
-                <TableBody>
-                    <TableRow>
-                        <TableCell />
-                        <TableCell>Wifi AP</TableCell>
-                        <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.SSId}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell />
-                        <TableCell>Wifi Strength</TableCell>
-                        <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell />
-                        <TableCell>Wifi Channel</TableCell>
-                        <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Channel}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell />
-                        <TableCell>Wifi BSSID</TableCell>
-                        <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.BSSId}</TableCell>
-                    </TableRow>
-                </TableBody>
-                </Table>
-            </ExpansionPanelDetails>
-            </ExpansionPanel>
-        </React.Fragment>
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                        <Table size="small">
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell>Wifi AP</TableCell>
+                                    <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.SSId}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell>Wifi Strength</TableCell>
+                                    <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell>Wifi Channel</TableCell>
+                                    <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Channel}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell>Wifi BSSID</TableCell>
+                                    <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.BSSId}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </ExpansionPanelDetails>
+                </ExpansionPanel>
+            </React.Fragment>
         )
     }
 
     renderTypeSettings() {
 
 
-        return(
+        return (
             <React.Fragment>
-                
+
                 {this.deviceConfig.settingsGroups.map((settings) => {
                     return (
                         <TableRow>
                             <TableCell colSpan={3}>
                                 <SettingsGroup deviceConnector={this.deviceConnector} settingsGroup={settings} />
                             </TableCell>
-                        </TableRow>                
+                        </TableRow>
                     )
                 })}
 
@@ -797,7 +797,7 @@ class TasmotaDevice extends Component {
                     return (
                         <TableRow>
                             <TableCell colSpan={3}>
-                                <CommandGroup groupType="Configuration" commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector}/>
+                                <CommandGroup groupType="Configuration" commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector} />
                             </TableCell>
                         </TableRow>
                     )
@@ -813,13 +813,13 @@ class TasmotaDevice extends Component {
                     return (
                         <TableRow>
                             <TableCell colSpan={3}>
-                                <CommandGroup groupType="Commands" commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector}/>
+                                <CommandGroup groupType="Commands" commandGroupName={commandGroupName} commandGroup={commandGroup} deviceConnector={this.deviceConnector} />
                             </TableCell>
                         </TableRow>
                     )
                 })}
 
-                
+
             </React.Fragment>
         )
     }
@@ -840,7 +840,7 @@ class TasmotaDevice extends Component {
                     </TableCell>
                 </TableRow>
 
-                {this.state.deviceInfo.status0Response.Status.Module === 0 ? ( 
+                {this.state.deviceInfo.status0Response.Status.Module === 0 ? (
                     <TableRow>
                         <TableCell colSpan={3}>
                             {this.renderDetailsTemplate()}
@@ -848,7 +848,7 @@ class TasmotaDevice extends Component {
                     </TableRow>
 
                 )
-                : null }
+                    : null}
 
                 <TableRow>
                     <TableCell colSpan={3}>
@@ -857,10 +857,10 @@ class TasmotaDevice extends Component {
                 </TableRow>
 
                 <TableRow>
-                        <TableCell align="left"><Typography>Status Report</Typography></TableCell>
-                        <TableCell align="center" colSpan={2}>
-                            <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
-                        </TableCell>
+                    <TableCell align="left"><Typography>Status Report</Typography></TableCell>
+                    <TableCell align="center" colSpan={2}>
+                        <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
+                    </TableCell>
                 </TableRow>
 
                 <TableRow>
@@ -875,46 +875,46 @@ class TasmotaDevice extends Component {
     renderTypeSettingsAndDetails(renderType) {
         return (
             <React.Fragment>
-            <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center">
-            <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center">
-                    <Paper align="center" style={{width: 200, height: 200}}>
-                        {this.renderDetailsImage()}
-                    </Paper>
-            </Box>
-            <Table size="medium">
-                <TableHead>
-                    <TableRow>
-                        <TableCell colSpan={2}></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                            <TableCell align="left"><Typography>FriendlyName</Typography></TableCell>
-                            <TableCell align="center" colSpan={2}>{this.state.deviceInfo.status0Response.Status.FriendlyName[0]}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                            <TableCell align="left"><Typography>Relays</Typography></TableCell>
-                            <TableCell align="center" colSpan={2}>{this.renderDetailsControlsButtons('Table')}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                            <TableCell align="left"><Typography>Light Controls</Typography></TableCell>
-                            <TableCell align="center" colSpan={2}>{this.renderDetailsControlsDimmers('Table')}</TableCell>
-                    </TableRow>
+                <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center">
+                    <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center">
+                        <Paper align="center" style={{ width: 200, height: 200 }}>
+                            {this.renderDetailsImage()}
+                        </Paper>
+                    </Box>
+                    <Table size="medium">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell colSpan={2}></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell align="left"><Typography>FriendlyName</Typography></TableCell>
+                                <TableCell align="center" colSpan={2}>{this.state.deviceInfo.status0Response.Status.FriendlyName[0]}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell align="left"><Typography>Relays</Typography></TableCell>
+                                <TableCell align="center" colSpan={2}>{this.renderDetailsControlsButtons('Table')}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell align="left"><Typography>Light Controls</Typography></TableCell>
+                                <TableCell align="center" colSpan={2}>{this.renderDetailsControlsDimmers('Table')}</TableCell>
+                            </TableRow>
 
-                    {renderType === 'Details' ? this.renderTypeDetails() : null}
-                    {renderType === 'Settings' ? this.renderTypeSettings() : null}
+                            {renderType === 'Details' ? this.renderTypeDetails() : null}
+                            {renderType === 'Settings' ? this.renderTypeSettings() : null}
 
-                </TableBody>
-            </Table>
+                        </TableBody>
+                    </Table>
 
-            </Box>
+                </Box>
             </React.Fragment>
         )
     }
 
     render() {
         // console.log('Tasmota Device renderType : %s', this.props.renderType)
-        switch(this.props['renderType']) {
+        switch (this.props['renderType']) {
             case 'List':
                 return this.renderTypeList();
 
@@ -930,18 +930,18 @@ class TasmotaDevice extends Component {
 
             case 'Table_WIFI':
                 return this.renderTypeTableWifiRow()
-    
+
             case 'Table_Mqtt':
                 return this.renderTypeTableMqttRow()
-    
+
             case 'Table_Firmware':
                 return this.renderTypeTableFirmwareRow()
-        
+
 
             default:
                 return (
                     <Typography>
-                         {/* {this.state.displayName} RenderType : {this.props.renderType} */}
+                        {/* {this.state.displayName} RenderType : {this.props.renderType} */}
                     </Typography>
                 )
                 break

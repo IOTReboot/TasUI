@@ -7,7 +7,7 @@ import ActionButton from './ActionButton';
 import HelpIcon from '@material-ui/icons/Help';
 import ClearIcon from '@material-ui/icons/Clear';
 
-const styles = theme => ({ 
+const styles = theme => ({
     terminal: {
         flexGrow: 1,
         flexBasis: "0",
@@ -33,7 +33,7 @@ class Console extends React.Component {
     }
 
     onCommandResponse(cmnd, success, response) {
-        if(cmnd === this.commandFired) {
+        if (cmnd === this.commandFired) {
             this.commandFired = null
             if (success) {
                 this.addLog(JSON.stringify(response))
@@ -59,7 +59,7 @@ class Console extends React.Component {
     }
 
     onWegLogEnableChanged(event) {
-        this.setState({webLogEnabled: event.target.checked})
+        this.setState({ webLogEnabled: event.target.checked })
         if (event.target.checked) {
             this.startWebLog()
         } else {
@@ -68,7 +68,7 @@ class Console extends React.Component {
     }
 
     requestLog() {
-        var callback = function(err, response) {
+        var callback = function (err, response) {
             // console.log ("Error : %O Response : %O", err, response);
             if (response) {
                 this.nextCommanNumber = response.text.substring(0, response.text.indexOf('}'));
@@ -83,13 +83,13 @@ class Console extends React.Component {
                 }
             }
         }
-        let url = 'http://' +  this.deviceIPAddress  + '/cs?c2=' + this.nextCommanNumber;
+        let url = 'http://' + this.deviceIPAddress + '/cs?c2=' + this.nextCommanNumber;
         superagent.get(url)
-        .timeout({
-            response: 1000,  // Wait 5 seconds for the server to start sending,
-            deadline: 3000, // but allow 1 minute for the file to finish loading.
-          })
-          .end(callback.bind(this))
+            .timeout({
+                response: 1000,  // Wait 5 seconds for the server to start sending,
+                deadline: 3000, // but allow 1 minute for the file to finish loading.
+            })
+            .end(callback.bind(this))
     }
 
     fireCommand(command, args) {
@@ -98,12 +98,12 @@ class Console extends React.Component {
     }
 
     generateCommands() {
-        for(let [commandCatagory, commands] of Object.entries(this.deviceConfig.commands)) {
-            for(let [commandName, command] of Object.entries(commands)) {
+        for (let [commandCatagory, commands] of Object.entries(this.deviceConfig.commands)) {
+            for (let [commandName, command] of Object.entries(commands)) {
                 this.commands[commandName.toLowerCase()] = {
                     description: ' ', //command.description,
                     usage: `${commandName} ${command.options.length > 0 ? ` <value>` : ''}`,
-                    fn: (args) => this.fireCommand(commandName, `${ args && args.length > 0 ? Array.from(args).join(' ') : ''}`)
+                    fn: (args) => this.fireCommand(commandName, `${args && args.length > 0 ? Array.from(args).join(' ') : ''}`)
                 }
             }
         }
@@ -133,7 +133,7 @@ class Console extends React.Component {
     }
 
     stopWebLog() {
-        if(this.timer) {
+        if (this.timer) {
             clearInterval(this.timer);
             this.timer = null
         }
@@ -144,9 +144,9 @@ class Console extends React.Component {
     }
 
     toCamelCase(string) {
-        return string.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2, offset) {
+        return string.replace(/^([A-Z])|\s(\w)/g, function (match, p1, p2, offset) {
             if (p2) return p2.toUpperCase();
-            return p1.toLowerCase();        
+            return p1.toLowerCase();
         });
     }
 
@@ -158,8 +158,8 @@ class Console extends React.Component {
                 <Box flexGrow={1}>
                     <FormControlLabel
                         value="end"
-                        control={<Checkbox 
-                            color="primary" 
+                        control={<Checkbox
+                            color="primary"
                             checked={this.state.weblogEnabled}
                             onChange={(event) => this.onWegLogEnableChanged(event)}
                         />}
@@ -167,20 +167,20 @@ class Console extends React.Component {
                         labelPlacement="end"
                     />
 
-                    <ActionButton 
-                        toolTip="Clear Console" 
-                        label="clear" 
+                    <ActionButton
+                        toolTip="Clear Console"
+                        label="clear"
                         icon={<ClearIcon />}
                         onButtonClick={() => this.terminal.current.clearStdout()}
                     />
 
-                    <ActionButton 
-                        toolTip="Show help" 
-                        label="help" 
+                    <ActionButton
+                        toolTip="Show help"
+                        label="help"
                         icon={<HelpIcon />}
                         onButtonClick={() => this.sendConsoleCommand('help')}
                     />
-                    
+
                 </Box>
                 <Terminal
                     className={classes.terminal}

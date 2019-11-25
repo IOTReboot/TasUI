@@ -18,13 +18,13 @@ class CommandGroup extends React.Component {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                <Typography>{`${this.props.commandGroupName} ${this.props.groupType}`}</Typography>
+                    <Typography>{`${this.props.commandGroupName} ${this.props.groupType}`}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Box display="flex" flexDirection="column" flexGrow={1}>
                         {Object.entries(this.props.commandGroup).map(([commandName, command]) => {
                             return (
-                                <CommandDisplay commandName={commandName} command={command} deviceConnector={this.props.deviceConnector}/>
+                                <CommandDisplay commandName={commandName} command={command} deviceConnector={this.props.deviceConnector} />
                             )
                         })}
                     </Box>

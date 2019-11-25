@@ -193,14 +193,14 @@ class FindDevices extends React.Component {
         label: "details",
         icon: <InfoIcon />,
         onButtonClick: (mac, event) => this.openDeviceDetails(mac, event),
-    },{
+    }, {
         toolTip: "Settings",
         label: "settings",
         icon: <SettingsApplicationsIcon />,
         onButtonClick: (mac, event) => this.openDeviceSettings(mac, event),
-    },{
-        toolTip: "Console", 
-        label: "console", 
+    }, {
+        toolTip: "Console",
+        label: "console",
         icon: <CallToActionIcon />,
         onButtonClick: (mac, event) => this.openDeviceConsole(mac, event),
     }]

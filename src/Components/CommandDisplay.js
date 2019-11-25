@@ -24,11 +24,11 @@ class CommandDisplay extends React.Component {
         this.commandOptions = this.props.command.options.concat([])
 
         this.commandOptions.unshift({
-                display: "Read",
-                description: "Read current value from device",
-                type: "select"
+            display: "Read",
+            description: "Read current value from device",
+            type: "select"
         })
-        
+
         let defaultOption = this.commandOptions[0]
 
         let defaultInputSelection
@@ -61,7 +61,7 @@ class CommandDisplay extends React.Component {
     }
 
     onCommandResponse(cmnd, success, response) {
-        
+
         if (this.commandSent && cmnd === this.commandSent) {
             let log = `Command ${cmnd} : ${success ? "Success" : "Failed"}`
             if (success) {
@@ -73,16 +73,16 @@ class CommandDisplay extends React.Component {
 
     onClearLog(event) {
         event.stopPropagation()
-        this.setState({logsOutput: ''})
+        this.setState({ logsOutput: '' })
     }
 
     addLog(newLog) {
-        this.setState({logsOutput: (this.state.logsOutput + `\n${new Date().toLocaleTimeString()} : ${newLog}`).trim()})
+        this.setState({ logsOutput: (this.state.logsOutput + `\n${new Date().toLocaleTimeString()} : ${newLog}`).trim() })
     }
 
     sendCommandInternal(event, command) {
         event.stopPropagation()
-        this.addLog('Sending command : ' +  command)
+        this.addLog('Sending command : ' + command)
         this.commandSent = command
         this.props.deviceConnector.performCommandOnDevice(command)
 
@@ -94,22 +94,22 @@ class CommandDisplay extends React.Component {
 
     onCommandInputChanged(event) {
         event.stopPropagation()
-        this.setState({commandToSend: event.target.value})
+        this.setState({ commandToSend: event.target.value })
     }
 
     onInputRangeItemSelected(event, value) {
         event.stopPropagation()
-        this.setState({currentSelectedInputRangeValue: value, currentSelectedCommand: this.generateCurrentCommand(value), commandToSend: this.generateCommand(this.state.selectedOption, this.state.valueToSend, value)})
+        this.setState({ currentSelectedInputRangeValue: value, currentSelectedCommand: this.generateCurrentCommand(value), commandToSend: this.generateCommand(this.state.selectedOption, this.state.valueToSend, value) })
     }
 
     onValueInputChanged(event) {
         event.stopPropagation()
-        this.setState({ valueToSend: event.target.value, commandToSend: this.generateCommand(this.state.selectedOption, event.target.value, this.state.currentSelectedInputRangeValue)})
+        this.setState({ valueToSend: event.target.value, commandToSend: this.generateCommand(this.state.selectedOption, event.target.value, this.state.currentSelectedInputRangeValue) })
     }
 
     onOptionItemSelected(event, option) {
         event.stopPropagation()
-        this.setState({ selectedOption: option, commandToSend: this.generateCommand(option, this.state.valueToSend, this.state.currentSelectedInputRangeValue)})
+        this.setState({ selectedOption: option, commandToSend: this.generateCommand(option, this.state.valueToSend, this.state.currentSelectedInputRangeValue) })
     }
 
     isCurrentSelectedOption(option) {
@@ -139,8 +139,8 @@ class CommandDisplay extends React.Component {
     generateCommand(option, valueToSend, rangeValue) {
         let command = this.generateCurrentCommand(rangeValue)
         if (option) {
-            switch(option.type) {
-                case "select" :
+            switch (option.type) {
+                case "select":
                     if (option.display !== "Read") {
                         command += ` ${option.display}`
                     }
@@ -160,102 +160,102 @@ class CommandDisplay extends React.Component {
     renderCommandDetails() {
         return (
             // <React.Fragment>
-                <Box display="flex" flexDirection="column" flexGrow={1} paddingTop={3}>
-                    <Box display="flex" flexDirection="row" flexGrow={1}>
-                        <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
-                            <List dense>
-                                {this.inputRange.map(value => {
-                                    let command = this.generateCurrentCommand(value)
-                                    return (
-                                        <ListItem key={value} role={undefined} button onClick={(event) => this.onInputRangeItemSelected(event, value)}>
+            <Box display="flex" flexDirection="column" flexGrow={1} paddingTop={3}>
+                <Box display="flex" flexDirection="row" flexGrow={1}>
+                    <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
+                        <List dense>
+                            {this.inputRange.map(value => {
+                                let command = this.generateCurrentCommand(value)
+                                return (
+                                    <ListItem key={value} role={undefined} button onClick={(event) => this.onInputRangeItemSelected(event, value)}>
                                         <ListItemIcon>
-                                        <Radio
-                                            checked={this.state.currentSelectedInputRangeValue === value}
-                                            value={value}
-                                            name={value}
-                                            inputProps={{ 'aria-label': 'A' }}
-                                        />
+                                            <Radio
+                                                checked={this.state.currentSelectedInputRangeValue === value}
+                                                value={value}
+                                                name={value}
+                                                inputProps={{ 'aria-label': 'A' }}
+                                            />
                                         </ListItemIcon>
                                         <ListItemText id={command} primary={command} />
                                     </ListItem>
-                                    )
-                                })}
-                            </List>
-                        </Scrollbar>
-                        <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
-                            <List dense>
-                                {this.commandOptions.map(option => {
-                                    return (
-                                        <ListItem key={option.display} role={undefined} button onClick={(event) => this.onOptionItemSelected(event, option)}>
+                                )
+                            })}
+                        </List>
+                    </Scrollbar>
+                    <Scrollbar style={{ width: 300, height: 200 }} px={5} flexGrow={4}>
+                        <List dense>
+                            {this.commandOptions.map(option => {
+                                return (
+                                    <ListItem key={option.display} role={undefined} button onClick={(event) => this.onOptionItemSelected(event, option)}>
                                         <ListItemIcon>
-                                        <Radio
-                                            checked={this.isCurrentSelectedOption(option)}
-                                            // onChange={handleChange}
-                                            value={option.display}
-                                            name={option.display}
-                                            inputProps={{ 'aria-label': 'A' }}
-                                        />
+                                            <Radio
+                                                checked={this.isCurrentSelectedOption(option)}
+                                                // onChange={handleChange}
+                                                value={option.display}
+                                                name={option.display}
+                                                inputProps={{ 'aria-label': 'A' }}
+                                            />
                                         </ListItemIcon>
                                         <ListItemText id={option.display} primary={option.display} secondary={option.description} />
                                     </ListItem>
-                                    )
-                                })}
-                            </List>
-                        </Scrollbar>
-                        {this.shouldShowValueInput() ? 
-                            <form noValidate autoComplete="off">
-                                <TextField
-                                    px={5}
-                                    style={{ width: 500, height: 150 }}
-                                    flexGrow={4}
-                                    rows="8"
-                                    multiline
-                                    required
-                                    id="value"
-                                    label="Value"
-                                    onChange={(event) => this.onValueInputChanged(event)}
-                                    value={this.state.valueToSend}
-                                    margin="normal"
-                                    variant="outlined"
-                                />
-                            </form>
-                        : null }
+                                )
+                            })}
+                        </List>
+                    </Scrollbar>
+                    {this.shouldShowValueInput() ?
+                        <form noValidate autoComplete="off">
+                            <TextField
+                                px={5}
+                                style={{ width: 500, height: 150 }}
+                                flexGrow={4}
+                                rows="8"
+                                multiline
+                                required
+                                id="value"
+                                label="Value"
+                                onChange={(event) => this.onValueInputChanged(event)}
+                                value={this.state.valueToSend}
+                                margin="normal"
+                                variant="outlined"
+                            />
+                        </form>
+                        : null}
 
-                    </Box>
-                    <form noValidate autoComplete="off">
-                        <TextField
-                            style={{ width: 1000, height: 100 }}
-                            rows="2"
-                            multiline
-                            id="commandToSend"
-                            label="Command to Send"
-                            value={this.state.commandToSend}
-                            onChange={(event) => this.onCommandInputChanged(event)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </form>
-
-                    <Typography px={5} flexGrow={1}>Logs</Typography>
-                    <Box display="flex" flexDirection="row" flexGrow={0}>
-                        <TextareaAutosize 
-                            aria-label="minimum height" 
-                            rows={6} 
-                            rowsMax={8} 
-                            value={this.state.logsOutput} 
-                            disabled
-                            style={{ width: 1000, height: 100 }} />
-
-                        <ActionButton 
-                            key={this.props.commandName+'clearlog'}
-                            toolTip="Clear Log" 
-                            label="Clear Log" 
-                            icon={<HighlightOffIcon />}
-                            onButtonClick={(event) => this.onClearLog(event)}
-                        />
-                    </Box>
-    
                 </Box>
+                <form noValidate autoComplete="off">
+                    <TextField
+                        style={{ width: 1000, height: 100 }}
+                        rows="2"
+                        multiline
+                        id="commandToSend"
+                        label="Command to Send"
+                        value={this.state.commandToSend}
+                        onChange={(event) => this.onCommandInputChanged(event)}
+                        margin="normal"
+                        variant="outlined"
+                    />
+                </form>
+
+                <Typography px={5} flexGrow={1}>Logs</Typography>
+                <Box display="flex" flexDirection="row" flexGrow={0}>
+                    <TextareaAutosize
+                        aria-label="minimum height"
+                        rows={6}
+                        rowsMax={8}
+                        value={this.state.logsOutput}
+                        disabled
+                        style={{ width: 1000, height: 100 }} />
+
+                    <ActionButton
+                        key={this.props.commandName + 'clearlog'}
+                        toolTip="Clear Log"
+                        label="Clear Log"
+                        icon={<HighlightOffIcon />}
+                        onButtonClick={(event) => this.onClearLog(event)}
+                    />
+                </Box>
+
+            </Box>
         )
     }
 
@@ -269,12 +269,12 @@ class CommandDisplay extends React.Component {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                <Typography style={{flexBasis: "33%"}}>{this.props.commandName}</Typography>
-                <Typography color="textSecondary" >{this.props.command.description.substring(0, 60)}</Typography>
+                    <Typography style={{ flexBasis: "33%" }}>{this.props.commandName}</Typography>
+                    <Typography color="textSecondary" >{this.props.command.description.substring(0, 60)}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Box display="flex" flexDirection="column" flexWrap="wrap">
-                        <Typography style={{whiteSpace: 'pre-line'}}>{this.props.command.description}</Typography>
+                        <Typography style={{ whiteSpace: 'pre-line' }}>{this.props.command.description}</Typography>
                         {this.renderCommandDetails()}
                     </Box>
                 </ExpansionPanelDetails>

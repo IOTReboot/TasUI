@@ -22,7 +22,7 @@ class DeviceDetails extends Component {
     render() {
         if (this.state.macAddress !== "") {
             return (
-                <Box style={{overflow: "visible", position: "absolute"}}>
+                <Box style={{ overflow: "visible", position: "absolute" }}>
                     <TasmotaDevice macAddress={this.state.macAddress} renderType="Settings" deviceManager={this.props.deviceManager} />
                 </Box>
             );

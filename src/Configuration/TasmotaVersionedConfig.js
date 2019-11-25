@@ -13,7 +13,7 @@ function getConfigurationForVersion(version) {
         let closestVersion = 0xFFFFFFFF
         let maximumVersion = -1
 
-        for(let i = 0; i < versions.length; i++) {
+        for (let i = 0; i < versions.length; i++) {
             let availableVersion = parseInt(versions[i].replace('TasmotaConfig_', ''), 16)
 
             if (availableVersion > maximumVersion) {

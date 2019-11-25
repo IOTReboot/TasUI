@@ -21,18 +21,18 @@ class DeviceList extends React.Component {
     }
 
     renderItems() {
-        switch ( this.props.displayMode) {
-            case "List" :
+        switch (this.props.displayMode) {
+            case "List":
                 return this.renderTypeList()
 
-            case "Table_Status" :
-            case "Table_Health" :
+            case "Table_Status":
+            case "Table_Health":
             case "Table_WIFI":
             case "Table_Mqtt":
             case "Table_Firmware":
                 return this.renderTypeTable()
 
-            case "Card" :
+            case "Card":
                 return this.renderTypeCard()
 
         }
@@ -46,26 +46,26 @@ class DeviceList extends React.Component {
                     {this.renderButton("Details", "details", (event) => this.openDeviceDetails(mac, event), <SettingsApplicationsIcon />)}
                     {this.renderButton("Delete", "delete", (event) => this.deleteDevice(mac, event), <DeleteIcon />)}
                 </div>
-            )    
-    
+            )
+
             return (
                 <ExpansionPanel key={mac}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1c-content"
-                    id="panel1c-header"
+                    <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1c-content"
+                        id="panel1c-header"
                     >
-                    <TasmotaDevice macAddress={mac} renderType={this.state.displayMode} deviceManager={this.props.deviceManager} actionButtons={buttons}/>
-                </ExpansionPanelSummary>
+                        <TasmotaDevice macAddress={mac} renderType={this.state.displayMode} deviceManager={this.props.deviceManager} actionButtons={buttons} />
+                    </ExpansionPanelSummary>
                 </ExpansionPanel>
-                )    
+            )
         })
     }
 
     renderTypeCard() {
         return Object.keys(this.props.devices).map((mac, index) => {
             return (
-                <TasmotaDevice macAddress={mac} renderType={this.props.displayMode} deviceManager={this.props.deviceManager}/>
+                <TasmotaDevice macAddress={mac} renderType={this.props.displayMode} deviceManager={this.props.deviceManager} />
             )
         })
     }
@@ -79,7 +79,7 @@ class DeviceList extends React.Component {
                 <TableCell>Module</TableCell>
                 <TableCell>Power</TableCell>
                 <TableCell>Light Controls</TableCell>
-          </TableRow>
+            </TableRow>
         )
     }
 
@@ -101,7 +101,7 @@ class DeviceList extends React.Component {
                 <TableCell>Restart Reason</TableCell>
                 <TableCell>LoadAvg</TableCell>
                 <TableCell>Sleep</TableCell>
-          </TableRow>
+            </TableRow>
         )
     }
 
@@ -118,7 +118,7 @@ class DeviceList extends React.Component {
                 <TableCell>Program Size</TableCell>
                 <TableCell>Free</TableCell>
                 <TableCell>OtaURL</TableCell>
-          </TableRow>
+            </TableRow>
         )
     }
 
@@ -138,7 +138,7 @@ class DeviceList extends React.Component {
                 <TableCell>Gateway</TableCell>
                 <TableCell>SSID</TableCell>
                 <TableCell>Channel</TableCell>
-          </TableRow>
+            </TableRow>
         )
     }
 
@@ -161,7 +161,7 @@ class DeviceList extends React.Component {
                 <TableCell>Mqtt Host</TableCell>
                 <TableCell>Mqtt Port</TableCell>
                 <TableCell>Mqtt Client</TableCell>
-          </TableRow>
+            </TableRow>
         )
     }
     renderTableHeader() {
@@ -181,46 +181,46 @@ class DeviceList extends React.Component {
 
             case 'Table_Firmware':
                 return this.renderTableHeaderFirmware()
-            
-            }
+
+        }
     }
 
     renderTypeTable() {
         return (
 
             <Table stickyHeader aria-label="simple table" >
-            {Object.keys(this.props.deviceSections).map((section, index) => {
-               return (
-                <React.Fragment>
-                {Object.keys(this.props.deviceSections[section].devices).length > 0 ? 
-                    <TableRow><h3>{section}</h3></TableRow> : null}
+                {Object.keys(this.props.deviceSections).map((section, index) => {
+                    return (
+                        <React.Fragment>
+                            {Object.keys(this.props.deviceSections[section].devices).length > 0 ?
+                                <TableRow><h3>{section}</h3></TableRow> : null}
 
-                {index === 0 ? 
-                <TableHead>
-                    {this.renderTableHeader()}
-                </TableHead>
-                : null}
-                <TableBody>
-                    {Object.keys(this.props.deviceSections[section].devices).map((mac, index) => {
-                                let buttons = this.props.deviceSections[section].itemButtons.map((button, index) => {
-                                    return (
-                                        <ActionButton 
-                                            key={mac+button.label}
-                                            toolTip={button.toolTip} 
-                                            label={button.label} 
-                                            icon={button.icon}
-                                            onButtonClick={(event) => button.onButtonClick(mac, event)}
-                                        />
-                                    )
+                            {index === 0 ?
+                                <TableHead>
+                                    {this.renderTableHeader()}
+                                </TableHead>
+                                : null}
+                            <TableBody>
+                                {Object.keys(this.props.deviceSections[section].devices).map((mac, index) => {
+                                    let buttons = this.props.deviceSections[section].itemButtons.map((button, index) => {
+                                        return (
+                                            <ActionButton
+                                                key={mac + button.label}
+                                                toolTip={button.toolTip}
+                                                label={button.label}
+                                                icon={button.icon}
+                                                onButtonClick={(event) => button.onButtonClick(mac, event)}
+                                            />
+                                        )
+                                    })
+
+                                    return <TasmotaDevice key={mac} macAddress={mac} renderType={this.props.displayMode} deviceManager={this.props.deviceManager} actionButtons={buttons} />
                                 })
-                                                    
-                            return <TasmotaDevice key={mac} macAddress={mac} renderType={this.props.displayMode} deviceManager={this.props.deviceManager} actionButtons={buttons}/>       
-                        })
-                    }
-                </TableBody>
-                </React.Fragment>
-               )
-            })}
+                                }
+                            </TableBody>
+                        </React.Fragment>
+                    )
+                })}
 
             </Table>
         )

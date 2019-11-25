@@ -22,19 +22,19 @@ class Devices extends React.Component {
         label: "details",
         icon: <InfoIcon />,
         onButtonClick: (mac, event) => this.openDeviceDetails(mac, event),
-    },{
+    }, {
         toolTip: "Settings",
         label: "settings",
         icon: <SettingsApplicationsIcon />,
         onButtonClick: (mac, event) => this.openDeviceSettings(mac, event),
-    },{
-        toolTip: "Console", 
-        label: "console", 
+    }, {
+        toolTip: "Console",
+        label: "console",
         icon: <CallToActionIcon />,
         onButtonClick: (mac, event) => this.openDeviceConsole(mac, event),
-    },{
-        toolTip: "Delete", 
-        label: "delete", 
+    }, {
+        toolTip: "Delete",
+        label: "delete",
         icon: <DeleteIcon />,
         onButtonClick: (mac, event) => this.deleteDevice(mac, event),
     }]
@@ -65,20 +65,20 @@ class Devices extends React.Component {
 
     render() {
 
-    return (
-        <Box display="flex" flexGrow={1} flexDirection="column" style={{overflow: "visible", position: "absolute"}}>
-            <Box display="flex" flexDirection="row" alignItems="baseline">
-                <h1>Devices</h1>
-                <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
+        return (
+            <Box display="flex" flexGrow={1} flexDirection="column" style={{ overflow: "visible", position: "absolute" }}>
+                <Box display="flex" flexDirection="row" alignItems="baseline">
+                    <h1>Devices</h1>
+                    <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
+                </Box>
+                <DeviceList
+                    displayMode={this.state.displayMode}
+                    deviceSections={{ "": { devices: this.state.devices, itemButtons: this.buttons } }}
+                    deviceManager={this.props.deviceManager}
+                />
+
             </Box>
-            <DeviceList 
-                displayMode={this.state.displayMode} 
-                deviceSections={{"" : {devices: this.state.devices, itemButtons: this.buttons}}}
-                deviceManager={this.props.deviceManager}
-            />
-            
-        </Box>
-    );
-  }
+        );
+    }
 }
 export default Devices

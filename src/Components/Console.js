@@ -1,8 +1,21 @@
 import React from 'react'
+import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Terminal from 'react-console-emulator'
 import { Box, Container, FormControlLabel, Checkbox } from '@material-ui/core'
 import superagent from 'superagent';
 import ActionButton from './ActionButton';
+import HelpIcon from '@material-ui/icons/Help';
+import ClearIcon from '@material-ui/icons/Clear';
+
+const styles = theme => ({ 
+    terminal: {
+        flexGrow: 1,
+        flexBasis: "0",
+        flexShrink: 1,
+        height: "80vh",
+        overflow: "hidden",
+    },
+})
 
 class Console extends React.Component {
 
@@ -28,6 +41,11 @@ class Console extends React.Component {
                 this.addLog(`${cmnd} Failed`)
             }
         }
+    }
+
+    sendConsoleCommand(cmnd) {
+        this.terminal.current.terminalInput.current.value = cmnd
+        this.terminal.current.processCommand()
     }
 
     addLog(line) {
@@ -125,25 +143,51 @@ class Console extends React.Component {
         this.stopWebLog()
     }
 
+    toCamelCase(string) {
+        return string.replace(/^([A-Z])|\s(\w)/g, function(match, p1, p2, offset) {
+            if (p2) return p2.toUpperCase();
+            return p1.toLowerCase();        
+        });
+    }
+
     render() {
+        const { classes } = this.props
 
         return (
-            <Box width="70%" height={700}>
-                <FormControlLabel
-                    value="end"
-                    control={<Checkbox 
-                        color="primary" 
-                        checked={this.state.weblogEnabled}
-                        onChange={(event) => this.onWegLogEnableChanged(event)}
-                    />}
-                    label="Show Weblog"
-                    labelPlacement="end"
-                />
+            <Box>
+                <Box flexGrow={1}>
+                    <FormControlLabel
+                        value="end"
+                        control={<Checkbox 
+                            color="primary" 
+                            checked={this.state.weblogEnabled}
+                            onChange={(event) => this.onWegLogEnableChanged(event)}
+                        />}
+                        label="Fetch Weblog"
+                        labelPlacement="end"
+                    />
+
+                    <ActionButton 
+                        toolTip="Clear Console" 
+                        label="clear" 
+                        icon={<ClearIcon />}
+                        onButtonClick={() => this.terminal.current.clearStdout()}
+                    />
+
+                    <ActionButton 
+                        toolTip="Show help" 
+                        label="help" 
+                        icon={<HelpIcon />}
+                        onButtonClick={() => this.sendConsoleCommand('help')}
+                    />
+                    
+                </Box>
                 <Terminal
+                    className={classes.terminal}
                     ref={this.terminal}
                     commands={this.commands}
                     welcomeMessage={'Console to ' + this.state.deviceName + '. Type help to see all commands. All commands are lowercase only'}
-                    promptLabel={`${this.state.deviceName}>`}
+                    promptLabel={`${this.toCamelCase(this.state.deviceName)}>`}
                 />
             </Box>
         )
@@ -151,4 +195,4 @@ class Console extends React.Component {
     }
 }
 
-export default Console
+export default withStyles(styles)(Console)

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Component } from "react";
-import { Typography } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import TasmotaDevice from '../DeviceTypes/TasmotaDevice';
+import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 class DeviceDetails extends Component {
 
@@ -22,7 +23,9 @@ class DeviceDetails extends Component {
     render() {
         if (this.state.macAddress !== "") {
             return (
-                <TasmotaDevice macAddress={this.state.macAddress} renderType="Details" deviceManager={this.props.deviceManager} />
+                <Box style={{overflow: "visible", position: "absolute"}}>
+                    <TasmotaDevice macAddress={this.state.macAddress} renderType="Details" deviceManager={this.props.deviceManager} />
+                </Box>
             );
         } else {
             return null;
@@ -30,4 +33,4 @@ class DeviceDetails extends Component {
     }
 }
 
-export default DeviceDetails;
+export default DeviceDetails

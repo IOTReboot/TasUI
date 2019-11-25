@@ -29,6 +29,11 @@ const drawerWidth = 240;
 const styles = theme => ({
   root: {
     display: 'flex',
+    flexBasis: "100%",
+    flexGrow: 0,
+    flexShrink: 1,
+    height: "100vh",
+    overflow: "hidden",
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -58,10 +63,14 @@ const styles = theme => ({
     justifyContent: 'center',
   },
   content: {
+    flexBasis: "100%",
     flexGrow: 1,
+    flexShrink: 1,
+    height: "100vh",
     justifyContent: "center",
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
+    overflow: "hidden",
   },
   nested: {
     paddingLeft: theme.spacing(4),
@@ -174,7 +183,7 @@ class App extends Component {
           <main className={classes.content}>
             <div className={classes.toolbar} />
               <div>
-            <Switch>
+            <Switch className={classes.content}>
               <Route exact path="/findDevices" render={(props) => <FindDevices {...props} deviceManager={deviceManager} />} />
               <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
               <Route path="/details/:mac" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />

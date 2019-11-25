@@ -875,7 +875,7 @@ class TasmotaDevice extends Component {
     renderTypeSettingsAndDetails(renderType) {
         return (
             <React.Fragment>
-            <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center" style={{minWidth: 900}}>
+            <Box display="flex" flexDirection="column" flexGrow={1} justifyItems="center" justifyContent="center">
             <Box display="flex" flexDirection="column" flexWrap="wrap" justifyContent="space-around" alignItems="center">
                     <Paper align="center" style={{width: 200, height: 200}}>
                         {this.renderDetailsImage()}

@@ -188,7 +188,7 @@ class DeviceList extends React.Component {
     renderTypeTable() {
         return (
 
-            <Table stickyHeader aria-label="simple table">
+            <Table stickyHeader aria-label="simple table" >
             {Object.keys(this.props.deviceSections).map((section, index) => {
                return (
                 <React.Fragment>

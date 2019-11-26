@@ -13,7 +13,7 @@ class ActionButton extends React.Component {
         }
 
         return (
-            <Tooltip title={this.props.toolTip}>
+            <Tooltip title={this.props.toolTip} style={{visibility: this.props.visibility ? this.props.visibility : "visible"}}>
                 <IconButton aria-label={this.props.label} onClick={(event) => this.props.onButtonClick(event)}>
                     {display}
                 </IconButton>

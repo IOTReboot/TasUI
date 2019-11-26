@@ -1,9 +1,16 @@
 import React from 'react'
 import { Box, TextField } from '@material-ui/core'
+import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import ActionButton from './ActionButton';
 import DoneIcon from '@material-ui/icons/Done';
 import CancelIcon from '@material-ui/icons/Cancel';
+
+const styles = theme => ({
+    disabledInput: {
+        color: theme.palette.text.primary,
+    },
+})
 
 class EditableSetting extends React.Component {
 
@@ -36,6 +43,7 @@ class EditableSetting extends React.Component {
     }
 
     render() {
+        const { classes } = this.props
         return (
             <Box display="flex" flexDirection="row" flexGrow={0} flexShrink={1} justifyContent="center">
                 <TextField
@@ -46,16 +54,19 @@ class EditableSetting extends React.Component {
                     color="primary"
                     margin="normal"
                     value={this.state.currentValue}
+                    InputProps={{ classes: { disabled: classes.disabledInput } }}
                     onChange={(event) => this.setState({ currentValue: event.target.value })}
                 />
 
                 {!this.state.enableEdit ?
-                    <ActionButton
-                        toolTip="Edit"
-                        label="edit"
-                        icon={<EditIcon />}
-                        onButtonClick={() => this.setState({ enableEdit: true })}
-                    />
+                    <React.Fragment>
+                        <ActionButton
+                            toolTip="Edit"
+                            label="edit"
+                            icon={<EditIcon />}
+                            onButtonClick={() => this.setState({ enableEdit: true })}
+                        />
+                    </React.Fragment>
                     :
                     (
                         <React.Fragment>
@@ -66,19 +77,22 @@ class EditableSetting extends React.Component {
                                 onButtonClick={(event) => this.save(event)}
 
                             />
-
-                            <ActionButton
-                                toolTip="Cancel"
-                                label="cancel"
-                                icon={<CancelIcon />}
-                                onButtonClick={(event) => this.setState({ enableEdit: false })}
-                            />
                         </React.Fragment>
-                    )}
+                    )
+                }
+
+                <ActionButton
+                    visibility={this.state.enableEdit ? "visible" : "hidden"}
+                    toolTip="Cancel"
+                    label="cancel"
+                    icon={<CancelIcon />}
+                    onButtonClick={(event) => this.setState({ enableEdit: false })}
+                />
+
             </Box>
 
         )
     }
 }
 
-export default EditableSetting
+export default withStyles(styles)(EditableSetting)

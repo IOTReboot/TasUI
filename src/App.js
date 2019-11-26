@@ -23,6 +23,7 @@ import DeviceDetails from './Components/DeviceDetails';
 import DeviceSettings from './Components/DeviceSettings';
 import FindDevices from './Components/FindDevices';
 import Console from './Components/Console'
+import AppConfig from './Configuration/AppConfig'
 
 const drawerWidth = 240;
 
@@ -110,6 +111,11 @@ const deviceManager = new DeviceManager();
 
 class App extends Component {
 
+  constructor(props) {
+    super(props)
+    this.appConfig = new AppConfig()
+  }
+
   renderChildItems(item) {
     const { classes } = this.props;
 
@@ -184,11 +190,11 @@ class App extends Component {
             <div className={classes.toolbar} />
               <div>
             <Switch className={classes.content}>
-              <Route exact path="/findDevices" render={(props) => <FindDevices {...props} deviceManager={deviceManager} />} />
-              <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} />} />
-              <Route path="/details/:mac" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} />} />
-              <Route path="/settings/:mac" render={(props) => <DeviceSettings {...props} deviceManager={deviceManager} />} />
-              <Route path="/console/:mac" render={(props) => <Console {...props} deviceManager={deviceManager} />} />
+              <Route exact path="/findDevices" render={(props) => <FindDevices {...props} deviceManager={deviceManager} appConfig={this.appConfig} />} />
+              <Route exact path="/devices" render={(props) => <Devices {...props} deviceManager={deviceManager} appConfig={this.appConfig} />} />
+              <Route path="/details/:mac" render={(props) => <DeviceDetails {...props} deviceManager={deviceManager} appConfig={this.appConfig} />} />
+              <Route path="/settings/:mac" render={(props) => <DeviceSettings {...props} deviceManager={deviceManager} appConfig={this.appConfig} />} />
+              <Route path="/console/:mac" render={(props) => <Console {...props} deviceManager={deviceManager} appConfig={this.appConfig} />} />
               {/* <Route render={(props) => <Devices {...props} deviceManager={deviceManager} />} /> */}
               <Redirect exact from="/" to="/devices" />
             </Switch>

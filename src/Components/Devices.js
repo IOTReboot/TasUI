@@ -13,7 +13,7 @@ class Devices extends React.Component {
         super(props);
         this.state = {
             devices: this.props.deviceManager.getDevices(),
-            displayMode: "Table_Status",
+            displayMode: this.props.appConfig.getAppConfig('device_view_mode') || "Table_Status",
         }
     }
 
@@ -61,6 +61,12 @@ class Devices extends React.Component {
         this.setState({
             devices: newDevices
         });
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.displayMode !== this.state.displayMode) {
+            this.props.appConfig.putAppConfig('device_view_mode', this.state.displayMode)
+        }
     }
 
     render() {

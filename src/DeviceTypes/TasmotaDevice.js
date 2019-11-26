@@ -29,6 +29,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Checkbox from '@material-ui/core/Checkbox';
 import ContactlessIcon from '@material-ui/icons/Contactless';
 import CommandGroup from '../Components/CommandGroup';
+import EditableSetting from '../Components/EditableSetting';
 
 const styles = theme => ({
     imageContainer: {
@@ -890,7 +891,9 @@ class TasmotaDevice extends Component {
                         <TableBody>
                             <TableRow>
                                 <TableCell align="left"><Typography>FriendlyName</Typography></TableCell>
-                                <TableCell align="center" colSpan={2}>{this.state.deviceInfo.status0Response.Status.FriendlyName[0]}</TableCell>
+                                <TableCell align="center" colSpan={2}>
+                                    <EditableSetting deviceConnector={this.deviceConnector} command="FriendlyName1" currentValue={this.state.deviceInfo.status0Response.Status.FriendlyName[0]} />
+                                </TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell align="left"><Typography>Relays</Typography></TableCell>

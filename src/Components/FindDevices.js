@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Typography, FormControlLabel, Checkbox } from '@material-ui/core';
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
@@ -14,6 +14,7 @@ import DeviceList from './DeviceList';
 import DisplayTypeButtons from './DisplayTypeButtons';
 import InfoIcon from '@material-ui/icons/Info';
 import CallToActionIcon from '@material-ui/icons/CallToAction';
+import { withSnackbar } from 'notistack';
 
 
 
@@ -31,7 +32,11 @@ class FindDevices extends React.Component {
             numIpsRequested: 0,
             numIpsCompleted: 0,
             searching: false,
-            displayMode: "Table_Status"
+            displayMode: "Table_Status",
+            username: '',
+            password: '',
+            enableAuth: false
+
         }
 
     }
@@ -87,13 +92,28 @@ class FindDevices extends React.Component {
 
     onCommandResponse(args) {
         console.log(`${args.ip} : Present : ${args.success} Response : %O`, args.response);
-        if (args.success) {
-            // if (!this.props.deviceManager.isDeviceKnown(args.response.body.StatusNET.Mac)) {
+        if (args.success && args.response.body.StatusNET) {
             this.props.deviceManager.addDiscoveredDevice(args.response.body.StatusNET.Mac, args.response.body);
+            if (this.state.enableAuth) {
+                this.props.deviceManager.updateDevice(args.response.body.StatusNET.Mac,
+                    {
+                        authInfo:
+                        {
+                            username: this.state.username,
+                            password: this.state.password,
+                        }
+                    })
+            }
             this.setState({})
             // }
         } else {
-
+            if (args.success && args.response.body.WARNING) {
+                if (this.state.enableAuth) {
+                    this.props.enqueueSnackbar(`${args.ip} authentication failed`, { variant: 'error'})
+                } else {
+                    this.props.enqueueSnackbar(`${args.ip} needs authentication`, { variant: 'error'})
+                }
+            }
         }
         this.ipsRequested = this.ipsRequested.filter(item => item !== args.ip);
         this.scanIps()
@@ -129,6 +149,10 @@ class FindDevices extends React.Component {
         let cmnd = "Status 0"
         // let ip = IPAddress.Address4.fromBigInteger(ipNum).correctForm();
         let url = 'http://' + ip + '/cm?cmnd=' + encodeURI(cmnd);
+
+        if (this.state.enableAuth) {
+            url += `&user=${encodeURI(this.state.username)}&password=${encodeURI(this.state.password)}`
+        }
 
         superagent.get(url)
             .timeout({
@@ -219,6 +243,11 @@ class FindDevices extends React.Component {
         onButtonClick: (mac, event) => this.addDevice(mac, event),
     }]
 
+    onAuthEnableChanged(event) {
+        event.stopPropagation()
+        this.setState({ enableAuth: event.target.checked })
+    }
+
     render() {
 
         let discoveredDevices = this.props.deviceManager.getDiscoveredDevices()
@@ -273,6 +302,40 @@ class FindDevices extends React.Component {
                 <Typography>
                     IPs to scan : {this.state.totalAddresses}
                 </Typography>
+                <Box display="flex" alignItems="baseline" flexDirection="row">
+                    <FormControlLabel
+                        value="end"
+                        control={<Checkbox
+                            disabled={this.state.searching ? 1 : 0}
+                            color="primary"
+                            checked={this.state.enableAuth}
+                            onChange={(event) => this.onAuthEnableChanged(event)}
+                        />}
+                        label="Use Authentication"
+                        labelPlacement="end"
+                    />
+                    <TextField
+                        id="outlined-name"
+                        label="Username"
+                        placeholder="Username"
+                        disabled={this.state.enableAuth && !this.state.searching ? 0 : 1}
+                        margin="normal"
+                        variant="outlined"
+                        value={this.state.username}
+                        onChange={(event) => this.setState({ username: event.target.value })}
+                    />
+                    <TextField
+                        id="outlined-name"
+                        label="Password"
+                        placeholder="Password"
+                        type="password"
+                        margin="normal"
+                        variant="outlined"
+                        disabled={this.state.enableAuth && !this.state.searching ? 0 : 1}
+                        value={this.state.password}
+                        onChange={(event) => this.setState({ password: event.target.value })}
+                    />
+                </Box>
                 {this.state.searching ?
                     <LinearProgress variant="buffer" value={this.state.numIpsCompleted} valueBuffer={this.state.numIpsRequested} />
                     : null}
@@ -298,4 +361,4 @@ class FindDevices extends React.Component {
 
 
 
-export default FindDevices;
+export default withSnackbar(FindDevices)

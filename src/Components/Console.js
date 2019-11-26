@@ -103,6 +103,11 @@ class Console extends React.Component {
             }
         }
         let url = 'http://' + this.deviceIPAddress + '/cs?c2=' + this.nextCommanNumber;
+
+        if (this.deviceInfo.authInfo) {
+            url += `&user=${encodeURI(this.deviceInfo.authInfo.username)}&password=${encodeURI(this.deviceInfo.authInfo.password)}`
+        }
+
         superagent.get(url)
             .timeout({
                 response: 1000,  // Wait 5 seconds for the server to start sending,

@@ -129,7 +129,7 @@ class DeviceManager {
         if (this.deviceConnectors[macAddress]) {
             return this.deviceConnectors[macAddress];
         } else {
-            let deviceConnector = new TasmotaDeviceConnector(ipAddress);
+            let deviceConnector = new TasmotaDeviceConnector(ipAddress, this.getDevice(macAddress).authInfo);
             this.deviceConnectors[macAddress] = deviceConnector;
             return deviceConnector;
         }

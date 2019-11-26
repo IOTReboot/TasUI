@@ -14,9 +14,10 @@ class TasmotaDeviceConnector {
     timer = null;
     // responseMap = [{}];
 
-    constructor(ipAddress) {
+    constructor(ipAddress, authInfo) {
         this.deviceIPAddress = ipAddress;
         this.online = false;
+        this.authInfo = authInfo
     }
 
     updateIpAddress(ipAddress) {
@@ -118,6 +119,11 @@ class TasmotaDeviceConnector {
             this.onCommandResponse({ key: this.cmnd, response: response, error: err, url: this.url, ip: this.ip, success: err ? false : true });
         }
         let url = 'http://' + this.deviceIPAddress + '/cm?cmnd=' + encodeURI(cmnd);
+
+        if (this.authInfo) {
+            url += `&user=${encodeURI(this.authInfo.username)}&password=${encodeURI(this.authInfo.password)}`
+        }
+
         superagent.get(url)
             .timeout({
                 response: 5000,  // Wait 5 seconds for the server to start sending,

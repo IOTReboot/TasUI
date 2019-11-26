@@ -165,6 +165,7 @@ class Console extends React.Component {
 
     componentWillUnmount() {
         this.stopWebLog()
+        this.deviceConnector.disconnect(this);
     }
 
     toCamelCase(string) {

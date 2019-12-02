@@ -161,7 +161,7 @@ class App extends Component {
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" noWrap>
-              IOTReboot
+              TasUI
             </Typography>
           </Toolbar>
         </AppBar>
@@ -175,7 +175,7 @@ class App extends Component {
         >
           <div className={classes.toolbar} >
             <Typography variant="h6" noWrap className={classes.title}>
-                IOTReboot UI
+                TasUI
             </Typography>
             <Typography variant="subtitle2" noWrap>
                 v0.0.1

@@ -69,6 +69,10 @@ class Devices extends React.Component {
         }
     }
 
+    componentDidMount() {
+        window.gtag('event', 'screen_view', { 'screen_name': 'Devices'});
+    }
+
     render() {
 
         return (

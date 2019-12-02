@@ -1,5 +1,5 @@
 {
-  "name": "iotreboot-ui",
+  "name": "tasui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -40,13 +40,13 @@
   "main": "public/electron.js",
   "homepage": "./",
   "author": {
-    "name": "IOTReboot",
-    "email": "iotreboot@shantur.com",
-    "url": "http://iotreboot.shantur.com"
+    "name": "TasUI",
+    "email": "tasui@shantur.com",
+    "url": "http://tasui.shantur.com"
   },
   "build": {
-    "appId": "com.shantur.iotreboot",
-    "productName": "IOTReboot UI",
+    "appId": "com.shantur.tasui",
+    "productName": "TasUI",
     "copyright": "Copyright © 2019 ${author}",
     "mac": {
       "category": "public.app-category.utilities"

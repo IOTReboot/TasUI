@@ -152,6 +152,7 @@ class Console extends React.Component {
     }
 
     componentDidMount() {
+        window.gtag('event', 'screen_view', { 'screen_name': 'Console'});
         this.fireCommand('Weblog')
     }
 

@@ -41,6 +41,10 @@ class FindDevices extends React.Component {
 
     }
 
+    componentDidMount() {
+        window.gtag('event', 'screen_view', { 'screen_name': 'DiscoverDevices'});
+    }
+
     componentWillMount() {
         this.calculateTotalIPs(this.state.ipFrom, this.state.ipTo);
     }

@@ -13,6 +13,7 @@ class DeviceDetails extends Component {
     }
 
     componentDidMount() {
+        window.gtag('event', 'screen_view', { 'screen_name': 'DeviceSettings'});
         this.setState({
             macAddress: this.props.match.params.mac
         })

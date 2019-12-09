@@ -161,12 +161,12 @@ class TasmotaDevice extends Component {
                 this.updateDeviceInfoState({ status0Response: response })
             } else if (cmnd === 'Template') {
                 this.updateDeviceInfoState({ templateResponse: response })
-                this.deviceConnector.performCommandOnDevice('GPIOs')
+                this.deviceConnector.performCommandOnDevice('GPIOS 255')
             } else if (cmnd === 'GPIO 255') {
                 // console.log('GPIO Response : %O', response)
                 this.updateDeviceInfoState({ gpio255Response: response })
-                this.deviceConnector.performCommandOnDevice('GPIOs')
-            } else if (cmnd === 'GPIOs') {
+                this.deviceConnector.performCommandOnDevice('GPIOS 255')
+            } else if (cmnd === 'GPIOS 255') {
                 this.updateDeviceInfoState({ gpiosResponse: response })
             } else if (cmnd === 'State') {
 
@@ -643,8 +643,6 @@ class TasmotaDevice extends Component {
             if (!Array.isArray(this.state.deviceInfo.gpiosResponse[keys[n]])) {
                 if (this.state.deviceInfo.gpiosResponse[keys[n]][gpio]) {
                     return this.state.deviceInfo.gpiosResponse[keys[n]][gpio]
-                } else {
-                    return 'User'
                 }
             } else {
                 for (let i = 0; i < this.state.deviceInfo.gpiosResponse[keys[n]].length; i++) {
@@ -654,6 +652,8 @@ class TasmotaDevice extends Component {
                 }
             }
         }
+
+        return 'Unknown'
     }
 
     renderTemplateResponse() {

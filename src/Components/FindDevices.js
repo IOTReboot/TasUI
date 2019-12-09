@@ -27,8 +27,8 @@ class FindDevices extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            ipFrom: "192.168.10.1",
-            ipTo: "192.168.10.254",
+            ipFrom: this.props.appConfig.getAppConfig('ip_scan_from') || "192.168.10.1",
+            ipTo: this.props.appConfig.getAppConfig('ip_scan_to') || "192.168.10.254",
             totalAddresses: "",
             numIpsRequested: 0,
             numIpsCompleted: 0,
@@ -173,6 +173,8 @@ class FindDevices extends React.Component {
         let from = new IPAddress.Address4(this.state.ipFrom).bigInteger();
         let to = new IPAddress.Address4(this.state.ipTo).bigInteger();
 
+        this.props.appConfig.putAppConfig('ip_scan_from', this.state.ipFrom)
+        this.props.appConfig.putAppConfig('ip_scan_to', this.state.ipTo)
 
         for (let ipNum = from; ipNum <= to; ipNum++) {
             this.ipsToScan.push(IPAddress.Address4.fromBigInteger(ipNum).correctForm());

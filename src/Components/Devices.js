@@ -7,6 +7,7 @@ import DeviceList from './DeviceList';
 import DisplayTypeButtons from './DisplayTypeButtons';
 import InfoIcon from '@material-ui/icons/Info';
 import CallToActionIcon from '@material-ui/icons/CallToAction';
+import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 
 class Devices extends React.Component {
     constructor(props) {
@@ -33,6 +34,11 @@ class Devices extends React.Component {
         icon: <CallToActionIcon />,
         onButtonClick: (mac, event) => this.openDeviceConsole(mac, event),
     }, {
+        toolTip: "WebUI",
+        label: "webui",
+        icon: <OpenInBrowserIcon />,
+        onButtonClick: (mac, event) => this.openWebUI(mac, event),
+    }, {
         toolTip: "Delete",
         label: "delete",
         icon: <DeleteIcon />,
@@ -52,6 +58,12 @@ class Devices extends React.Component {
     openDeviceConsole = (macAddress, event) => {
         event.stopPropagation();
         this.props.history.push('/console/' + macAddress);
+    }
+
+    openWebUI  = (macAddress, event) => {
+        event.stopPropagation();
+        let ip = this.props.deviceManager.getDevice(macAddress).status0Response.StatusNET.IPAddress
+        window.open(`http://${ip}`)
     }
 
     deleteDevice = (macAddress, event) => {

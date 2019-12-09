@@ -224,10 +224,16 @@ class TasmotaDevice extends Component {
         return (
             <TableRow key={this.props.macAddress}>
                 <TableCell component="th" scope="row">
-                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Box fontSize={16}>
+                            {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                        </Box>
+                        <Box display="flex" flexDirection="row">
+                            {this.props.actionButtons}
+                        </Box>
+                    </Box>
                 </TableCell>
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
-                <TableCell align="center">{this.props.actionButtons}</TableCell>
                 <TableCell>{this.getModuleDisplayText()}</TableCell>
                 <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
                 <TableCell>{this.renderDetailsControlsDimmers('Table')}</TableCell>
@@ -239,10 +245,16 @@ class TasmotaDevice extends Component {
         return (
             <TableRow key={this.props.macAddress}>
                 <TableCell component="th" scope="row">
-                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Box fontSize={16}>
+                            {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                        </Box>
+                        <Box display="flex" flexDirection="row">
+                            {this.props.actionButtons}
+                        </Box>
+                    </Box>
                 </TableCell>
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
-                <TableCell align="center">{this.props.actionButtons}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Uptime}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.MqttCount}</TableCell>
@@ -262,10 +274,16 @@ class TasmotaDevice extends Component {
         return (
             <TableRow key={this.props.macAddress}>
                 <TableCell component="th" scope="row">
-                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Box fontSize={16}>
+                            {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                        </Box>
+                        <Box display="flex" flexDirection="row">
+                            {this.props.actionButtons}
+                        </Box>
+                    </Box>
                 </TableCell>
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
-                <TableCell align="center">{this.props.actionButtons}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.BSSId}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.LinkCount}</TableCell>
@@ -284,10 +302,16 @@ class TasmotaDevice extends Component {
         return (
             <TableRow key={this.props.macAddress}>
                 <TableCell component="th" scope="row">
-                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Box fontSize={16}>
+                            {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                        </Box>
+                        <Box display="flex" flexDirection="row">
+                            {this.props.actionButtons}
+                        </Box>
+                    </Box>
                 </TableCell>
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
-                <TableCell align="center">{this.props.actionButtons}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.MqttCount}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.Status.Topic}</TableCell>
@@ -308,10 +332,16 @@ class TasmotaDevice extends Component {
         return (
             <TableRow key={this.props.macAddress}>
                 <TableCell component="th" scope="row">
-                    {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Box fontSize={16}>
+                            {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                        </Box>
+                        <Box display="flex" flexDirection="row">
+                            {this.props.actionButtons}
+                        </Box>
+                    </Box>
                 </TableCell>
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
-                <TableCell align="center">{this.props.actionButtons}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Version}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.Core}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusFWR.SDK}</TableCell>

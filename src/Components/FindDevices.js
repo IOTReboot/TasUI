@@ -14,6 +14,7 @@ import DeviceList from './DeviceList';
 import DisplayTypeButtons from './DisplayTypeButtons';
 import InfoIcon from '@material-ui/icons/Info';
 import CallToActionIcon from '@material-ui/icons/CallToAction';
+import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import { withSnackbar } from 'notistack';
 
 
@@ -216,6 +217,12 @@ class FindDevices extends React.Component {
         this.props.history.push('/console/' + macAddress);
     }
 
+    openWebUI  = (macAddress, event) => {
+        event.stopPropagation();
+        let ip = this.props.deviceManager.getDevice(macAddress).status0Response.StatusNET.IPAddress
+        window.open(`http://${ip}`)
+    }
+
     commonButtons = [{
         toolTip: "Details",
         label: "details",
@@ -231,6 +238,11 @@ class FindDevices extends React.Component {
         label: "console",
         icon: <CallToActionIcon />,
         onButtonClick: (mac, event) => this.openDeviceConsole(mac, event),
+    }, {
+        toolTip: "WebUI",
+        label: "webui",
+        icon: <OpenInBrowserIcon />,
+        onButtonClick: (mac, event) => this.openWebUI(mac, event),
     }]
 
     knownDeviceButtons = [...this.commonButtons, {

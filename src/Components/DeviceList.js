@@ -13,8 +13,6 @@ import React from 'react';
 import TasmotaDevice from '../DeviceTypes/TasmotaDevice';
 import ActionButton from './ActionButton';
 
-
-
 class DeviceList extends React.Component {
     constructor(props) {
         super(props);
@@ -73,9 +71,8 @@ class DeviceList extends React.Component {
     renderTableHeaderStatus() {
         return (
             <TableRow>
-                <TableCell>Friendly Name</TableCell>
+                <TableCell align="center">Friendly Name</TableCell>
                 <TableCell />
-                <TableCell align="center">Actions</TableCell>
                 <TableCell>Module</TableCell>
                 <TableCell>Power</TableCell>
                 <TableCell>Light Controls</TableCell>
@@ -89,7 +86,6 @@ class DeviceList extends React.Component {
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
                 <TableCell />
-                <TableCell align="center">Actions</TableCell>
                 <TableCell>RSSI</TableCell>
                 <TableCell>Uptime</TableCell>
                 <TableCell>Mqtt Count</TableCell>
@@ -111,7 +107,6 @@ class DeviceList extends React.Component {
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
                 <TableCell />
-                <TableCell align="center">Actions</TableCell>
                 <TableCell>Version</TableCell>
                 <TableCell>Core</TableCell>
                 <TableCell>SDK</TableCell>
@@ -127,7 +122,6 @@ class DeviceList extends React.Component {
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
                 <TableCell />
-                <TableCell align="center">Actions</TableCell>
                 <TableCell>RSSI</TableCell>
                 <TableCell>BSSID</TableCell>
                 <TableCell>Link Count</TableCell>
@@ -148,7 +142,6 @@ class DeviceList extends React.Component {
             <TableRow>
                 <TableCell>Friendly Name</TableCell>
                 <TableCell />
-                <TableCell align="center">Actions</TableCell>
                 <TableCell>RSSI</TableCell>
                 <TableCell>Mqtt Count</TableCell>
                 <TableCell>Topic</TableCell>

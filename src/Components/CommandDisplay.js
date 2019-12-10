@@ -49,8 +49,12 @@ class CommandDisplay extends React.Component {
         let defaultOption = this.commandOptions[0]
 
         let defaultInputSelection
-        if (this.props.commandName.endsWith("<x>")) {
-            this.inputRange = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        if (this.props.commandName.endsWith("<x>") && this.props.command.indexed) {
+            this.inputRange = []
+            let range = this.props.command.indexRange.split('..');
+            for (var i = range[0]; i <= range[1]; i++) {
+                this.inputRange.push(i);
+            }
             defaultInputSelection = 1
         } else {
             this.inputRange = [""]

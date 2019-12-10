@@ -336,6 +336,8 @@ function updatedConfig() {
     }
 
     TasmotaConfig_07010200.commands.SetOptions.SetOption77 = {
+        "indexed": false,
+        "indexRange": "",  
         "options": [
             {
                 "display": "0",
@@ -353,6 +355,8 @@ function updatedConfig() {
 
 
     TasmotaConfig_07010200.commands.WiFi.CORS = {
+        "indexed": false,
+        "indexRange": "",  
         "options": [
             {
                 "display": "",

@@ -16,9 +16,11 @@
 */
 
 import TasmotaConfig_06070000 from './TasmotaConfig-6.7.0.0'
+import { TasmotaConfig_07010200 } from './TasmotaConfig-7.1.2.0'
 
 const TasmotaVersionedConfig = {
     TasmotaConfig_06070000: TasmotaConfig_06070000,
+    TasmotaConfig_07010200: TasmotaConfig_07010200,
 }
 
 function getConfigurationForVersion(version) {

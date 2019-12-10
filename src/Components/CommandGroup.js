@@ -39,7 +39,7 @@ class CommandGroup extends React.Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Box display="flex" flexDirection="column" flexGrow={1}>
-                        {Object.entries(this.props.commandGroup).map(([commandName, command]) => {
+                        {Object.entries(this.props.commandGroup).sort().map(([commandName, command]) => {
                             return (
                                 <CommandDisplay commandName={commandName} command={command} deviceConnector={this.props.deviceConnector} />
                             )

@@ -33,12 +33,12 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 
-import Devices from './Components/Devices';
+import Devices from './Screens/Devices';
 import DeviceManager from './DeviceManagement/DeviceManager';
-import DeviceDetails from './Components/DeviceDetails';
-import DeviceSettings from './Components/DeviceSettings';
-import FindDevices from './Components/FindDevices';
-import Console from './Components/Console'
+import DeviceDetails from './Screens/DeviceDetails';
+import DeviceSettings from './Screens/DeviceSettings';
+import FindDevices from './Screens/FindDevices';
+import Console from './Screens/Console'
 import AppConfig from './Configuration/AppConfig'
 
 const drawerWidth = 240;
@@ -193,9 +193,9 @@ class App extends Component {
             <Typography variant="h6" noWrap className={classes.title}>
                 TasUI
             </Typography>
-            <Typography variant="subtitle2" noWrap>
-                v0.0.1
-            </Typography>
+            <Link variant="subtitle2" noWrap onClick={() => window.open(`https://github.com/IOTReboot/TasUI/tree/${process.env.REACT_APP_GIT_SHA}`)}>
+              {process.env.REACT_APP_VERSION} {process.env.REACT_APP_GIT_BRANCH} ({process.env.REACT_APP_GIT_SHA})
+            </Link>
           </div>
           <Divider />
           <List>

@@ -1,7 +1,7 @@
 <!--
 
   Copyright (C) 2019  Shantur Rathore
-  
+
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
@@ -24,13 +24,13 @@
 <head>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DBPNVNLBMB"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GA_KEY%"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
-    gtag('config', 'G-DBPNVNLBMB', { 'app_name': 'TasUI' });
+    gtag('config', "%REACT_APP_GA_KEY%", { 'app_name': 'TasUI', 'send_page_view': false });
   </script>
 
   <meta charset="utf-8">

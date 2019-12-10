@@ -28,10 +28,10 @@
     "wait-on": "^3.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "start": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` react-scripts start",
+    "build": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` react-scripts build",
+    "test": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` react-scripts test --env=jsdom",
+    "eject": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",

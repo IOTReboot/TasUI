@@ -28,6 +28,9 @@ import List from '@material-ui/core/List';
 import { Typography, Box, Radio, TextField, Button, Divider, TextareaAutosize } from '@material-ui/core';
 import { Scrollbar } from 'react-scrollbars-custom';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import HelpIcon from '@material-ui/icons/Help';
+import IconButton from '@material-ui/core/IconButton';
+
 
 import ActionButton from './ActionButton'
 
@@ -280,6 +283,10 @@ class CommandDisplay extends React.Component {
         )
     }
 
+    openHelp(event, command) {
+        event.stopPropagation()
+        window.open(`https://tasmota.github.io/docs/#/Commands?id=${this.props.commandName.toLowerCase().replace("<x>", "")}`, "tascommands")
+    }
 
     render() {
 
@@ -290,8 +297,13 @@ class CommandDisplay extends React.Component {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography style={{ flexBasis: "33%" }}>{this.props.commandName}</Typography>
-                    <Typography color="textSecondary" >{this.props.command.description.substring(0, 60)}</Typography>
+                    <Box display="flex" flexDirection="row" alignItems="center" style={{ flexBasis: "33%" }}>
+                        <Typography>{this.props.commandName}</Typography>
+                        <IconButton onClick={(event) => this.openHelp(event,this.props.commandName)}>
+                            <HelpIcon />
+                        </IconButton>
+                    </Box>
+                    <Typography style={{ alignSelf: "center" }} color="textSecondary" >{this.props.command.description.substring(0, 60)}</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Box display="flex" flexDirection="column" flexWrap="wrap">

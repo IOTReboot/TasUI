@@ -58,7 +58,7 @@ class CommandDisplay extends React.Component {
             for (var i = range[0]; i <= range[1]; i++) {
                 this.inputRange.push(i);
             }
-            defaultInputSelection = 1
+            defaultInputSelection = this.inputRange[0]
         } else {
             this.inputRange = [""]
             defaultInputSelection = ""
@@ -166,7 +166,12 @@ class CommandDisplay extends React.Component {
             switch (option.type) {
                 case "select":
                     if (option.display !== "Read") {
-                        command += ` ${option.display}`
+                        let arg = option.display
+                        let slashIndex = arg.indexOf("/")
+                        if (slashIndex > 0) {
+                            arg = arg.substring(0, slashIndex)
+                        }
+                        command += ` ${arg}`
                     }
                     break
 
@@ -249,7 +254,7 @@ class CommandDisplay extends React.Component {
                 <form noValidate autoComplete="off">
                     <TextField
                         style={{ width: 1000, height: 100 }}
-                        rows="2"
+                        rows="1"
                         multiline
                         id="commandToSend"
                         label="Command to Send"

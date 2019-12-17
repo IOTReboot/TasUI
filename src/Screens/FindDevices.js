@@ -15,7 +15,7 @@
 
 */
 
-import { Typography, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Typography, FormControlLabel, Checkbox, IconButton } from '@material-ui/core';
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
@@ -32,7 +32,10 @@ import DisplayTypeButtons from '../Components/DisplayModeButtons';
 import InfoIcon from '@material-ui/icons/Info';
 import CallToActionIcon from '@material-ui/icons/CallToAction';
 import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Tooltip from '@material-ui/core/Tooltip';
 import { withSnackbar } from 'notistack';
+import copyToClipboard from '../Utils/CopyToClipboard';
 
 
 
@@ -306,9 +309,29 @@ class FindDevices extends React.Component {
 
         return (
             <Box display="flex" flexGrow={1} flexDirection="column" style={{ overflow: "visible", position: "absolute" }}>
-                <Box display="flex" alignItems="baseline" flexDirection="row">
+                <Box display="flex" alignItems="center" flexDirection="row">
                     <h1>Discover Active Devices</h1>
                     <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
+                </Box>
+                <Box display="flex" alignItems="center" flexDirection="row">
+                    <Typography>
+                        Enable TasUI for Tasmota version 7.1.2.3 or earlier with "SetOption73 1"
+                    </Typography>
+                    <Tooltip title="Copy command">
+                        <IconButton onClick={() => copyToClipboard('SetOption73 1')}>
+                            <FileCopyIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+                <Box display="flex" alignItems="center" flexDirection="row">
+                    <Typography>
+                        Enable TasUI for Tasmota version 7.1.2.4 or higher with "CORS http://tasui.shantur.com"
+                    </Typography>
+                    <Tooltip title="Copy command">
+                        <IconButton onClick={() => copyToClipboard('CORS http://tasui.shantur.com')}>
+                            <FileCopyIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
                 <Box display="flex" alignItems="baseline" flexDirection="row">
                     <TextField

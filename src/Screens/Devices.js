@@ -106,7 +106,7 @@ class Devices extends React.Component {
 
         return (
             <Box display="flex" flexGrow={1} flexDirection="column" style={{ overflow: "visible", position: "absolute" }}>
-                <Box display="flex" flexDirection="row" alignItems="baseline">
+                <Box display="flex" flexDirection="row" alignItems="center">
                     <h1>Devices</h1>
                     <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
                 </Box>

@@ -47,6 +47,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ContactlessIcon from '@material-ui/icons/Contactless';
 import CommandGroup from '../Components/CommandGroup';
 import EditableSetting from '../Components/EditableSetting';
+import copyToClipboard from '../Utils/CopyToClipboard';
 
 const styles = theme => ({
     imageContainer: {
@@ -555,18 +556,6 @@ class TasmotaDevice extends Component {
 
     }
 
-    copyToClipboard() {
-        const el = document.createElement('textarea');
-        el.value = JSON.stringify(this.state.deviceInfo.status0Response, null, 2)
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-    }
-
     convertHexStringToBitArray(bytesString) {
         var bitArray = [];
         var digitValue = 0;
@@ -907,7 +896,7 @@ class TasmotaDevice extends Component {
                 <TableRow>
                     <TableCell align="left"><Typography>Status Report</Typography></TableCell>
                     <TableCell align="center" colSpan={2}>
-                        <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => this.copyToClipboard(event)}>Copy to clipboard</Button>
+                        <Button variant="contained" key="copy-to-clipboard-button" onClick={(event) => copyToClipboard(JSON.stringify(this.state.deviceInfo.status0Response, null, 2))}>Copy to clipboard</Button>
                     </TableCell>
                 </TableRow>
 

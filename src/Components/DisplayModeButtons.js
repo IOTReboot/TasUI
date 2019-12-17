@@ -68,7 +68,7 @@ class DisplayModeButtons extends React.Component {
 
                 <ActionButton
                     toolTip="Mqtt View"
-                    label="MQTt"
+                    label="MQTT"
                     icon={<SettingsInputAntennaIcon />}
                     onButtonClick={() => this.props.setState({ displayMode: "Table_Mqtt" })}
                     selected={this.props.displayMode === "Table_Mqtt"}

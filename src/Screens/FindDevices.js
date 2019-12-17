@@ -64,6 +64,7 @@ class FindDevices extends React.Component {
 
     componentDidMount() {
         window.gtag('event', 'screen_view', { 'screen_name': 'DiscoverDevices'});
+        window.gtag('event', 'DiscoverDevices');
     }
 
     componentWillMount() {
@@ -190,6 +191,8 @@ class FindDevices extends React.Component {
 
     handleFindClicked() {
 
+        window.gtag('event', 'StartDiscovery');
+
         let from = new IPAddress.Address4(this.state.ipFrom).bigInteger();
         let to = new IPAddress.Address4(this.state.ipTo).bigInteger();
 
@@ -206,6 +209,7 @@ class FindDevices extends React.Component {
     }
 
     handleStopClicked() {
+        window.gtag('event', 'StopDiscovery');
         this.ipsToScan = [];
         this.scanIps();
     }
@@ -216,6 +220,7 @@ class FindDevices extends React.Component {
     }
 
     addDevice = (macAddress, event) => {
+        window.gtag('event', 'AddDevice');
         console.log('Add Device ' + macAddress)
         event.stopPropagation();
         this.props.deviceManager.addDevice(macAddress, this.props.deviceManager.getDiscoveredDevices()[macAddress]);
@@ -223,6 +228,7 @@ class FindDevices extends React.Component {
     }
 
     deleteDevice = (macAddress, event) => {
+        window.gtag('event', 'DeleteDevice');
         console.log('Delete Device ' + macAddress)
         event.stopPropagation();
         this.props.deviceManager.removeDevice(macAddress);
@@ -240,6 +246,7 @@ class FindDevices extends React.Component {
     }
 
     openWebUI  = (macAddress, event) => {
+        window.gtag('event', 'OpenWebUI');
         event.stopPropagation();
         let ip = this.props.deviceManager.getDevice(macAddress).status0Response.StatusNET.IPAddress
         window.open(`http://${ip}`)

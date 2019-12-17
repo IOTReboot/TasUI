@@ -99,6 +99,7 @@ class Devices extends React.Component {
     }
 
     componentDidMount() {
+        window.gtag('event', 'Devices', { 'value' : this.state.displayMode });
         window.gtag('event', 'screen_view', { 'screen_name': 'Devices'});
     }
 

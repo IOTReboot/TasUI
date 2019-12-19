@@ -214,6 +214,8 @@ class TasmotaDevice extends Component {
                 this.updateDeviceInfoState({ status0Response: status0Clone })
             } else if (cmnd === 'Module') {
                 this.updateDeviceInfoState({ moduleResponse: response })
+            } else if (cmnd === 'WifiPower') {
+                this.updateDeviceInfoState({ wifiPowerResponse: response })
             }
         }
     }
@@ -303,6 +305,7 @@ class TasmotaDevice extends Component {
                 </TableCell>
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.RSSI}</TableCell>
+                <TableCell>{this.state.deviceInfo.wifiPowerResponse ? this.state.deviceInfo.wifiPowerResponse.WifiPower : 'Unsupported'}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.BSSId}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.LinkCount}</TableCell>
                 <TableCell>{this.state.deviceInfo.status0Response.StatusSTS.Wifi.Downtime}</TableCell>

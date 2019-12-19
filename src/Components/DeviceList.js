@@ -140,6 +140,7 @@ class DeviceList extends React.Component {
                 <TableCell>Friendly Name</TableCell>
                 <TableCell />
                 <TableCell>RSSI</TableCell>
+                <TableCell>WifiPower</TableCell>
                 <TableCell>BSSID</TableCell>
                 <TableCell>Link Count</TableCell>
                 <TableCell>Downtime</TableCell>

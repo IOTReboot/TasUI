@@ -22,6 +22,7 @@ const commands = {
     State: 'State',
     Status8: 'Status 8',
     Module: 'Module',
+    WifiPower: 'WifiPower',
 }
 
 class TasmotaDeviceConnector {
@@ -93,6 +94,10 @@ class TasmotaDeviceConnector {
         this.performCommandOnDeviceDirect(commands.Status0);
     }
 
+    getWifiPower() {
+        this.performCommandOnDeviceDirect(commands.WifiPower);
+    }
+
     getModule() {
         this.performCommandOnDeviceDirect(commands.Module);
     }
@@ -122,6 +127,8 @@ class TasmotaDeviceConnector {
             this.getStatus8()
         } else if (args.key === commands.Status0) {
             this.getModule()
+        } else if (args.key === commands.Module) {
+            this.getWifiPower()
         }
     }
 

@@ -169,7 +169,7 @@ class FindDevices extends React.Component {
     }
 
     enableCorsAndSendRequest(ip) {
-        let cmnd = `Backlog SetOption73 1; CORS ${window.location.protocol}\\\\${window.location.hostname}`
+        let cmnd = `Backlog SetOption73 1; CORS ${window.location.protocol}//${window.location.hostname}`
 
         if (window.location.port && window.location.port !== "") {
             cmnd += `:${window.location.port}`
@@ -184,8 +184,8 @@ class FindDevices extends React.Component {
                 response: 5000,  // Wait 5 seconds for the server to start sending,
                 deadline: 6000, // but allow 6 seconds for the file to finish loading.
             }).end(function (err, res) {
-                this.sendRequest(ip)
-            }.bind(this));
+                setTimeout(this.obj.sendRequest.bind(this.obj, this.ip), 1000);
+            }.bind({obj: this, ip: ip}));
     }
 
     sendRequest(ip) {

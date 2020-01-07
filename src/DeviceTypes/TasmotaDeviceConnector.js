@@ -142,10 +142,10 @@ class TasmotaDeviceConnector {
             // console.log ("Error : %O Response : %O", err, response);
             this.onCommandResponse({ key: this.cmnd, response: response, error: err, url: this.url, ip: this.ip, success: err ? false : true });
         }
-        let url = 'http://' + this.deviceIPAddress + '/cm?cmnd=' + encodeURI(cmnd);
+        let url = 'http://' + this.deviceIPAddress + '/cm?cmnd=' + encodeURIComponent(cmnd);
 
         if (this.authInfo) {
-            url += `&user=${encodeURI(this.authInfo.username)}&password=${encodeURI(this.authInfo.password)}`
+            url += `&user=${encodeURIComponent(this.authInfo.username)}&password=${encodeURIComponent(this.authInfo.password)}`
         }
 
         superagent.get(url)

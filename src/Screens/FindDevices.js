@@ -15,27 +15,23 @@
 
 */
 
-import { Typography, FormControlLabel, Checkbox, IconButton } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Typography } from '@material-ui/core';
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from '@material-ui/icons/Add';
+import CallToActionIcon from '@material-ui/icons/CallToAction';
 import DeleteIcon from '@material-ui/icons/Delete';
+import InfoIcon from '@material-ui/icons/Info';
+import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
 import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 import IPAddress from 'ip-address';
+import { withSnackbar } from 'notistack';
 import React from 'react';
 import superagent from "superagent";
 import DeviceList from '../Components/DeviceList';
 import DisplayTypeButtons from '../Components/DisplayModeButtons';
-import InfoIcon from '@material-ui/icons/Info';
-import CallToActionIcon from '@material-ui/icons/CallToAction';
-import OpenInBrowserIcon from '@material-ui/icons/OpenInBrowser';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import Tooltip from '@material-ui/core/Tooltip';
-import { withSnackbar } from 'notistack';
-import copyToClipboard from '../Utils/CopyToClipboard';
 
 
 
@@ -56,7 +52,8 @@ class FindDevices extends React.Component {
             displayMode: "Table_Status",
             username: '',
             password: '',
-            enableAuth: false
+            enableAuth: false,
+            enableCorsAutomatically: true,
 
         }
 
@@ -151,7 +148,11 @@ class FindDevices extends React.Component {
             while (this.ipsRequested.length < 25 && this.ipsToScan.length) {
                 let ip = this.ipsToScan.shift()
                 this.ipsRequested.push(ip);
-                this.sendRequest(ip)
+                if (this.state.enableCorsAutomatically) {
+                    this.enableCorsAndSendRequest(ip)
+                } else {
+                    this.sendRequest(ip)
+                }
             }
 
             this.setState({
@@ -167,6 +168,26 @@ class FindDevices extends React.Component {
         }
     }
 
+    enableCorsAndSendRequest(ip) {
+        let cmnd = `Backlog SetOption73 1; CORS ${window.location.protocol}\\\\${window.location.hostname}`
+
+        if (window.location.port && window.location.port !== "") {
+            cmnd += `:${window.location.port}`
+        }
+
+        let url = 'http://' + ip + '/cm?cmnd=' + encodeURIComponent(cmnd).replace(";", "%3B");
+
+        console.log("Enabling CORS for with " + url)
+
+        superagent.get(url)
+            .timeout({
+                response: 5000,  // Wait 5 seconds for the server to start sending,
+                deadline: 6000, // but allow 6 seconds for the file to finish loading.
+            }).end(function (err, res) {
+                this.sendRequest(ip)
+            }.bind(this));
+    }
+
     sendRequest(ip) {
         var callback = function (err, response) {
             this.onCommandResponse({ key: this.cmnd, response: response, error: err, ip: this.ip, url: this.url, success: err ? false : true });
@@ -174,10 +195,10 @@ class FindDevices extends React.Component {
 
         let cmnd = "Status 0"
         // let ip = IPAddress.Address4.fromBigInteger(ipNum).correctForm();
-        let url = 'http://' + ip + '/cm?cmnd=' + encodeURI(cmnd);
+        let url = 'http://' + ip + '/cm?cmnd=' + encodeURIComponent(cmnd);
 
         if (this.state.enableAuth) {
-            url += `&user=${encodeURI(this.state.username)}&password=${encodeURI(this.state.password)}`
+            url += `&user=${encodeURIComponent(this.state.username)}&password=${encodeURIComponent(this.state.password)}`
         }
 
         superagent.get(url)
@@ -293,6 +314,11 @@ class FindDevices extends React.Component {
         this.setState({ enableAuth: event.target.checked })
     }
 
+    onEnableCorsAutomaticallyChanged(event) {
+        event.stopPropagation()
+        this.setState({ enableCorsAutomatically: event.target.checked })
+    }
+
     render() {
 
         let discoveredDevices = this.props.deviceManager.getDiscoveredDevices()
@@ -320,26 +346,6 @@ class FindDevices extends React.Component {
                     <h1>Discover Active Devices</h1>
                     <DisplayTypeButtons displayMode={this.state.displayMode} setState={(state) => this.setState(state)} />
                 </Box>
-                <Box display="flex" alignItems="center" flexDirection="row">
-                    <Typography>
-                        Enable TasUI for Tasmota version 7.1.2.3 or earlier with "SetOption73 1"
-                    </Typography>
-                    <Tooltip title="Copy command">
-                        <IconButton onClick={() => copyToClipboard('SetOption73 1')}>
-                            <FileCopyIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-                <Box display="flex" alignItems="center" flexDirection="row">
-                    <Typography>
-                        Enable TasUI for Tasmota version 7.1.2.4 or higher with "CORS http://tasui.shantur.com"
-                    </Typography>
-                    <Tooltip title="Copy command">
-                        <IconButton onClick={() => copyToClipboard('CORS http://tasui.shantur.com')}>
-                            <FileCopyIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
                 <Box display="flex" alignItems="baseline" flexDirection="row">
                     <TextField
                         id="outlined-name"
@@ -348,6 +354,7 @@ class FindDevices extends React.Component {
                         margin="normal"
                         variant="outlined"
                         value={this.state.ipFrom}
+                        disabled={this.state.searching ? 1 : 0}
                         onChange={this.handleIPFromChange}
                     />
                     <TextField
@@ -357,6 +364,7 @@ class FindDevices extends React.Component {
                         margin="normal"
                         variant="outlined"
                         value={this.state.ipTo}
+                        disabled={this.state.searching ? 1 : 0}
                         onChange={this.handleIPToChange}
                     />
                     {!this.state.searching ?
@@ -367,6 +375,19 @@ class FindDevices extends React.Component {
                 <Typography>
                     IPs to scan : {this.state.totalAddresses}
                 </Typography>
+                <Box display="flex" alignItems="baseline" flexDirection="row">
+                    <FormControlLabel
+                        value="end"
+                        control={<Checkbox
+                            disabled={this.state.searching ? 1 : 0}
+                            color="primary"
+                            checked={this.state.enableCorsAutomatically}
+                            onChange={(event) => this.onEnableCorsAutomaticallyChanged(event)}
+                        />}
+                        label="Enable CORS for TasUI"
+                        labelPlacement="end"
+                    />
+                </Box>
                 <Box display="flex" alignItems="baseline" flexDirection="row">
                     <FormControlLabel
                         value="end"

@@ -8,7 +8,7 @@ TasUI provides a syntax-aware command interface for every Tasmota command by cat
 
 ## Docker
 
-A Docker image for linux/amd64 (more architectures coming soon) is available for [download](https://hub.docker.com/r/effelle/tasui).
+For those who prefer to have everything locally, a Docker image for linux/amd64 (more architectures coming soon) is available for [download](https://hub.docker.com/r/effelle/tasui).
 
 ```
 docker pull effelle/tasui

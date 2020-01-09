@@ -12,7 +12,7 @@ For those who prefer to have everything locally, a Docker image for linux/amd64 
 
 ```
 docker pull effelle/tasui
-docker run -p 8081:8081 effelle/tasui:latest
+docker run -p 8081:80 effelle/tasui:latest
 ```
 ## Home Assistant
 

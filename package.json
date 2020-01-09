@@ -35,10 +35,11 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
-    "electron-pack": "electron-builder -wlm -c.mac.identity=null"
+    "electron-pack": "electron-builder -wlm -c.mac.identity=null",
+    "publish": "./utils/publish.sh"
   },
   "main": "public/electron.js",
-  "homepage": "./",
+  "homepage": ".",
   "author": {
     "name": "TasUI",
     "email": "tasui@shantur.com",

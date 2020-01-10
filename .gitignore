@@ -10,6 +10,9 @@
 /build
 /dist
 
+#build-container
+/build-container
+
 # misc
 .DS_Store
 .env

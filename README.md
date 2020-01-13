@@ -8,11 +8,11 @@ TasUI provides a syntax-aware command interface for every Tasmota command by cat
 
 ## Docker
 
-For those who prefer to have everything locally, a Docker image for linux/amd64 (more architectures coming soon) is available for [download](https://hub.docker.com/r/effelle/tasui).
+For those who prefer to have everything locally, a Docker image for linux/amd64 (more architectures coming soon) is available for [download](https://hub.docker.com/r/iotreboot/tasui).
 
 ```
-docker pull effelle/tasui
-docker run -p 8081:80 effelle/tasui:latest
+docker pull iotreboot/tasui
+docker run -p [PORT]:80 iotreboot/tasui:latest
 ```
 ## Home Assistant
 

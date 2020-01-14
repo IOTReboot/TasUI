@@ -24,6 +24,8 @@
     "concurrently": "^5.0.0",
     "electron": "^7.1.2",
     "electron-builder": "^21.2.0",
+    "fs-extra": "^8.1.0",
+    "simple-git": "^1.129.0",
     "typescript": "^3.7.2",
     "wait-on": "^3.3.0"
   },
@@ -36,7 +38,7 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -wlm -c.mac.identity=null",
-    "publish": "./utils/publish.sh"
+    "publish": "node ./utils/publish.js"
   },
   "main": "public/electron.js",
   "homepage": ".",

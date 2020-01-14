@@ -70,6 +70,7 @@ function publishBranch(sourceGit, diff, codeStatus, head) {
         .then(isRepo => !isRepo && clonePublishingRepo(publishGit, branch))
         .then(() => publishGit.checkout('master'))
         .then(() => child_process.execSync(`bash -c "rm -rf ${branch === "master" ? `${publish_temp}/*` : `${publish_temp}/${branch}/*`}"`))
+        .then(() => child_process.execSync(`bash -c "echo ${branch === "master" ? branchRepoMap.master : branchRepoMap.development} > ${publish_temp}/CNAME"`))
         .then(() => fsx.copySync('./build', branch === "master" ? publish_temp : `${publish_temp}/${branch}`))
         .then(() => publishGit.add('-A'))
         .then(() => publishGit.commit(commitMessage))

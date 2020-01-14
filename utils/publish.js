@@ -1,5 +1,6 @@
 const simpleGit = require('simple-git/promise');
 const fs = require('fs')
+const child_process = require('child_process')
 const fsx = require('fs-extra')
 
 const branchRepoMap = {
@@ -68,12 +69,11 @@ function publishBranch(sourceGit, diff, codeStatus, head) {
     publishGit.checkIsRepo()
         .then(isRepo => !isRepo && clonePublishingRepo(publishGit, branch))
         .then(() => publishGit.checkout('master'))
-        .then(() => fs.rmdirSync(`${publish_temp}/${branch}`, { recursive: true}))
-        .then(() => fsx.copySync('./build', `${publish_temp}/${branch}`))
+        .then(() => child_process.execSync(`bash -c "rm -rf ${branch === "master" ? `${publish_temp}/*` : `${publish_temp}/${branch}/*`}"`))
+        .then(() => fsx.copySync('./build', branch === "master" ? publish_temp : `${publish_temp}/${branch}`))
         .then(() => publishGit.add('-A'))
         .then(() => publishGit.commit(commitMessage))
         .then(() => publishGit.push('origin', 'master'))
-
 }
 
 function clonePublishingRepo(git, branch) {

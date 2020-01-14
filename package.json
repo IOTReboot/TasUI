@@ -38,7 +38,7 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -wlm -c.mac.identity=null",
-    "publish": "node ./utils/publish.js"
+    "publish": "npm run build && node ./utils/publish.js"
   },
   "main": "public/electron.js",
   "homepage": ".",

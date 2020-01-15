@@ -24,6 +24,7 @@
     "concurrently": "^5.0.0",
     "electron": "^7.1.2",
     "electron-builder": "^21.2.0",
+    "env-cmd": "^10.0.1",
     "fs-extra": "^8.1.0",
     "simple-git": "^1.129.0",
     "typescript": "^3.7.2",
@@ -38,7 +39,9 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -wlm -c.mac.identity=null",
-    "publish": "npm run build && node ./utils/publish.js"
+    "publish": "node ./utils/publish.js",
+    "build:production": "env-cmd -f .env.production react-scripts build",
+    "build:development": "env-cmd -f .env.development react-scripts build"
   },
   "main": "public/electron.js",
   "homepage": ".",

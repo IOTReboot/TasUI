@@ -35,6 +35,11 @@ function publishBranch(sourceGit, diff, codeStatus, head) {
     let branch = codeStatus.current;
     console.log("Publishing branch : " + branch)
 
+    if (branch === "master") {
+        child_process.execSync(`bash -c "npm run build:production"`)
+    } else {
+        child_process.execSync(`bash -c "npm run build:development"`)
+    }
 
     try{
         fs.rmdirSync(publish_temp, {recursive: true})

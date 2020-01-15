@@ -1,0 +1,16 @@
+{
+  "name": "TasUI",
+  "version": "0.0.1",
+  "slug": "tasui",
+  "arch": ["amd64"],
+  "image": "iotreboot/tasui-{arch}",
+  "description": "TasUI is a zero-install device management interface web application for all your Tasmota devices. It will discover your deployed devices and allow you to set up and configure every device from a single dashboard",
+  "url": "https://github.com/IOTReboot/TasUI/",
+  "startup": "application",
+  "boot": "auto",
+  "ports": {"80/tcp": 8013},
+  "ports_description": {"8013/tcp": "TasUI Web Interface"},
+  "options": {},
+  "schema": {},
+  "webui":"http://[HOST]:[PORT:8013]"
+}

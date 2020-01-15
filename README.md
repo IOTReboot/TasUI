@@ -14,6 +14,10 @@ For those who prefer to have everything locally, a Docker image for linux/amd64 
 docker pull iotreboot/tasui
 docker run -p [PORT]:80 iotreboot/tasui:latest
 ```
+
 ## Home Assistant
 
-Coming soon.
+An Hass.io addon can be installed on amd64 builds. 
+Simply add our repository on your addons list: https://github.com/iotreboot/TasUI
+
+No configuration required.

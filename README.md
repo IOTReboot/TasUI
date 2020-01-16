@@ -8,16 +8,16 @@ TasUI provides a syntax-aware command interface for every Tasmota command by cat
 
 ## Docker
 
-For those who prefer to have everything locally, a Docker image for linux/amd64 (more architectures coming soon) is available for [download](https://hub.docker.com/r/iotreboot/tasui).
+For those who prefer to have everything locally, a Docker image for linux `amd64`, `arm32v7`, `arm64v8` and `i386` is available for [download](https://hub.docker.com/repository/docker/iotreboot/tasui).
 
 ```
-docker pull iotreboot/tasui
+docker pull iotreboot/tasui:latest
 docker run -p [PORT]:80 iotreboot/tasui:latest
 ```
 
 ## Home Assistant
 
-An Hass.io addon can be installed on amd64 builds. 
+An Hass.io addon can be installed on amd64 builds (more architecture soon). 
 Simply add our repository on your addons list: https://github.com/iotreboot/TasUI
 
 No configuration required.

@@ -1,0 +1,3 @@
+FROM arm64v8/nginx:alpine
+
+COPY build-container/build /usr/share/nginx/html

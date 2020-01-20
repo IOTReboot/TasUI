@@ -15,39 +15,36 @@
 
 */
 
-import { withStyles, ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { green, blue } from '@material-ui/core/colors';
-import { Box, Grid, Paper, Container, Button, Slider, Divider, Tooltip } from '@material-ui/core';
+import { Box, Button, Divider, Paper, Slider, Tooltip, FormControl, InputLabel, Select, MenuItem, ExpansionPanelActions } from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { blue } from '@material-ui/core/colors';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import CircularProgress from '@material-ui/core/CircularProgress'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import DeleteIcon from '@material-ui/icons/Delete';
-import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import React, { Component } from 'react';
-import Svg from 'react-inlinesvg';
-import Table from '@material-ui/core/Table';
-import Link from '@material-ui/core/Link';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import VisibilityListener from '../Utils/VisibilityListener';
-import Popover from '@material-ui/core/Popover';
-import SettingsGroup from '../Components/SettingsGroup'
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Checkbox from '@material-ui/core/Checkbox';
+import Popover from '@material-ui/core/Popover';
+import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import ContactlessIcon from '@material-ui/icons/Contactless';
+import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React, { Component } from 'react';
+import Svg from 'react-inlinesvg';
 import CommandGroup from '../Components/CommandGroup';
 import EditableSetting from '../Components/EditableSetting';
+import SettingsGroup from '../Components/SettingsGroup';
 import copyToClipboard from '../Utils/CopyToClipboard';
+import VisibilityListener from '../Utils/VisibilityListener';
+
 
 const styles = theme => ({
     imageContainer: {
@@ -110,10 +107,24 @@ const DimmerSlider = withStyles({
     },
 })(Slider);
 
+const templateGPIOIndex = ["0", "1", "2", "3", "4", "5", "9", "10", "12", "13", "14", "15", "16"]
+
+const templateFlagOptions = [
+    { value: 0, text: "No features" },
+    { value: 1, text: "Analog Value" },
+    { value: 2, text: "Temperatue" },
+    { value: 3, text: "Light" },
+    { value: 4, text: "Button" },
+    { value: 5, text: "Buttoni" },
+    { value: 15, text: "User configured (same as GPIO 255)" },
+]
+
 class TasmotaDevice extends Component {
 
     deviceConnector = null;
     deviceConfig = null;
+
+    visibilityListener = this.onWindowVisibilityChanged.bind(this)
 
     constructor(props) {
         super(props);
@@ -122,6 +133,7 @@ class TasmotaDevice extends Component {
             deviceInfo: null,
             dimmerAnchors: {},
             online: false,
+            currentTemplate: {},
         }
     }
 
@@ -144,8 +156,10 @@ class TasmotaDevice extends Component {
 
     componentWillMount() {
         this.deviceConfig = this.props.deviceManager.getTasmotaConfig(this.macAddress)
+        let deviceInfo = this.props.deviceManager.getDevice(this.macAddress)
         this.setState({
-            deviceInfo: this.props.deviceManager.getDevice(this.macAddress)
+            deviceInfo: deviceInfo,
+            currentTemplate: deviceInfo.templateResponse,
         })
         if (!this.deviceConnector) {
             this.deviceConnector = this.props.deviceManager.getDeviceConnector(this.macAddress, this.props.deviceManager.getDevice(this.macAddress).status0Response.StatusNET.IPAddress);
@@ -154,12 +168,12 @@ class TasmotaDevice extends Component {
             online: this.deviceConnector.online
         })
         this.deviceConnector.connect(this);
-        VisibilityListener.addVisibilityChangeCallback(this.onWindowVisibilityChanged.bind(this));
+        VisibilityListener.addVisibilityChangeCallback(this.visibilityListener);
     }
 
     componentWillUnmount() {
-        VisibilityListener.removeVisibilityChangeCallback(this.onWindowVisibilityChanged.bind(this));
-        this.deviceConnector.disconnect();
+        VisibilityListener.removeVisibilityChangeCallback(this.visibilityListener);
+        this.deviceConnector.disconnect(this);
     }
 
     updateDeviceInfoState(updatedInfo) {
@@ -168,7 +182,7 @@ class TasmotaDevice extends Component {
     }
 
     onCommandResponse(cmnd, success, response) {
-        // console.log('State %s cmnd: %s response : %O', this.state.displayName, cmnd, response)
+        // console.log('Tasmota Device onCommandResponse cmnd: %s response : %O', cmnd, response)
 
         this.setState({ online: success });
 
@@ -179,13 +193,20 @@ class TasmotaDevice extends Component {
                 this.updateDeviceInfoState({ status0Response: response })
             } else if (cmnd === 'Template') {
                 this.updateDeviceInfoState({ templateResponse: response })
-                this.deviceConnector.performCommandOnDevice('GPIOS 255')
+                this.setState({ currentTemplate: response })
+                this.deviceConnector.performCommandOnDeviceDirect('GPIOS 255')
+            } else if (cmnd.startsWith('Template {')) {
+                this.updateDeviceInfoState({ templateResponse: response })
+                this.setState({ currentTemplate: response })
             } else if (cmnd === 'GPIO 255') {
                 // console.log('GPIO Response : %O', response)
                 this.updateDeviceInfoState({ gpio255Response: response })
-                this.deviceConnector.performCommandOnDevice('GPIOS 255')
+                this.deviceConnector.performCommandOnDeviceDirect('GPIOS 255')
             } else if (cmnd === 'GPIOS 255') {
                 this.updateDeviceInfoState({ gpiosResponse: response })
+                this.deviceConnector.performCommandOnDeviceDirect('Modules')
+            } else if (cmnd === 'Modules') {
+                this.updateDeviceInfoState({ modulesResponse: response })
             } else if (cmnd === 'State') {
 
                 if (response.Module) {
@@ -636,8 +657,23 @@ class TasmotaDevice extends Component {
     getPanelCommandData = command => (event, isExpanded) => {
         event.stopPropagation()
         if (isExpanded) {
-            this.deviceConnector.performCommandOnDevice(command);
+            this.deviceConnector.performCommandOnDeviceDirect(command);
         }
+    }
+
+    getAvailableGPIOS() {
+        var availableGPIOs = []
+
+        var gpioObject = Object.keys(this.state.deviceInfo.gpiosResponse)
+
+        for (let key of gpioObject) {
+            for (let [gpioNum, gpioName] of Object.entries(this.state.deviceInfo.gpiosResponse[key])) {
+                availableGPIOs.push({ gpioNum: gpioNum, gpioName: gpioName })
+            }
+        }
+
+        availableGPIOs.push({ gpioNum: 255, gpioName: "User" })
+        return availableGPIOs
     }
 
     getGPIOName(gpio) {
@@ -665,21 +701,74 @@ class TasmotaDevice extends Component {
         return 'Unknown'
     }
 
+    onTemplateGPIOChanged(gpioindex, event) {
+        let newTemplate = Object.assign({}, this.state.currentTemplate)
+        newTemplate.GPIO[gpioindex] = parseInt(event.target.value, 10)
+        this.setState({ currentTemplate: newTemplate })
+    }
+
+
+    onTemplateNameUpdated(oldName, newName) {
+        let newTemplate = Object.assign({}, this.state.currentTemplate)
+        newTemplate.NAME = newName
+        this.setState({ currentTemplate: newTemplate })
+    }
+
+    onTemplateFlagChanged(event) {
+        let newTemplate = Object.assign({}, this.state.currentTemplate)
+        newTemplate.FLAG = parseInt(event.target.value, 10)
+        this.setState({ currentTemplate: newTemplate })
+    }
+
+    onTemplateBaseChanged(event) {
+        let newTemplate = Object.assign({}, this.state.currentTemplate)
+        newTemplate.BASE = parseInt(event.target.value, 10)
+        this.setState({ currentTemplate: newTemplate })
+    }
+
+    getAvailableModules() {
+        var availableModules = []
+
+        var moduleObject = Object.keys(this.state.deviceInfo.modulesResponse)
+
+        for (let key of moduleObject) {
+            for (let [moduleNum, moduleName] of Object.entries(this.state.deviceInfo.modulesResponse[key])) {
+                availableModules.push({ moduleNum: moduleNum, moduleName: moduleName })
+            }
+        }
+
+        return availableModules
+    }
+
     renderTemplateResponse() {
+
         return (
             <Table size="small">
                 <TableBody>
                     <TableRow>
                         <TableCell>NAME</TableCell>
-                        <TableCell>{this.state.deviceInfo.templateResponse.NAME}</TableCell>
+                        <TableCell><EditableSetting settingUpdatedCallback={this.onTemplateNameUpdated.bind(this)} currentValue={this.state.currentTemplate.NAME} /></TableCell>
                     </TableRow>
 
                     {
-                        this.state.deviceInfo.templateResponse.GPIO.map((gpio, index) => {
+                        this.state.currentTemplate.GPIO.map((gpio, index) => {
                             return (
                                 <TableRow>
-                                    <TableCell>{`GPIO${index}`}</TableCell>
-                                    <TableCell>{`${gpio} ( ${this.getGPIOName(gpio)} )`}</TableCell>
+                                    <TableCell>{`GPIO${templateGPIOIndex[index]}`}</TableCell>
+                                    <TableCell>
+                                        <FormControl>
+                                            <Select
+                                                labelId={`template-select-label-gpio${index}`}
+                                                id="weblog-select"
+                                                value={gpio}
+                                                onChange={(event) => this.onTemplateGPIOChanged(index, event)}
+                                            >
+                                                {this.getAvailableGPIOS().map((availableGPIO, index) => {
+                                                    return <MenuItem value={availableGPIO.gpioNum}>{`${availableGPIO.gpioName} (${availableGPIO.gpioNum})`}</MenuItem>
+                                                })}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
                                 </TableRow>
                             )
                         })
@@ -687,18 +776,58 @@ class TasmotaDevice extends Component {
 
                     <TableRow>
                         <TableCell>FLAG</TableCell>
-                        <TableCell>{this.state.deviceInfo.templateResponse.FLAG}</TableCell>
+                        <TableCell>
+                            <FormControl>
+                                <Select
+                                    labelId={`template-select-label-flag`}
+                                    id="template-flag"
+                                    value={this.state.currentTemplate.FLAG}
+                                    onChange={(event) => this.onTemplateFlagChanged(event)}
+                                >
+                                    {templateFlagOptions.map((templateFlag, index) => {
+                                        return <MenuItem value={templateFlag.value}>{`${templateFlag.text} (${templateFlag.value})`}</MenuItem>
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </TableCell>
                     </TableRow>
 
                     <TableRow>
                         <TableCell>BASE</TableCell>
-                        <TableCell>{this.state.deviceInfo.templateResponse.BASE}</TableCell>
+                        <TableCell>
+                            <FormControl>
+                                <Select
+                                    labelId={`template-select-label-module`}
+                                    id="template-module"
+                                    value={this.state.currentTemplate.BASE}
+                                    onChange={(event) => this.onTemplateBaseChanged(event)}
+                                >
+                                    {this.getAvailableModules().map((mod, index) => {
+                                        return <MenuItem value={mod.moduleNum}>{`${mod.moduleName} (${mod.moduleNum})`}</MenuItem>
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </TableCell>
                     </TableRow>
 
                 </TableBody>
             </Table>
 
         )
+    }
+
+    saveTemplate(event) {
+        event.stopPropagation()
+        this.deviceConnector.performCommandOnDevice(`Template ${JSON.stringify(this.state.currentTemplate)}`)
+    }
+
+    resetTemplate(event) {
+        event.stopPropagation()
+        this.setState({ currentTemplate: this.state.deviceInfo.templateResponse})
+    }
+
+    isTemplateRenderable() {
+        return this.state.deviceInfo.templateResponse && this.state.deviceInfo.gpiosResponse && this.state.deviceInfo.modulesResponse
     }
 
     renderDetailsTemplate() {
@@ -713,11 +842,19 @@ class TasmotaDevice extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
 
-                    {!this.state.deviceInfo.templateResponse || !this.state.deviceInfo.gpiosResponse ? <CircularProgress /> :
-                        this.renderTemplateResponse()
+                    {
+                        this.isTemplateRenderable() ? this.renderTemplateResponse() : <CircularProgress /> 
                     }
 
                 </ExpansionPanelDetails>
+
+                { this.isTemplateRenderable() ? (
+                    <ExpansionPanelActions>
+                        <Button size="small" variant="contained" onClick={(event) => this.resetTemplate(event)}>Reset Template</Button>
+                        <Button size="small" variant="contained" onClick={(event) => this.saveTemplate(event)}>Save Template</Button>
+                    </ExpansionPanelActions>
+                    ) : ""
+                }
             </ExpansionPanel>
         )
     }
@@ -912,6 +1049,10 @@ class TasmotaDevice extends Component {
         )
     }
 
+    onFriendlyNameUpdatedCallback(oldName, newName) {
+        this.deviceConnector.performCommandOnDevice(`FriendlyName1 ${newName}`)
+    }
+
     renderTypeSettingsAndDetails(renderType) {
         return (
             <React.Fragment>
@@ -931,7 +1072,7 @@ class TasmotaDevice extends Component {
                             <TableRow>
                                 <TableCell align="left"><Typography>FriendlyName</Typography></TableCell>
                                 <TableCell align="center" colSpan={2}>
-                                    <EditableSetting deviceConnector={this.deviceConnector} command="FriendlyName1" currentValue={this.state.deviceInfo.status0Response.Status.FriendlyName[0]} />
+                                    <EditableSetting settingUpdatedCallback={this.onFriendlyNameUpdatedCallback.bind(this)} currentValue={this.state.deviceInfo.status0Response.Status.FriendlyName[0]} />
                                 </TableCell>
                             </TableRow>
                             <TableRow>

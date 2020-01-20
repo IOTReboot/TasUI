@@ -7,8 +7,8 @@
 /coverage
 
 # production
-/build
-/dist
+/WebApp/build
+/WebApp/dist
 
 #build-container
 /build-container

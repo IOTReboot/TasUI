@@ -16,6 +16,6 @@ docker run -p [PORT]:80 iotreboot/tasui:latest
 ```
 
 ## Home Assistant
-A Hass.io addon can be installed on amd64 builds (more architectures coming soon). Simply add the TasUI repository on your addons list: https://github.com/iotreboot/TasUI
+An Hass.io addon can be installed on `amd64`, `arm32v7`, `arm64v8` and `i386` builds. Simply add the TasUI repository on your addons list: https://github.com/iotreboot/TasUI
 
 No configuration is required.

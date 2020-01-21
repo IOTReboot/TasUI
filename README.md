@@ -19,3 +19,5 @@ docker run -p [PORT]:80 iotreboot/tasui:latest
 A Hass.io addon can be installed on `amd64`, `arm32v7`, `arm64v8` and `i386` builds. Simply add the TasUI repository on your addons list: https://github.com/iotreboot/TasUI
 
 No configuration is required.
+
+<img src="https://user-images.githubusercontent.com/7702766/72171387-a2190c80-33b1-11ea-9e1c-ca855da1fed1.png" width="800" class="center">

@@ -40,8 +40,8 @@
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -wlm -c.mac.identity=null",
     "publish": "node ./utils/publish.js",
-    "build:production": "env-cmd -f .env.production react-scripts build",
-    "build:development": "env-cmd -f .env.development react-scripts build"
+    "build:production": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD``git diff --quiet || echo '-dirty'` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` env-cmd -f .env.production react-scripts build",
+    "build:development": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD``git diff --quiet || echo '-dirty'` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` env-cmd -f .env.development react-scripts build"
   },
   "main": "public/electron.js",
   "homepage": ".",

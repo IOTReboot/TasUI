@@ -30,6 +30,7 @@ import DeveloperBoardIcon from '@material-ui/icons/DeveloperBoard';
 import InfoIcon from '@material-ui/icons/Info';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import SearchIcon from '@material-ui/icons/Search';
+import Version from './version.json'
 
 import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
 
@@ -194,7 +195,7 @@ class App extends Component {
                 TasUI
             </Typography>
             <Link variant="subtitle2" noWrap onClick={() => window.open(`https://github.com/IOTReboot/TasUI/tree/${process.env.REACT_APP_GIT_SHA}`)}>
-              {process.env.REACT_APP_VERSION} {process.env.REACT_APP_GIT_BRANCH} ({process.env.REACT_APP_GIT_SHA})
+              {Version.versionNumber}-{Version.versionName} {process.env.REACT_APP_GIT_BRANCH} ({process.env.REACT_APP_GIT_SHA})
             </Link>
           </div>
           <Divider />

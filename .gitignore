@@ -12,6 +12,7 @@
 
 #build-container
 /build-container
+dockerfile
 
 # misc
 .DS_Store

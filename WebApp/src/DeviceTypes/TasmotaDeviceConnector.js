@@ -148,6 +148,10 @@ class TasmotaDeviceConnector {
             url += `&user=${encodeURIComponent(this.authInfo.username)}&password=${encodeURIComponent(this.authInfo.password)}`
         }
 
+        if (window.runtimeConfig.proxyMode) {
+            url = '/?url=' + encodeURIComponent(url)
+        }
+
         superagent.get(url)
             .timeout({
                 response: 5000,  // Wait 5 seconds for the server to start sending,

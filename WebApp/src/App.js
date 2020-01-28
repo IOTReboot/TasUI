@@ -152,6 +152,9 @@ class App extends Component {
 
 
   render() {
+
+    console.log("RuntimeConfig %O", window.runtimeConfig)
+
     const { classes } = this.props;
 
     const listItems = mainMenuItems.map((item, index) => {

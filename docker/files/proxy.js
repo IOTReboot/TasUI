@@ -36,7 +36,18 @@ proxy.on('error', function (err, req, res) {
 //     });
 // });
 
+const haFiltering = Boolean(process.env.HA_FILTERING === "1");
+
 var server = http.createServer(function(req, res) {
+    if (haFiltering && req.socket.remoteAddress !== "172.30.32.2") {
+        res.writeHead(401, {
+            'Content-Type': 'text/plain'
+          });
+        
+        res.end('Client not allowed to connect from ' + req.socket.remoteAddress);
+        return
+    }
+
     if (url.parse(req.url,true).query.url) {
 
         let parsedUrl = url.parse(req.url,true)

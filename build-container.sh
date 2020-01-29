@@ -15,7 +15,7 @@ MANIFEST=""
 echo "######################## BUIDING VERSION ${VERSION} ########################"
 mkdir -p build-container/build build-container/node_modules
 
-#docker run -it --rm --name tasui-builder -v "$PWD":/tasui -v "$PWD/build-container/node_modules":/tasui/WebApp/node_modules -v "$PWD/build-container/build":/tasui/WebApp/build -w /tasui/WebApp node:13.6 sh -c "npm install && npm run build"
+docker run -it --rm --name tasui-builder -v "$PWD":/tasui -v "$PWD/build-container/node_modules":/tasui/WebApp/node_modules -v "$PWD/build-container/build":/tasui/WebApp/build -w /tasui/WebApp node:13.6 sh -c "npm install && npm run build"
 
 sed -e 's/proxyMode: false,/proxyMode: true,/g' -i "" build-container/build/runtimeConfig.js
 

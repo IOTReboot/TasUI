@@ -39,7 +39,7 @@ proxy.on('error', function (err, req, res) {
 const haFiltering = Boolean(process.env.HA_FILTERING === "1");
 
 var server = http.createServer(function(req, res) {
-    if (haFiltering && req.socket.remoteAddress !== "172.30.32.2") {
+    if (haFiltering && !req.socket.remoteAddress.endsWith("172.30.32.2")) {
         res.writeHead(401, {
             'Content-Type': 'text/plain'
           });

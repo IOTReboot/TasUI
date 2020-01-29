@@ -149,7 +149,7 @@ class TasmotaDeviceConnector {
         }
 
         if (window.runtimeConfig.proxyMode) {
-            url = '/?url=' + encodeURIComponent(url)
+	    url = '?url=' + encodeURIComponent(url)
         }
 
         superagent.get(url)

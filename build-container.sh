@@ -17,7 +17,7 @@ mkdir -p build-container/build build-container/node_modules
 
 docker run -it --rm --name tasui-builder -v "$PWD":/tasui -v "$PWD/build-container/node_modules":/tasui/WebApp/node_modules -v "$PWD/build-container/build":/tasui/WebApp/build -w /tasui/WebApp node:13.6 sh -c "npm install && npm run build"
 
-sed -e 's/proxyMode: false,/proxyMode: true,/g' -i "$PWD/build-container/build/runtimeConfig.js"
+sed -e 's/proxyMode: false,/proxyMode: true,/g' -i "" "$PWD/build-container/build/runtimeConfig.js"
 
 dockarr=('amd64=node:lts-alpine' 'arm32=arm32v7/node:lts-alpine' 'arm64=arm64v8/node:lts-alpine' 'i386=i386/node:lts-alpine')
 

@@ -182,7 +182,7 @@ class FindDevices extends React.Component {
         superagent.get(url)
             .timeout({
                 response: 5000,  // Wait 5 seconds for the server to start sending,
-                deadline: 5000, // but allow 6 seconds for the file to finish loading.
+                deadline: 6000, // but allow 6 seconds for the file to finish loading.
             }).end(function (err, res) {
                 setTimeout(this.obj.sendRequest.bind(this.obj, this.ip), 1000);
             }.bind({obj: this, ip: ip}));
@@ -208,7 +208,7 @@ class FindDevices extends React.Component {
         superagent.get(url)
             .timeout({
                 response: 5000,  // Wait 5 seconds for the server to start sending,
-                deadline: 10000, // but allow 1 minute for the file to finish loading.
+                deadline: 60000, // but allow 1 minute for the file to finish loading.
             })
             .end(callback.bind({ onCommandResponse: this.onCommandResponse.bind(this), ip: ip, url: url, cmnd: cmnd, success: true }))
 

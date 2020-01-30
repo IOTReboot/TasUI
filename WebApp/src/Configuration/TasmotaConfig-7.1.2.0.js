@@ -4,7 +4,7 @@ function updatedConfig() {
 
     let TasmotaConfig_07010200 = {
         settingsGroups: TasmotaConfig_06070000.settingsGroups,
-        moduleResponseFormatter: TasmotaConfig_06070000.moduleResponseFormatter,
+        moduleResponseParser: TasmotaConfig_06070000.moduleResponseParser,
         gpioResponseFormatter: TasmotaConfig_06070000.gpioResponseFormatter,
         commands: {},
         configuration: TasmotaConfig_06070000.configuration,

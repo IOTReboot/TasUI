@@ -376,19 +376,21 @@ const TasmotaConfig_06070000 = {
         //         command: 'Rule3'
         //     }]
     }],
-    moduleResponseFormatter: function (moduleResponse) {
+    moduleResponseParser: function (moduleResponse) {
         if (typeof moduleResponse.Module === 'object') {
-            let key = Object.keys(moduleResponse.Module)[0]
-            return `${key} (${moduleResponse.Module[key]})`
+            return moduleResponse
         } else {
-            return moduleResponse.Module
+            let moduleParts = moduleResponse.Module.split(' ')
+            let parsed = { Module: {}}
+            parsed.Module[moduleParts[0]] = moduleParts[1].replace('(', '').replace(')', '')
+            return parsed
         }
     },
     gpioResponseFormatter: function (gpioResponse) {
         return Object.keys(gpioResponse).map((gpio, index) => {
             if (typeof gpioResponse[gpio] === 'object') {
                 var key = Object.keys(gpioResponse[gpio])[0]
-                return { gpio: gpio, gpioInfo: `${key} ( ${gpioResponse[gpio][key]} )` }
+                return { gpio: gpio, gpioDeviceType: key, gpioDeviceName: gpioResponse[gpio][key] }
             } else {
                 return { gpio: gpio, gpioInfo: gpioResponse[gpio] }
             }

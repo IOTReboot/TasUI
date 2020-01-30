@@ -134,6 +134,9 @@ class TasmotaDevice extends Component {
             dimmerAnchors: {},
             online: false,
             currentTemplate: {},
+            currentModuleConfig: [],
+            currentModuleType: 0,
+            pendingCommand: null,
         }
     }
 
@@ -183,10 +186,19 @@ class TasmotaDevice extends Component {
 
     onCommandResponse(cmnd, success, response) {
         // console.log('Tasmota Device onCommandResponse cmnd: %s response : %O', cmnd, response)
+        let currentState = this.state.online
 
         this.setState({ online: success });
 
         if (success) {
+
+            if (!currentState) {
+                this.deviceConnector.performCommandOnDevice('Status 0')
+                if (this.state.pendingCommand) {
+                    this.deviceConnector.performCommandOnDevice(this.state.pendingCommand)
+                    this.setState( {pendingCommand: null})
+                }
+            }
 
             if (cmnd === 'Status 0') {
                 // console.log('Status0 %s :  %O', this.macAddress, response);
@@ -194,15 +206,20 @@ class TasmotaDevice extends Component {
             } else if (cmnd === 'Template') {
                 this.updateDeviceInfoState({ templateResponse: response })
                 this.setState({ currentTemplate: response })
-                this.deviceConnector.performCommandOnDeviceDirect('GPIOS 255')
+                this.deviceConnector.performCommandOnDeviceDirect('GPIOS')
             } else if (cmnd.startsWith('Template {')) {
                 this.updateDeviceInfoState({ templateResponse: response })
                 this.setState({ currentTemplate: response })
-            } else if (cmnd === 'GPIO 255') {
+            } else if (cmnd === 'GPIO 255' || cmnd === 'GPIO') {
                 // console.log('GPIO Response : %O', response)
-                this.updateDeviceInfoState({ gpio255Response: response })
-                this.deviceConnector.performCommandOnDeviceDirect('GPIOS 255')
-            } else if (cmnd === 'GPIOS 255') {
+                if (cmnd === 'GPIO') {
+                    this.updateDeviceInfoState({ gpioResponse: response })
+                    this.setState({ currentModuleConfig: this.deviceConfig.gpioResponseFormatter(response)})
+                } else {
+                    this.updateDeviceInfoState({ gpio255Response: response })
+                }
+                this.deviceConnector.performCommandOnDeviceDirect('GPIOS')
+            } else if (cmnd === 'GPIOS') {
                 this.updateDeviceInfoState({ gpiosResponse: response })
                 this.deviceConnector.performCommandOnDeviceDirect('Modules')
             } else if (cmnd === 'Modules') {
@@ -235,6 +252,7 @@ class TasmotaDevice extends Component {
                 this.updateDeviceInfoState({ status0Response: status0Clone })
             } else if (cmnd === 'Module') {
                 this.updateDeviceInfoState({ moduleResponse: response })
+                this.setState({ currentModuleType: Object.keys(response.Module)[0] })
             } else if (cmnd === 'WifiPower') {
                 this.updateDeviceInfoState({ wifiPowerResponse: response })
             }
@@ -255,9 +273,11 @@ class TasmotaDevice extends Component {
 
     getModuleDisplayText() {
         if (this.state.deviceInfo.moduleResponse) {
-            return this.deviceConfig.moduleResponseFormatter(this.state.deviceInfo.moduleResponse)
+            let moduleParsed = this.deviceConfig.moduleResponseParser(this.state.deviceInfo.moduleResponse)
+            let moduleNum = Object.keys(moduleParsed.Module)[0];
+            return `${moduleNum} (${moduleParsed.Module[moduleNum]})`
         } else {
-            return this.state.deviceInfo.status0Response.Status.Module
+            return ''
         }
     }
 
@@ -819,6 +839,7 @@ class TasmotaDevice extends Component {
     saveTemplate(event) {
         event.stopPropagation()
         this.deviceConnector.performCommandOnDevice(`Template ${JSON.stringify(this.state.currentTemplate)}`)
+        setTimeout(() => this.setState({ online: false, pendingCommand: 'Template' }), 1000)
     }
 
     resetTemplate(event) {
@@ -869,13 +890,139 @@ class TasmotaDevice extends Component {
                         return (
                             <TableRow>
                                 <TableCell>{gpioObj.gpio}</TableCell>
-                                <TableCell>{gpioObj.gpioInfo}</TableCell>
+                        <TableCell>{gpioObj.gpioDeviceType} ( {gpioObj.gpioDeviceName} )</TableCell>
                             </TableRow>
                         )
                     })}
 
                 </TableBody>
             </Table>
+        )
+    }
+
+    onModuleTypeChanged(event) {
+        event.stopPropagation()
+        this.setState( {currentModuleType: event.target.value})
+    }
+
+    onTemplateGPIOChanged(gpio, event) {
+        event.stopPropagation()
+        let newConfig = Object.assign([], this.state.currentModuleConfig);
+        for (let gpioObj of newConfig) {
+            if (gpioObj.gpio === gpio) {
+                gpioObj.gpioDeviceType = event.target.value
+                break
+            }
+        }
+
+        this.setState( {currentModuleConfig: newConfig} )
+    }
+
+    saveModuleConfiguration(event) {
+        event.stopPropagation()
+        let request = `/md?g99=${this.state.currentModuleType - 1}`
+
+        this.state.currentModuleConfig.forEach(function (gpio, index) {
+            request += `&g${gpio.gpio.replace('GPIO', '')}=${gpio.gpioDeviceType}`
+        })
+
+        request += '&save='
+
+        this.deviceConnector.performRequestOnDevice(request)
+        console.log(`Save Module Configuration : ${request}`)
+        setTimeout(() => this.setState({ online: false, pendingCommand: 'GPIO' }), 1000)
+    }
+
+    resetModuleConfiguration(event) {
+        let moduleType = Object.keys(this.state.deviceInfo.moduleResponse.Module)[0]
+        let moduleConfig = this.deviceConfig.gpioResponseFormatter(this.state.deviceInfo.gpioResponse)
+
+        this.setState ( { currentModuleType: moduleType, currentModuleConfig: moduleConfig})
+    }
+
+    renderGPIOConfiguration() {
+
+        return (
+            <Table size="small">
+                <TableBody>
+                    <TableRow>
+                        <TableCell>Module Type</TableCell>
+                        <TableCell>
+                            <FormControl>
+                                <Select
+                                    labelId={`template-select-label-module`}
+                                    id="template-module"
+                                    value={this.state.currentModuleType}
+                                    onChange={(event) => this.onModuleTypeChanged(event)}
+                                >
+                                    {this.getAvailableModules().map((mod, index) => {
+                                        return <MenuItem value={mod.moduleNum}>{`${mod.moduleName} (${mod.moduleNum})`}</MenuItem>
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </TableCell>
+                    </TableRow>
+
+
+                    {
+                        this.state.currentModuleConfig.map((gpioObj, index) => {
+                            return (
+                                <TableRow>
+                                    <TableCell>{gpioObj.gpio}</TableCell>
+                                    <TableCell>
+                                        <FormControl>
+                                            <Select
+                                                labelId={`template-select-label-gpio${index}`}
+                                                id="weblog-select"
+                                                value={gpioObj.gpioDeviceType}
+                                                onChange={(event) => this.onTemplateGPIOChanged(gpioObj.gpio, event)}
+                                            >
+                                                {this.getAvailableGPIOS().map((availableGPIO, index) => {
+                                                    return <MenuItem value={availableGPIO.gpioNum}>{`${availableGPIO.gpioName} (${availableGPIO.gpioNum})`}</MenuItem>
+                                                })}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })
+                    }
+                </TableBody>
+            </Table>
+
+        )
+    }
+
+    isModuleConfigurationRenderable() {
+        return this.state.deviceInfo.gpioResponse && this.state.deviceInfo.gpiosResponse && this.state.deviceInfo.modulesResponse
+    }
+
+    renderModuleConfiguration() {
+        return (
+            <ExpansionPanel key="ModuleConfigurationExpansionPanel" onChange={this.getPanelCommandData('GPIO')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Module GPIO Configuration</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+
+                    {
+                        this.isModuleConfigurationRenderable() ? this.renderGPIOConfiguration() : <CircularProgress /> 
+                    }
+
+                </ExpansionPanelDetails>
+
+                { this.isModuleConfigurationRenderable() ? (
+                    <ExpansionPanelActions>
+                        <Button size="small" variant="contained" onClick={(event) => this.resetModuleConfiguration(event)}>Reset Module Configuration</Button>
+                        <Button size="small" variant="contained" onClick={(event) => this.saveModuleConfiguration(event)}>Save Module Configuration</Button>
+                    </ExpansionPanelActions>
+                    ) : ""
+                }
+            </ExpansionPanel>
         )
     }
 
@@ -970,6 +1117,19 @@ class TasmotaDevice extends Component {
                     </TableCell>
                 </TableRow>
 
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderModuleConfiguration()}
+                    </TableCell>
+                </TableRow>
+
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderDetailsTemplate()}
+                    </TableCell>
+                </TableRow>
+
                 {Object.entries(this.deviceConfig.configuration).map(([commandGroupName, commandGroup]) => {
                     return (
                         <TableRow>
@@ -1008,6 +1168,12 @@ class TasmotaDevice extends Component {
                 <TableRow>
                     <TableCell colSpan={3}>
                         {this.renderDetailsConnectivity()}
+                    </TableCell>
+                </TableRow>
+
+                <TableRow>
+                    <TableCell colSpan={3}>
+                        {this.renderModuleConfiguration()}
                     </TableCell>
                 </TableRow>
 

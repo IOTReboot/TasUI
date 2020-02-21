@@ -33,6 +33,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Version from './version.json'
 
 import { Route, Link, Switch, HashRouter as Router, Redirect } from 'react-router-dom';
+import ScrollToTop from 'react-router-scroll-top'
 
 import Devices from './Screens/Devices';
 import DeviceManager from './DeviceManagement/DeviceManager';
@@ -41,6 +42,7 @@ import DeviceSettings from './Screens/DeviceSettings';
 import FindDevices from './Screens/FindDevices';
 import Console from './Screens/Console'
 import AppConfig from './Configuration/AppConfig'
+
 
 const drawerWidth = 240;
 
@@ -177,15 +179,16 @@ class App extends Component {
     return (
       <div className={classes.root}>
         <Router>
-        <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="h6" noWrap>
-              TasUI
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
+          <ScrollToTop>
+          <CssBaseline />
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <Typography variant="h6" noWrap>
+                TasUI
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer
           className={classes.drawer}
           variant="permanent"
           classes={{
@@ -219,6 +222,7 @@ class App extends Component {
             </Switch>
             </div>
           </main>
+          </ScrollToTop>
         </Router>
       </div>
     );

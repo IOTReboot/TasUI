@@ -281,19 +281,25 @@ class TasmotaDevice extends Component {
         }
     }
 
+    renderTypeTableFriendlyNameCell() {
+        return (
+            <TableCell component="th" scope="row">
+                <Box display="flex" flexDirection="column" alignItems="center">
+                    <Box fontSize={16}>
+                        {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
+                    </Box>
+                    <Box display="flex" flexDirection="row">
+                        {this.props.actionButtons}
+                    </Box>
+                </Box>
+            </TableCell>
+        )
+    }
+
     renderTypeTableStatusRow() {
         return (
             <TableRow key={this.props.macAddress}>
-                <TableCell component="th" scope="row">
-                    <Box display="flex" flexDirection="column" alignItems="center">
-                        <Box fontSize={16}>
-                            {this.state.deviceInfo.status0Response.Status.FriendlyName[0]}
-                        </Box>
-                        <Box display="flex" flexDirection="row">
-                            {this.props.actionButtons}
-                        </Box>
-                    </Box>
-                </TableCell>
+                {this.renderTypeTableFriendlyNameCell()}
                 <TableCell>{this.renderConnectivityStatus()}</TableCell>
                 <TableCell>{this.getModuleDisplayText()}</TableCell>
                 <TableCell><Box flex={1} flexDirection='row'>{this.renderDetailsControlsButtons('Table')}</Box></TableCell>
@@ -1215,8 +1221,8 @@ class TasmotaDevice extends Component {
         )
     }
 
-    onFriendlyNameUpdatedCallback(oldName, newName) {
-        this.deviceConnector.performCommandOnDevice(`FriendlyName1 ${newName}`)
+    onFriendlyNameUpdatedCallback(oldName, newName, index) {
+        this.deviceConnector.performCommandOnDevice(`FriendlyName${index + 1} ${newName}`)
     }
 
     renderTypeSettingsAndDetails(renderType) {
@@ -1238,7 +1244,15 @@ class TasmotaDevice extends Component {
                             <TableRow>
                                 <TableCell align="left"><Typography>FriendlyName</Typography></TableCell>
                                 <TableCell align="center" colSpan={2}>
-                                    <EditableSetting settingUpdatedCallback={this.onFriendlyNameUpdatedCallback.bind(this)} currentValue={this.state.deviceInfo.status0Response.Status.FriendlyName[0]} />
+                                    <Box display="flex" flexDirection="column" flexGrow={1} justifyContent="center" justifyItems="center">
+                                        {
+                                            this.state.deviceInfo.status0Response.Status.FriendlyName.map((name, index) => {
+                                                return (
+                                                    <EditableSetting settingUpdatedCallback={(oldName, newName) => this.onFriendlyNameUpdatedCallback(oldName, newName, index)} currentValue={name} />
+                                                )
+                                            })
+                                        }
+                                    </Box>
                                 </TableCell>
                             </TableRow>
                             <TableRow>

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "slug": "tasui",
   "arch": ["armv7", "aarch64", "amd64", "i386"],
-  "image": "effelle/tasui-exp",
+  "image": "iotreboot/tasui",
   "description": "TasUI is a zero-install device management interface web application for all your Tasmota devices. It will discover your deployed devices and allow you to set up and configure every device from a single dashboard",
   "url": "https://github.com/IOTReboot/TasUI/",
   "ingress": true,

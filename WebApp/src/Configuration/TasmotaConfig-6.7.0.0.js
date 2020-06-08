@@ -419,7 +419,7 @@ const TasmotaConfig_06070000 = {
             PowerOnState: Commands.Control.PowerOnState,
             PowerRetain: Commands.MQTT.PowerRetain,
             Interlock: Commands.Control.Interlock,
-            'PusleTime<x>': Commands.Control['PulseTime<x>'],
+            'PulseTime<x>': Commands.Control['PulseTime<x>'],
             SetOption0: Commands.SetOptions.SetOption0,
             SetOption26: Commands.SetOptions.SetOption26,
             SetOption63: Commands.SetOptions.SetOption63,

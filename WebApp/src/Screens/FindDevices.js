@@ -169,7 +169,7 @@ class FindDevices extends React.Component {
     }
 
     enableCorsAndSendRequest(ip) {
-        let cmnd = `Backlog SetOption73 1; CORS ${window.location.protocol}//${window.location.hostname}`
+        let cmnd = `CORS ${window.location.protocol}//${window.location.hostname}`
 
         if (window.location.port && window.location.port !== "") {
             cmnd += `:${window.location.port}`

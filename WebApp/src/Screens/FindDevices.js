@@ -53,7 +53,7 @@ class FindDevices extends React.Component {
             username: '',
             password: '',
             enableAuth: false,
-            enableCorsAutomatically: true,
+            enableCorsAutomatically: !window.runtimeConfig.proxyMode,
 
         }
 
@@ -145,10 +145,10 @@ class FindDevices extends React.Component {
     scanIps() {
         if (this.ipsToScan.length) {
 
-            while (this.ipsRequested.length < 25 && this.ipsToScan.length) {
+            while (this.ipsRequested.length < 100 && this.ipsToScan.length) {
                 let ip = this.ipsToScan.shift()
                 this.ipsRequested.push(ip);
-                if (this.state.enableCorsAutomatically) {
+                if (this.state.enableCorsAutomatically && !window.runtimeConfig.proxyMode) {
                     this.enableCorsAndSendRequest(ip)
                 } else {
                     this.sendRequest(ip)
@@ -169,7 +169,7 @@ class FindDevices extends React.Component {
     }
 
     enableCorsAndSendRequest(ip) {
-        let cmnd = `Backlog SetOption73 1; CORS ${window.location.protocol}//${window.location.hostname}`
+        let cmnd = `CORS ${window.location.protocol}//${window.location.hostname}`
 
         if (window.location.port && window.location.port !== "") {
             cmnd += `:${window.location.port}`
@@ -199,6 +199,10 @@ class FindDevices extends React.Component {
 
         if (this.state.enableAuth) {
             url += `&user=${encodeURIComponent(this.state.username)}&password=${encodeURIComponent(this.state.password)}`
+        }
+
+        if (window.runtimeConfig.proxyMode) {
+            url = '?url=' + encodeURIComponent(url)
         }
 
         superagent.get(url)
@@ -375,19 +379,21 @@ class FindDevices extends React.Component {
                 <Typography>
                     IPs to scan : {this.state.totalAddresses}
                 </Typography>
-                <Box display="flex" alignItems="baseline" flexDirection="row">
-                    <FormControlLabel
-                        value="end"
-                        control={<Checkbox
-                            disabled={this.state.searching ? 1 : 0}
-                            color="primary"
-                            checked={this.state.enableCorsAutomatically}
-                            onChange={(event) => this.onEnableCorsAutomaticallyChanged(event)}
-                        />}
-                        label="Enable CORS for TasUI"
-                        labelPlacement="end"
-                    />
-                </Box>
+                { window.runtimeConfig.proxyMode ? "" : 
+                    <Box display="flex" alignItems="baseline" flexDirection="row">
+                        <FormControlLabel
+                            value="end"
+                            control={<Checkbox
+                                disabled={this.state.searching ? 1 : 0}
+                                color="primary"
+                                checked={this.state.enableCorsAutomatically}
+                                onChange={(event) => this.onEnableCorsAutomaticallyChanged(event)}
+                            />}
+                            label="Enable CORS for TasUI"
+                            labelPlacement="end"
+                        />
+                    </Box>
+                }
                 <Box display="flex" alignItems="baseline" flexDirection="row">
                     <FormControlLabel
                         value="end"

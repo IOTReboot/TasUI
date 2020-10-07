@@ -110,6 +110,15 @@ class TasmotaDeviceConnector {
         this.performCommandOnDeviceDirect(commands.Status8);
     }
 
+    onDeviceRequestResponse(args) {
+        console.log(`Request ${args.key} Url : ${args.url} Response: %O`, args.response ? args.response.body : null)
+        this.deviceListeners.forEach(function (deviceListener, index) {
+            if (deviceListener.onDeviceRequestResponse) {
+                deviceListener.onDeviceRequestResponse(args.key, args.success, args.success ? args.response.body : null)
+            }
+        });
+    }
+
     onCommandResponse(args) {
         if (args.key === commands.State || args.key === commands.Status0) {
             this.online = args.success
@@ -137,6 +146,33 @@ class TasmotaDeviceConnector {
         this.getStatus0();
     }
 
+    performRequestOnDevice(request) {
+        this.performRequestOnDeviceDirect(request)
+    }
+
+    performRequestOnDeviceDirect(request) {
+        var callback = function (err, response) {
+            // console.log ("Error : %O Response : %O", err, response);
+            this.onDeviceRequestResponse({ key: this.request, response: response, error: err, url: this.url, ip: this.ip, success: err ? false : true });
+        }
+        let url = 'http://' + this.deviceIPAddress + request
+
+        if (this.authInfo) {
+            url += `&user=${encodeURIComponent(this.authInfo.username)}&password=${encodeURIComponent(this.authInfo.password)}`
+        }
+
+        if (window.runtimeConfig.proxyMode) {
+            url = '?url=' + encodeURIComponent(url)
+        }
+
+        superagent.get(url)
+            .timeout({
+                response: 5000,  // Wait 5 seconds for the server to start sending,
+                deadline: 10000, // but allow 1 minute for the file to finish loading.
+            })
+            .end(callback.bind({ onDeviceRequestResponse: this.onDeviceRequestResponse.bind(this), ip: this.deviceIPAddress, url: url, request: request }))
+    }
+
     performCommandOnDeviceDirect(cmnd) {
         var callback = function (err, response) {
             // console.log ("Error : %O Response : %O", err, response);
@@ -148,10 +184,14 @@ class TasmotaDeviceConnector {
             url += `&user=${encodeURIComponent(this.authInfo.username)}&password=${encodeURIComponent(this.authInfo.password)}`
         }
 
+        if (window.runtimeConfig.proxyMode) {
+            url = '?url=' + encodeURIComponent(url)
+        }
+
         superagent.get(url)
             .timeout({
                 response: 5000,  // Wait 5 seconds for the server to start sending,
-                deadline: 60000, // but allow 1 minute for the file to finish loading.
+                deadline: 10000, // but allow 1 minute for the file to finish loading.
             })
             .end(callback.bind({ onCommandResponse: this.onCommandResponse.bind(this), ip: this.deviceIPAddress, url: url, cmnd: cmnd }))
     }

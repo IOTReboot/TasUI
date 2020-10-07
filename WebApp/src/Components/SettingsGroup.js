@@ -63,6 +63,10 @@ class SettingsGroup extends React.Component {
         })
     }
 
+    componentWillUnmount() {
+        this.props.deviceConnector.disconnect(this);
+    }
+
     getCurrentSettings = command => (event, isExpanded) => {
         event.stopPropagation()
         if (isExpanded) {

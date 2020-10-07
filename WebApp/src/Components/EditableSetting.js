@@ -39,23 +39,9 @@ class EditableSetting extends React.Component {
         }
     }
 
-    componentWillMount() {
-        this.props.deviceConnector.connect(this)
-    }
-
-    componentWillUnmount() {
-        this.props.deviceConnector.disconnect(this)
-    }
-
-    onCommandResponse(cmnd, success, response) {
-        if (cmnd.toLowerCase().startsWith(this.props.command.toLowerCase()) && success) {
-            this.setState({ currentValue: response[this.props.command] })
-        }
-    }
-
     save(event) {
         event.stopPropagation()
-        this.props.deviceConnector.performCommandOnDevice(`${this.props.command} ${this.state.currentValue}`)
+        this.props.settingUpdatedCallback(this.props.currentValue, this.state.currentValue)
         this.setState({ enableEdit: false })
     }
 
@@ -103,7 +89,7 @@ class EditableSetting extends React.Component {
                     toolTip="Cancel"
                     label="cancel"
                     icon={<CancelIcon />}
-                    onButtonClick={(event) => this.setState({ enableEdit: false })}
+                    onButtonClick={(event) => this.setState({ enableEdit: false, currentValue: this.props.currentValue })}
                 />
 
             </Box>

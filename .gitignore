@@ -1,24 +1,25 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+/WebApp/node_modules
 
 # testing
 /coverage
 
 # production
-/build
-/dist
+/WebApp/build
+/WebApp/dist
 
 #build-container
 /build-container
+dockerfile
 
 # misc
 .DS_Store
-.env
-.env.*
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-yarn.lock
-/publish_temp
+/WebApp/.env
+/WebApp/.env.*
+/WebApp/npm-debug.log*
+/WebApp/yarn-debug.log*
+/WebApp/yarn-error.log*
+/WebApp/yarn.lock
+.vscode

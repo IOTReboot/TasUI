@@ -1,0 +1,3 @@
+runtimeConfig = {
+    proxyMode: false,
+}

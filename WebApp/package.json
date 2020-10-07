@@ -14,6 +14,7 @@
     "react-dom": "^16.12.0",
     "react-inlinesvg": "^1.1.7",
     "react-router-dom": "^5.1.2",
+    "react-router-scroll-top": "^0.2.1",
     "react-scripts": "3.2.0",
     "react-scrollbars-custom": "^4.0.21",
     "react-tag-manager": "^3.0.0",
@@ -24,6 +25,7 @@
     "concurrently": "^5.0.0",
     "electron": "^7.1.2",
     "electron-builder": "^21.2.0",
+    "env-cmd": "^10.0.1",
     "fs-extra": "^8.1.0",
     "simple-git": "^1.129.0",
     "typescript": "^3.7.2",
@@ -38,7 +40,9 @@
     "postinstall": "electron-builder install-app-deps",
     "preelectron-pack": "yarn build",
     "electron-pack": "electron-builder -wlm -c.mac.identity=null",
-    "publish": "npm run build && node ./utils/publish.js"
+    "publish": "node ./utils/publish.js",
+    "build:production": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD``git diff --quiet || echo '-dirty'` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` env-cmd -f .env.production react-scripts build",
+    "build:development": "REACT_APP_GIT_SHA=`git rev-parse --short HEAD``git diff --quiet || echo '-dirty'` REACT_APP_GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` env-cmd -f .env.development react-scripts build"
   },
   "main": "public/electron.js",
   "homepage": ".",

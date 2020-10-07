@@ -1,5 +1,7 @@
 :rotating_light: **WARNING: PROJECT SUSPENDED UNTIL FURTHER NOTICE** :rotating_light:
 
+:rotating_light: **WARNING: USING DISCOVERY FEATURE WITH [TASMOTA VERSIONS >= 8.3.0.1](https://github.com/arendst/Tasmota/blob/development/tasmota/CHANGELOG.md#8301-20200514) DISABLES THE DEFAULT MAPPING BETWEEN BUTTONS AND RELAYS, EFFECTIVELY STOPPING TASMOTA REACTING TO HARDWARE BUTTON INPUTS DUE TO SetOption73 REUSE** :rotating_light:
+
 ## TasUI
 TasUI is a zero-install device management interface web application for all your Tasmota devices. 
 It will discover your deployed devices and allow you to set up and configure every device from a single dashboard. 

@@ -27,7 +27,7 @@
     "electron-builder": "^21.2.0",
     "env-cmd": "^10.0.1",
     "fs-extra": "^8.1.0",
-    "simple-git": "^1.129.0",
+    "simple-git": "^3.3.0",
     "typescript": "^3.7.2",
     "wait-on": "^3.3.0"
   },

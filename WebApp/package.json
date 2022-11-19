@@ -15,7 +15,7 @@
     "react-inlinesvg": "^1.1.7",
     "react-router-dom": "^5.1.2",
     "react-router-scroll-top": "^0.2.1",
-    "react-scripts": "3.2.0",
+    "react-scripts": "5.0.1",
     "react-scrollbars-custom": "^4.0.21",
     "react-tag-manager": "^3.0.0",
     "superagent": "^5.1.0"
